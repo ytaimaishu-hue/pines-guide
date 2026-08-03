@@ -138,7 +138,11 @@
   .tile .tlabel{font-weight:700;font-size:16px}
   .tile .tsub{font-size:11.5px;color:var(--faded);font-style:italic;line-height:1.35}
   .backlink{font-size:13px;color:var(--coral-deep)}
-  .zonehead{display:flex;gap:12px;align-items:center;margin:34px 0 0}
+  .zonehead{display:flex;gap:12px;align-items:center;margin:34px 0 0;scroll-margin-top:62px}
+  .zjump{position:sticky;top:0;z-index:20;display:flex;gap:8px;overflow-x:auto;padding:11px 22px;margin:14px -22px 4px;background:var(--paper);border-bottom:1px solid rgba(52,50,44,.14);scrollbar-width:none}
+  .zjump::-webkit-scrollbar{display:none}
+  .zjump button{flex:0 0 auto;font-family:var(--serif);font-size:12.5px;padding:8px 14px;border-radius:999px;border:1.2px solid rgba(52,50,44,.3);background:var(--paper);color:var(--faded);cursor:pointer;white-space:nowrap;min-height:38px}
+  .zjump button.on{border-color:var(--coral);color:var(--coral);font-weight:bold}
   .bigacts{display:flex;gap:10px;margin:14px 0 0;flex-wrap:wrap}
   .bigbtn{flex:1 1 100%;text-align:center;font-size:16px;font-weight:700;padding:15px 12px;border:1.6px solid var(--ink);border-radius:var(--w1);background:var(--paper);color:var(--ink);font-family:var(--serif);cursor:pointer;text-decoration:none;display:block}
   .bigbtn.primary{background:var(--coral);border-color:var(--coral);color:#fff;border-radius:var(--w2)}
@@ -645,14 +649,15 @@ const ZONE_OF = {
   "Walker Pass — walk the PCT": 5, "Red Rock Canyon State Park": 5, "Bakersfield Basque dinner houses": 5,
   "Sherman Peak": 6, "Wind Wolves Preserve": 6, "Tehachapi Loop & depot town": 6, "Sequoia National Park (the honest truth)": 6,
 };
+/* [full name, the distance line, short name for the jump strip] */
 const ZONES = [
   null,
-  ["A short walk", "out the door · 0–5 minutes on foot"],
-  ["In town", "a 15-minute stroll or a 4-minute drive"],
-  ["Down the valley", "10–25 minutes by car, toward the lake"],
-  ["Up the canyon", "25–45 minutes — north into the forest, or south to the tubs"],
-  ["The high country", "50 minutes to 1½ hours · pack water, fill the tank"],
-  ["Proper expeditions", "1½ hours and up — make a day of it"],
+  ["A short walk", "out the door · 0–5 minutes on foot", "On foot"],
+  ["In town", "a 15-minute stroll or a 4-minute drive", "In town"],
+  ["Down the valley", "10–25 minutes by car, toward the lake", "The valley"],
+  ["Up the canyon", "25–45 minutes — north into the forest, or south to the tubs", "The canyon"],
+  ["The high country", "50 minutes to 1½ hours · pack water, fill the tank", "High country"],
+  ["Proper expeditions", "1½ hours and up — make a day of it", "Expeditions"],
 ];
 /* printed-guide picks — from the house booklet */
 const STAFF_EATS = new Set(["Sequoia Mountain Bakery", "Big Blue Bear Cafe", "Cheryl's Diner", "Something Sweeter", "McNally's Outpost", "The Pizza Barn", "Kern River Brewing Co. — The Pub", "El Rio Mexican & American", "Ewings on the Kern"]);
@@ -1901,7 +1906,7 @@ function askResults(c, sc) {
     : `<div class="qa"><h3>Stumped us!</h3><p>That one deserves a real local — call the desk, (760) 376-3733.</p></div>`;
 }
 function milepost(z) {
-  return `<div class="zonehead">
+  return `<div class="zonehead" id="z${z}">
     <svg width="24" height="40" viewBox="0 0 24 40" fill="none" aria-hidden="true">
       <path d="M12 8 L12 38" stroke="#34322C" stroke-width="1.8" stroke-linecap="round"/>
       <path d="M4 10 L20 6 L20 15 L4 19 Z" fill="#FBEFEA" stroke="#C44F41" stroke-width="1.5"/>
@@ -1950,9 +1955,11 @@ function renderExplore() {
     : exFilter === "trail" ? x.kind === "trail"
     : exFilter === "water" ? (x.kind === "water" || x.it.water)
     : exFilter === "secret" ? x.kind === "secret" : true;
+  const present = [];
   const zonesHtml = [1, 2, 3, 4, 5, 6].map(z => {
     let items = all.filter(x => (ZONE_OF[x.it.name] || 9) === z && passes(x));
     if (!items.length) return "";
+    present.push(z);
     items.sort((a, b) => ((b.it.star ? 1 : 0) - (a.it.star ? 1 : 0))
       || ((!a.it.months || a.it.months.includes(c.month)) ? 0 : 1) - ((!b.it.months || b.it.months.includes(c.month)) ? 0 : 1)
       || fitScore(b.it.goodFor || b.it.tags) - fitScore(a.it.goodFor || a.it.tags));
@@ -1982,6 +1989,8 @@ function renderExplore() {
     </div>
     <div class="chips" style="margin-top:12px">${[["all", "Everything"], ["eat", "Eat & drink"], ["trail", "Trails"], ["water", "On the water"], ["secret", "Local secrets"]].map(([k, l]) =>
       `<button class="chip ${exFilter === k ? "on" : ""}" data-exf="${k}">${l}</button>`).join("")}</div>
+    ${present.length > 1 ? `<div class="zjump">${present.map(z =>
+      `<button data-jump="${z}">${ZONES[z][2]}</button>`).join("")}</div>` : ""}
     ${feat ? `<span class="label" style="display:block;margin-top:16px">Today's house secret</span>
       <div class="beat"><span class="slotlab">Psst</span>
         <div class="pickname">${esc(feat.name)}</div>
@@ -2119,6 +2128,8 @@ document.addEventListener("click", (e) => {
     [...rm.parentElement.querySelectorAll(".chip")].forEach(ch => ch.classList.toggle("on", ch.dataset.room === room));
     return;
   }
+  const jp = e.target.closest("[data-jump]");
+  if (jp) { const el = document.getElementById("z" + jp.dataset.jump); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); return; }
   const xz = e.target.closest("[data-exz]");
   if (xz) { const z = +xz.dataset.exz; exOpen.has(z) ? exOpen.delete(z) : exOpen.add(z); paint(); return; }
   const ex = e.target.closest("[data-exf]");
@@ -2157,6 +2168,22 @@ document.addEventListener("input", (e) => {
   }
   if (e.target.id === "guestNameInput") { guestName = cleanName(e.target.value); saveName(); }
 });
+/* the jump strip marks whichever zone you're standing in as you scroll */
+let spyTick = 0;
+window.addEventListener("scroll", () => {
+  if (cur !== "explore" || spyTick) return;
+  spyTick = requestAnimationFrame(() => {
+    spyTick = 0;
+    const btns = document.querySelectorAll(".zjump [data-jump]");
+    if (!btns.length) return;
+    let active = "";
+    btns.forEach(b => {
+      const el = document.getElementById("z" + b.dataset.jump);
+      if (el && el.getBoundingClientRect().top <= 84) active = b.dataset.jump;
+    });
+    btns.forEach(b => b.classList.toggle("on", b.dataset.jump === active));
+  });
+}, { passive: true });
 window.addEventListener("hashchange", () => { ingestParams(); paint(true); });
 function safePaint() { /* don't clobber typing, half-entered dates, or an open sheet */
   if (document.hidden) return;
