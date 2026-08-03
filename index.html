@@ -1929,10 +1929,12 @@ function renderExplore() {
     <p class="logi">The valley, laid out by how far it is from your door.</p>
     <div class="tick"><span class="label" style="color:var(--olive-deep)">Where you are</span>
       <p style="margin:3px 0 0;font-size:14px">2,670 feet, right where the Kern comes down out of the High Sierra. Everything here is measured in minutes along Sierra Way — downtown is a 15-minute stroll, the lake 10 minutes south, and the canyon runs 20 wild miles north. Bakersfield is an hour-plus west; treat it as an expedition, not an errand.</p></div>
-    <div style="border:1.4px solid var(--ink);border-radius:14px;overflow:hidden;margin:12px 0 0">
-      <iframe title="Map of Kernville" src="https://www.openstreetmap.org/export/embed.html?bbox=-118.4630%2C35.7360%2C-118.4020%2C35.7700&amp;layer=mapnik&amp;marker=35.7549%2C-118.4256" style="width:100%;height:300px;border:0;display:block" loading="lazy"></iframe>
+    ${townMap}
+    <p class="logi" style="font-style:italic;margin-top:2px">Sierra Way runs the whole length of it. We're on the river side; downtown is south, the canyon north.</p>
+    <div class="contactrow" style="margin-top:8px">
+      <a class="cbtn" href="${DATA.lodge.mapUrl}" target="_blank" rel="noopener">Open us in your maps app</a>
     </div>
-    <p class="logi" style="font-style:italic;margin-top:4px">The pin is your front door. <a href="${DATA.lodge.mapUrl}" target="_blank" rel="noopener">Open the full map</a> — and every card below has its own Directions button.</p>
+    <p class="logi" style="font-style:italic">Every card below has its own Directions button, too.</p>
     <div class="chips" style="margin-top:12px">${[["all", "Everything"], ["eat", "Eat & drink"], ["trail", "Trails"], ["water", "On the water"], ["secret", "Local secrets"]].map(([k, l]) =>
       `<button class="chip ${exFilter === k ? "on" : ""}" data-exf="${k}">${l}</button>`).join("")}</div>
     ${feat ? `<span class="label" style="display:block;margin-top:16px">Today's house secret</span>
