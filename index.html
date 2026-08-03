@@ -1430,58 +1430,66 @@ function lodgeMap() {
   const tree = (x, y, r) => `<g><ellipse cx="${x}" cy="${y}" rx="${r}" ry="${r * .44}" fill="#8A9A3E" opacity=".92"/>` +
     `<ellipse cx="${x + r * .48}" cy="${y + r * .34}" rx="${r * .6}" ry="${r * .28}" fill="#8A9A3E" opacity=".68"/>` +
     `<path d="M${x} ${y + r * .44} C${x} ${y + r * .8}, ${x - .6} ${y + r} , ${x - 1} ${y + r * 1.3}" stroke="#34322C" stroke-width="1.2" stroke-linecap="round"/></g>`;
+  /* a plain outbuilding (storage, etc.) — drawn so the grounds read true, left unlabelled */
+  const shed = (x, y, w, h) => `<g><rect x="${x + 2}" y="${y + 2.5}" width="${w}" height="${h}" rx="2" fill="#8A9A3E" opacity=".16"/>` +
+    `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="2" fill="#FFFDF8" stroke="#34322C" stroke-width="1.1"/></g>`;
+  /* stair run */
+  const stairs = (x, y, w, h) => `<g><rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#FFFDF8" stroke="#34322C" stroke-width="1.1"/>` +
+    `<path d="${Array.from({ length: 5 }, (_, i) => `M${x} ${y + h * (i + 1) / 6} H${x + w}`).join("")}" stroke="#34322C" stroke-width=".8" opacity=".6"/></g>`;
   return `
-<svg class="scene" width="360" height="404" viewBox="0 0 360 404" fill="none" aria-hidden="true">
-  <rect x="34" y="4" width="292" height="396" rx="10" fill="#8A9A3E" opacity=".07"/>
-  <path d="M330 2 C 322 70, 340 150, 330 220 C 322 286, 338 340, 330 402" stroke="#5B7FB4" stroke-width="30" opacity=".2" stroke-linecap="round"/>
-  <path d="M330 2 C 322 70, 340 150, 330 220 C 322 286, 338 340, 330 402" stroke="#5B7FB4" stroke-width="1.6" opacity=".5"/>
-  <g stroke="#5B7FB4" stroke-width="1.1" opacity=".5" stroke-linecap="round"><path d="M326 60 c8 6, 12 -4, 20 2M322 148 c8 6, 12 -4, 20 2M330 246 c8 6, 12 -4, 20 2M324 330 c8 6, 12 -4, 20 2"/></g>
-  <text x="336" y="196" font-size="10.5" font-style="italic" fill="#5B7FB4" font-family="Georgia,serif" transform="rotate(90 336 196)">the Kern</text>
-  <rect x="4" y="0" width="26" height="404" fill="#E9E6DE"/>
-  <path d="M4 0 V404 M30 0 V404" stroke="#34322C" stroke-width="1.2" opacity=".65"/>
-  <path d="M17 6 V398" stroke="#FFFDF8" stroke-width="1.8" stroke-dasharray="12 12" opacity=".95"/>
-  <text x="17" y="212" font-size="10.5" font-style="italic" fill="#6B675A" font-family="Georgia,serif" text-anchor="middle" transform="rotate(-90 17 212)">Sierra Way</text>
-  <path d="M30 250 H70" stroke="#E9E6DE" stroke-width="16"/>
-  <path d="M30 242 H72 M30 258 H72" stroke="#34322C" stroke-width="1" opacity=".5"/>
-  <rect x="46" y="236" width="86" height="66" rx="5" fill="#E9E6DE" opacity=".8" stroke="#34322C" stroke-width="1" stroke-dasharray="4 4"/>
-  <circle cx="60" cy="250" r="8.5" fill="#FFFDF8" stroke="#34322C" stroke-width="1.2"/>
-  <text x="60" y="254" text-anchor="middle" font-size="11" font-weight="bold" font-family="Georgia,serif" fill="#34322C">P</text>
-  ${rm(112, 44, 40, 34, "112")}${rm(154, 44, 40, 34, "111")}${rm(196, 44, 40, 34, "110")}${rm(238, 44, 40, 34, "109")}
-  <rect x="196" y="8" width="66" height="24" rx="3" fill="#FBEFEA" stroke="#C44F41" stroke-width="1.5"/>
-  <path d="M206 14 h9 v9 h-9 z" stroke="#C44F41" stroke-width="1.2" fill="none"/>
-  <text x="238" y="24" text-anchor="middle" font-size="10" font-weight="bold" font-family="Georgia,serif" fill="#C44F41">ice</text>
-  ${rm(266, 96, 56, 32, "108")}${rm(266, 132, 56, 32, "107")}${rm(266, 168, 56, 32, "106")}${rm(266, 204, 56, 32, "105")}
-  <path d="M322 186 C 336 184, 342 190, 348 196" stroke="#8A9A3E" stroke-width="1.6" stroke-dasharray="3 4" stroke-linecap="round"/>
-  <text x="300" y="253" font-size="9.5" font-style="italic" fill="#6B675A" font-family="Georgia,serif" text-anchor="middle">to the river</text>
-  <path d="M266 246 C 286 250, 300 246, 312 242" stroke="#8A9A3E" stroke-width="1.6" stroke-dasharray="3 4" stroke-linecap="round"/>
-  ${rm(266, 264, 56, 32, "104")}${rm(266, 300, 56, 32, "103")}
-  ${rm(168, 336, 44, 32, "101")}${rm(216, 336, 44, 32, "102")}
-  <g><rect x="176" y="188" width="66" height="50" rx="16" fill="#5B7FB4" opacity=".28"/>
-    <rect x="176" y="188" width="66" height="50" rx="16" stroke="#5B7FB4" stroke-width="1.6"/>
-    <g stroke="#FFFDF8" stroke-width="1.4" opacity=".85" stroke-linecap="round"><path d="M186 206 c7 -4, 13 4, 20 0 s13 -4, 20 0M186 220 c7 -4, 13 4, 20 0 s13 -4, 20 0"/></g>
-    <g stroke="#34322C" stroke-width="1.3" stroke-linecap="round"><path d="M226 188 v-7 M234 188 v-7 M226 184 h8"/></g>
-    <g fill="#FFFDF8" stroke="#34322C" stroke-width="1.1"><rect x="150" y="196" width="18" height="8" rx="3"/><rect x="150" y="212" width="18" height="8" rx="3"/></g>
-    <path d="M159 186 v-12 M151 174 h16" stroke="#C44F41" stroke-width="1.5" stroke-linecap="round"/></g>
-  <g><rect x="62" y="132" width="94" height="72" rx="4" fill="#FFFDF8" stroke="#34322C" stroke-width="1.5"/>
-    <rect x="64.5" y="135" width="94" height="72" rx="4" fill="#8A9A3E" opacity=".18"/>
-    <rect x="62" y="132" width="94" height="72" rx="4" fill="#FFFDF8" stroke="#34322C" stroke-width="1.5"/>
-    <path d="M109 132 V204" stroke="#34322C" stroke-width=".9" opacity=".3"/>
-    <path d="M62 178 h94" stroke="#34322C" stroke-width=".9" opacity=".3"/>
-    <path d="M100 204 h18 v6 h-18 z" fill="#C44F41" opacity=".9"/>
-    <text x="109" y="164" text-anchor="middle" font-size="10.5" font-family="Georgia,serif" fill="#34322C">front desk</text></g>
-  <g>${rm(66, 92, 40, 26, "117")}${rm(110, 92, 40, 26, "118")}
-    <rect x="66" y="120" width="84" height="7" rx="3" fill="#8A9A3E" opacity=".35" stroke="#34322C" stroke-width="1"/>
-    <text x="108" y="86" text-anchor="middle" font-size="9.5" font-style="italic" fill="#6B675A" font-family="Georgia,serif">upstairs · shared balcony</text></g>
-  <g><circle cx="180" cy="272" r="9" fill="#FFFDF8" stroke="#34322C" stroke-width="1.4"/>
-    <path d="M174 272 h12" stroke="#34322C" stroke-width="1.2"/>
-    <path d="M174 280 l-3 8M186 280 l3 8" stroke="#34322C" stroke-width="1.3" stroke-linecap="round"/>
-    <path d="M176 259 c-3 -5, 3 -7, 0 -12M184 259 c-3 -5, 3 -7, 0 -12" stroke="#C44F41" stroke-width="1.3" stroke-linecap="round" opacity=".8"/>
-    <rect x="202" y="266" width="34" height="14" rx="2" fill="#FFFDF8" stroke="#34322C" stroke-width="1.3"/>
-    <path d="M206 280 v8M232 280 v8M202 273 h34" stroke="#34322C" stroke-width="1.2" stroke-linecap="round"/>
-    <text x="206" y="303" font-size="10" font-family="Georgia,serif" fill="#34322C">BBQ</text></g>
-  ${tree(52, 60, 21)}${tree(84, 44, 15)}${tree(46, 330, 22)}${tree(74, 356, 16)}
-  ${tree(246, 340, 20)}${tree(292, 366, 15)}${tree(150, 300, 14)}${tree(300, 60, 17)}
-  ${tree(122, 372, 18)}${tree(246, 160, 12)}
+<svg class="scene" width="360" height="484" viewBox="0 0 360 484" fill="none" aria-hidden="true">
+  <rect x="30" y="4" width="296" height="476" rx="10" fill="#8A9A3E" opacity=".07"/>
+  <path d="M338 2 C 330 70, 348 150, 336 226 C 328 296, 346 380, 336 482" stroke="#5B7FB4" stroke-width="26" opacity=".2" stroke-linecap="round"/>
+  <path d="M338 2 C 330 70, 348 150, 336 226 C 328 296, 346 380, 336 482" stroke="#5B7FB4" stroke-width="1.6" opacity=".5"/>
+  <g stroke="#5B7FB4" stroke-width="1.1" opacity=".45" stroke-linecap="round"><path d="M334 66 c7 5, 11 -4, 18 2M330 160 c7 5, 11 -4, 18 2M338 290 c7 5, 11 -4, 18 2M336 400 c7 5, 11 -4, 18 2"/></g>
+  <text x="345" y="240" font-size="10.5" font-style="italic" fill="#5B7FB4" font-family="Georgia,serif" text-anchor="middle" transform="rotate(90 345 240)">Kern River</text>
+  <rect x="2" y="0" width="24" height="484" fill="#E9E6DE"/>
+  <path d="M2 0 V484 M26 0 V484" stroke="#34322C" stroke-width="1.2" opacity=".6"/>
+  <path d="M14 6 V478" stroke="#FFFDF8" stroke-width="1.8" stroke-dasharray="13 13" opacity=".95"/>
+  <text x="14" y="240" font-size="10.5" font-style="italic" fill="#6B675A" font-family="Georgia,serif" text-anchor="middle" transform="rotate(-90 14 240)">Sierra Way</text>
+  <path d="M26 322 H44" stroke="#E9E6DE" stroke-width="15"/>
+  <path d="M26 315 H46 M26 330 H46" stroke="#34322C" stroke-width=".9" opacity=".45"/>
+  ${shed(40, 196, 54, 19)}
+  <g>${shed(118, 182, 46, 50)}
+    <path d="M141 182 V232" stroke="#34322C" stroke-width="1" opacity=".45"/>
+    <rect x="141" y="182" width="23" height="50" rx="2" fill="#FBEFEA" stroke="#C44F41" stroke-width="1.6"/>
+    <path d="M147 196 h11 v11 h-11 z M147 201.5 h11 M152.5 196 v11" stroke="#C44F41" stroke-width="1.1" fill="none"/>
+    <text x="152.5" y="222" text-anchor="middle" font-size="9.5" font-weight="bold" font-family="Georgia,serif" fill="#C44F41">ice</text></g>
+  ${rm(170, 178, 26, 44, "112")}${rm(196, 178, 26, 44, "111")}${rm(222, 178, 26, 44, "110")}${rm(248, 178, 26, 44, "109")}
+  ${stairs(280, 166, 50, 12)}
+  ${rm(280, 182, 50, 30, "108")}${rm(280, 215, 50, 30, "107")}${rm(280, 248, 50, 30, "106")}${rm(280, 281, 50, 30, "105")}
+  <g><rect x="284" y="320" width="42" height="52" rx="14" fill="#5B7FB4" opacity=".3"/>
+    <rect x="284" y="320" width="42" height="52" rx="14" stroke="#5B7FB4" stroke-width="1.6"/>
+    <g stroke="#FFFDF8" stroke-width="1.4" opacity=".85" stroke-linecap="round"><path d="M291 338 c6 -4, 11 4, 17 0 s10 -3, 12 -1M291 354 c6 -4, 11 4, 17 0 s10 -3, 12 -1"/></g>
+    <g stroke="#34322C" stroke-width="1.3" stroke-linecap="round"><path d="M296 320 v-6 M304 320 v-6 M296 316 h8"/></g>
+    <g fill="#FFFDF8" stroke="#34322C" stroke-width="1.1"><rect x="262" y="326" width="16" height="7" rx="3"/><rect x="262" y="340" width="16" height="7" rx="3"/></g>
+    <path d="M270 320 v-11 M263 309 h14" stroke="#C44F41" stroke-width="1.4" stroke-linecap="round"/></g>
+  ${rm(280, 380, 50, 30, "104")}${rm(280, 413, 50, 30, "103")}
+  <path d="M330 300 C 342 296, 348 302, 352 310" stroke="#8A9A3E" stroke-width="1.6" stroke-dasharray="3 4" stroke-linecap="round"/>
+  <text x="252" y="304" font-size="9.5" font-style="italic" fill="#6B675A" font-family="Georgia,serif" text-anchor="end">to the river ›</text>
+  ${shed(150, 420, 26, 46)}
+  ${rm(190, 424, 38, 34, "101")}${rm(230, 424, 38, 34, "102")}
+  <g><rect x="40" y="240" width="70" height="106" rx="4" fill="#8A9A3E" opacity=".18" transform="translate(2.5,3)"/>
+    <rect x="40" y="240" width="70" height="106" rx="4" fill="#FFFDF8" stroke="#34322C" stroke-width="1.5"/>
+    <path d="M40 268 h70 M40 314 h70" stroke="#34322C" stroke-width="1" opacity=".45"/>
+    <text x="75" y="259" text-anchor="middle" font-size="10" font-family="Georgia,serif" fill="#34322C">deck</text>
+    <text x="75" y="288" text-anchor="middle" font-size="9.5" font-family="Georgia,serif" fill="#34322C">kitchen</text>
+    <text x="75" y="300" text-anchor="middle" font-size="9.5" font-family="Georgia,serif" fill="#34322C">&amp; dining</text>
+    <text x="75" y="334" text-anchor="middle" font-size="10.5" font-family="Georgia,serif" fill="#34322C">front desk</text>
+    <path d="M100 346 h16 v6 h-16 z" fill="#C44F41" opacity=".9"/></g>
+  <g>${stairs(112, 240, 14, 22)}
+    <path d="M126 244 C 136 240, 142 236, 150 234" stroke="#34322C" stroke-width="1" opacity=".7"/>
+    <text x="152" y="235" font-size="9.5" font-style="italic" fill="#6B675A" font-family="Georgia,serif">117 &amp; 118 above</text></g>
+  <g><path d="M124 258 C 176 252, 208 274, 206 312 C 204 346, 160 358, 130 344 C 112 336, 112 276, 124 258 Z" fill="#E9E6DE" opacity=".55" stroke="#34322C" stroke-width="1" stroke-dasharray="4 4"/>
+    <ellipse cx="176" cy="322" rx="22" ry="15" fill="#FFFDF8" stroke="#34322C" stroke-width="1.2"/>
+    <circle cx="150" cy="292" r="9" fill="#FFFDF8" stroke="#34322C" stroke-width="1.4"/>
+    <path d="M144 292 h12" stroke="#34322C" stroke-width="1.2"/>
+    <path d="M144 300 l-3 8M156 300 l3 8" stroke="#34322C" stroke-width="1.3" stroke-linecap="round"/>
+    <path d="M146 279 c-3 -5, 3 -7, 0 -12M154 279 c-3 -5, 3 -7, 0 -12" stroke="#C44F41" stroke-width="1.3" stroke-linecap="round" opacity=".8"/>
+    <text x="150" y="322" text-anchor="middle" font-size="10.5" font-family="Georgia,serif" fill="#34322C">BBQ</text></g>
+  ${tree(54, 128, 20)}${tree(88, 108, 14)}${tree(232, 128, 18)}${tree(300, 116, 15)}
+  ${tree(46, 390, 21)}${tree(80, 420, 15)}${tree(112, 396, 13)}${tree(240, 360, 16)}
+  ${tree(250, 452, 19)}${tree(300, 462, 14)}${tree(196, 148, 12)}${tree(60, 452, 16)}
 </svg>`;
 }
 function nowArrival(c, sc) {
