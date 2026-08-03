@@ -1186,6 +1186,20 @@ function sceneHero(c, txt) {
   ${txt.sub ? `<text x="20" y="246" font-family="Georgia,serif" font-size="11" font-style="italic" fill="${night ? "#B9C2CE" : "#6B675A"}">${txt.sub}</text>` : ""}
 </svg>`;
 }
+/* content-first override — the landing leads with words, not paint */
+function sceneHero(c, txt) {
+  return `<div class="t-display">${txt.top}</div>
+    ${txt.skyline ? `<p class="logi">${txt.skyline}</p>` : ""}
+    ${txt.cap ? `<p class="why" style="font-size:16.5px;margin-top:10px"><b>${txt.cap}</b>${txt.sub ? ` <span class="logi" style="font-weight:400">· ${txt.sub}</span>` : ""}</p>` : ""}`;
+}
+function openNowTick(c) {
+  const open = DATA.eat.map(p => ({ p, st: statusFor(p, c) })).filter(x => x.st.order <= 1)
+    .sort((a, b) => a.st.order - b.st.order || fitScore(b.p.goodFor) - fitScore(a.p.goodFor)).slice(0, 3);
+  if (!open.length) return "";
+  return `<div class="tick"><span class="label" style="color:var(--olive-deep)">Open right now in town</span>
+    ${open.map(x => `<div style="display:flex;justify-content:space-between;gap:8px;font-size:14px;margin-top:5px"><span><b>${esc(x.p.name)}</b> <span class="logi">· ${esc(x.p.area)}</span></span><span class="st"><span class="dot"></span>${x.st.text}</span></div>`).join("")}
+  </div>`;
+}
 function bigActs(primaryLabel, primaryGoto, primaryHref) {
   const primary = primaryLabel
     ? (primaryHref
@@ -1562,7 +1576,8 @@ function nowFull(c, sc) {
       sub: primary ? esc(primary.sub).slice(0, 64) : "",
     })
     + bigActs(primary ? primary.lab + ": " + esc(primary.name) + " →" : "Explore the valley →", primary ? primary.gotoK : "do")
-    + `${beats.slice(primary ? 1 : 0, primary ? 3 : 2).join("")}
+    + `${beats.slice(0, 3).join("")}
+    ${openNowTick(c)}
     ${oneNight ? "" : `<span class="label" style="display:block;margin-top:18px">Your days, sketched</span>${dayStrip(c, sc)}`}
     ${evs}
     ${essCardNow()}
@@ -1652,6 +1667,15 @@ function nowNone(c) {
       sub: `sunset ${shortTime(sun.set)} · sunrise ${shortTime(sun.rise)} — computed for this bend of the river`,
     })
     + bigActs(cap === "All quiet on the river" ? "Explore the valley →" : cap + " →", capGoto)
+    + `${m0 ? verdict(mealKind === "breakfast" ? "First thing " + inkMark("mug") : "Dinner tonight " + inkMark("fork"), esc(m0.name),
+        m0.quote.split(/[.—]/)[0].trim().toLowerCase(),
+        statusFor(m0, c).text + " · " + esc(m0.area),
+        btn("Call", telHref(m0.phone)) + btn("Directions", mapsQ(m0.name), true), altsFor(meal, m0), "eat")
+      : ad ? verdict("After dark " + moonDisc(c.n), esc(ad.name), ad.why, ad.logi, "", null, "secrets") : ""}
+    ${act ? verdict("While the light's good " + inkMark("boot"), esc(act.name), whyFor(act, c, c.n),
+        [act.drive || act.cat, act.diff].filter(Boolean).join(" · "),
+        btn("Directions", mapsQ(act.name), true), null, "do") : ""}
+    ${openNowTick(c)}`
     + essCardNow()
     + `${tm ? `<p class="why" style="margin-top:12px">First one up tomorrow: <b>${esc(tm.p.name)}</b>, opens ${shortTime(tm.t.open)}.</p>` : ""}
     ${evs.length ? `<div class="tick"><span class="label" style="color:var(--olive-deep)">Tonight in town</span><div style="font-size:14px;margin-top:3px"><b>${esc(evs[0].name)}</b> — ${esc(evs[0].blurb)}</div></div>` : ""}
