@@ -94,6 +94,7 @@
   .chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 2px}
   .chip{font-family:var(--serif);font-size:13.5px;padding:10px 15px;border-radius:999px;border:1.3px solid var(--ink);background:var(--paper);color:var(--ink);cursor:pointer;min-height:44px}
   .chip.on{border-color:var(--coral);background:var(--coral);color:#fff}
+  .morez{display:block;width:100%;margin:-4px 0 18px;padding:11px;border:1.2px dashed var(--olive-deep);background:none;border-radius:12px;font-family:var(--serif);font-size:13.5px;font-style:italic;color:var(--olive-deep);cursor:pointer;min-height:44px}
   .chip.dogchip.on{border-color:var(--olive);background:var(--olive)}
   .acts{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
   .act{font-size:12.5px;border:1.2px solid var(--ink);border-radius:999px;padding:9px 13px;text-decoration:none;color:var(--ink);font-family:var(--serif);min-height:40px;display:inline-flex;align-items:center}
@@ -1737,6 +1738,8 @@ function renderNow() {
 
 /* ===================== EXPLORE — the appendix ===================== */
 let exFilter = "all", askQuery = "";
+/* zones start showing only their best few; exOpen holds the ones the guest asked to see in full */
+let exOpen = new Set();
 function actsRow(name, opts) {
   opts = opts || {};
   const L = LINKS[name], a = [];
@@ -1953,11 +1956,17 @@ function renderExplore() {
     items.sort((a, b) => ((b.it.star ? 1 : 0) - (a.it.star ? 1 : 0))
       || ((!a.it.months || a.it.months.includes(c.month)) ? 0 : 1) - ((!b.it.months || b.it.months.includes(c.month)) ? 0 : 1)
       || fitScore(b.it.goodFor || b.it.tags) - fitScore(a.it.goodFor || a.it.tags));
-    return milepost(z) + items.map(x =>
+    /* lead with the best three; the rest wait behind one tap so the page stays walkable */
+    const open = exOpen.has(z), CAP = 3, deep = items.length > CAP + 1;
+    const show = (deep && !open) ? items.slice(0, CAP) : items;
+    const rows = show.map(x =>
       x.kind === "eat" ? eatRow(x.it, c)
       : x.kind === "water" ? waterRow(x.it)
       : catRow({ ...x.it, kind: x.kind === "trail" ? "hike" : x.kind }, c, x.kind === "trip" ? x.it.drive : null)
     ).join("");
+    const more = !deep ? ""
+      : `<button class="morez" data-exz="${z}">${open ? "Show fewer" : "See all " + items.length + " ›"}</button>`;
+    return milepost(z) + rows + more;
   }).join("");
   /* today's house secret, up top */
   const dayN = Math.floor(+c.mid / 864e5);
@@ -1966,14 +1975,11 @@ function renderExplore() {
   return `
     <div class="t-display">Explore</div>
     <p class="logi">The valley, laid out by how far it is from your door.</p>
-    <div class="tick"><span class="label" style="color:var(--olive-deep)">Where you are</span>
-      <p style="margin:3px 0 0;font-size:14px">2,670 feet, right where the Kern comes down out of the High Sierra. Everything here is measured in minutes along Sierra Way — downtown is a 15-minute stroll, the lake 10 minutes south, and the canyon runs 20 wild miles north. Bakersfield is an hour-plus west; treat it as an expedition, not an errand.</p></div>
     ${townMap}
-    <p class="logi" style="font-style:italic;margin-top:2px">Sierra Way runs the whole length of it. We're on the river side; downtown is south, the canyon north.</p>
+    <p class="logi" style="font-style:italic;margin-top:2px">Downtown is a 15-minute stroll south, the lake 10 minutes past that, and the canyon runs 20 wild miles north.</p>
     <div class="contactrow" style="margin-top:8px">
       <a class="cbtn" href="${DATA.lodge.mapUrl}" target="_blank" rel="noopener">Open us in your maps app</a>
     </div>
-    <p class="logi" style="font-style:italic">Every card below has its own Directions button, too.</p>
     <div class="chips" style="margin-top:12px">${[["all", "Everything"], ["eat", "Eat & drink"], ["trail", "Trails"], ["water", "On the water"], ["secret", "Local secrets"]].map(([k, l]) =>
       `<button class="chip ${exFilter === k ? "on" : ""}" data-exf="${k}">${l}</button>`).join("")}</div>
     ${feat ? `<span class="label" style="display:block;margin-top:16px">Today's house secret</span>
@@ -2097,7 +2103,7 @@ document.addEventListener("click", (e) => {
   const nav = e.target.closest("[data-nav]");
   if (nav) { cur = nav.dataset.nav; paint(true); return; }
   const go = e.target.closest("[data-goto]");
-  if (go) { e.preventDefault(); cur = "explore"; exFilter = { eat: "eat", do: "trail", secrets: "secret", events: "all" }[go.dataset.goto] || "all"; paint(true); return; }
+  if (go) { e.preventDefault(); cur = "explore"; exFilter = { eat: "eat", do: "trail", secrets: "secret", events: "all" }[go.dataset.goto] || "all"; exOpen.clear(); paint(true); return; }
   const p = e.target.closest("[data-p]");
   if (p) {
     const id = p.dataset.p;
@@ -2113,8 +2119,10 @@ document.addEventListener("click", (e) => {
     [...rm.parentElement.querySelectorAll(".chip")].forEach(ch => ch.classList.toggle("on", ch.dataset.room === room));
     return;
   }
+  const xz = e.target.closest("[data-exz]");
+  if (xz) { const z = +xz.dataset.exz; exOpen.has(z) ? exOpen.delete(z) : exOpen.add(z); paint(); return; }
   const ex = e.target.closest("[data-exf]");
-  if (ex) { exFilter = ex.dataset.exf; paint(); return; }
+  if (ex) { exFilter = ex.dataset.exf; exOpen.clear(); paint(); return; }
   const ak = e.target.closest("[data-ask]");
   if (ak) {
     askQuery = ak.dataset.ask;
