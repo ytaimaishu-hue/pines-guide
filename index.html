@@ -1440,19 +1440,22 @@ function lodgeMap() {
   const stairs = (x, y, w, h) => `<g><rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#FFFDF8" stroke="#34322C" stroke-width="1.1"/>` +
     `<path d="${Array.from({ length: 5 }, (_, i) => `M${x} ${y + h * (i + 1) / 6} H${x + w}`).join("")}" stroke="#34322C" stroke-width=".8" opacity=".6"/></g>`;
   return `
-<svg class="scene" width="360" height="545" viewBox="0 0 360 545" fill="none" aria-hidden="true">
-  <rect x="30" y="4" width="300" height="537" rx="10" fill="#8A9A3E" opacity=".07"/>
-  <path d="M342 2 C 334 80, 350 170, 340 256 C 332 336, 350 430, 340 543" stroke="#5B7FB4" stroke-width="26" opacity=".2" stroke-linecap="round"/>
-  <path d="M342 2 C 334 80, 350 170, 340 256 C 332 336, 350 430, 340 543" stroke="#5B7FB4" stroke-width="1.6" opacity=".5"/>
-  <g stroke="#5B7FB4" stroke-width="1.1" opacity=".45" stroke-linecap="round"><path d="M338 70 c7 5, 11 -4, 18 2M334 180 c7 5, 11 -4, 18 2M342 330 c7 5, 11 -4, 18 2M340 500 c7 5, 11 -4, 18 2"/></g>
-  <text x="350" y="250" font-size="10.5" font-style="italic" fill="#5B7FB4" font-family="Georgia,serif" text-anchor="middle" transform="rotate(90 350 250)">Kern River</text>
-  <rect x="2" y="0" width="24" height="545" fill="#E9E6DE"/>
-  <path d="M2 0 V545 M26 0 V545" stroke="#34322C" stroke-width="1.2" opacity=".6"/>
-  <path d="M14 6 V539" stroke="#FFFDF8" stroke-width="1.8" stroke-dasharray="13 13" opacity=".95"/>
-  <text x="14" y="272" font-size="10.5" font-style="italic" fill="#6B675A" font-family="Georgia,serif" text-anchor="middle" transform="rotate(-90 14 272)">Sierra Way</text>
-  <path d="M26 412 C 92 426, 158 414, 210 396 C 240 386, 254 350, 254 300 C 254 250, 250 218, 242 204" stroke="#34322C" stroke-width="19" opacity=".16" stroke-linecap="round"/>
-  <path d="M26 412 C 92 426, 158 414, 210 396 C 240 386, 254 350, 254 300 C 254 250, 250 218, 242 204" stroke="#D9D6CE" stroke-width="16" stroke-linecap="round"/>
-  <text x="150" y="410" font-size="9.5" font-style="italic" fill="#4A473E" font-family="Georgia,serif" text-anchor="middle">park by your door</text>
+<svg class="scene" width="360" height="600" viewBox="0 0 360 600" fill="none" aria-hidden="true">
+  <rect x="30" y="4" width="300" height="592" rx="10" fill="#8A9A3E" opacity=".07"/>
+  <path d="M344 2 C 336 90, 352 190, 342 282 C 334 370, 352 480, 342 598" stroke="#5B7FB4" stroke-width="26" opacity=".2" stroke-linecap="round"/>
+  <path d="M344 2 C 336 90, 352 190, 342 282 C 334 370, 352 480, 342 598" stroke="#5B7FB4" stroke-width="1.6" opacity=".5"/>
+  <g stroke="#5B7FB4" stroke-width="1.1" opacity=".45" stroke-linecap="round"><path d="M340 76 c7 5, 11 -4, 18 2M336 196 c7 5, 11 -4, 18 2M344 366 c7 5, 11 -4, 18 2M342 552 c7 5, 11 -4, 18 2"/></g>
+  <text x="352" y="270" font-size="10.5" font-style="italic" fill="#5B7FB4" font-family="Georgia,serif" text-anchor="middle" transform="rotate(90 352 270)">Kern River</text>
+  <rect x="2" y="0" width="24" height="600" fill="#E9E6DE"/>
+  <path d="M2 0 V600 M26 0 V600" stroke="#34322C" stroke-width="1.2" opacity=".6"/>
+  <path d="M14 6 V594" stroke="#FFFDF8" stroke-width="1.8" stroke-dasharray="13 13" opacity=".95"/>
+  <text x="14" y="300" font-size="10.5" font-style="italic" fill="#6B675A" font-family="Georgia,serif" text-anchor="middle" transform="rotate(-90 14 300)">Sierra Way</text>
+  <path d="M26 452 C 96 462, 156 452, 200 434 C 228 422, 240 386, 240 336 C 240 276, 236 230, 228 208" stroke="#34322C" stroke-width="32" opacity=".14" stroke-linecap="round"/>
+  <path d="M26 452 C 96 462, 156 452, 200 434 C 228 422, 240 386, 240 336 C 240 276, 236 230, 228 208" stroke="#D9D6CE" stroke-width="29" stroke-linecap="round"/>
+  <g fill="#FFFDF8" stroke="#34322C" stroke-width="1.1" opacity=".9">
+    <rect x="258" y="244" width="17" height="9" rx="3"/><rect x="258" y="282" width="17" height="9" rx="3"/>
+    <rect x="258" y="320" width="17" height="9" rx="3"/><rect x="150" y="462" width="17" height="9" rx="3"/></g>
+  <text x="120" y="440" font-size="9.5" font-style="italic" fill="#4A473E" font-family="Georgia,serif" text-anchor="middle">park by your door</text>
   <g><rect x="112" y="148.5" width="56" height="56" rx="2" fill="#34322C" opacity=".13"/>
     <rect x="110" y="146" width="56" height="56" rx="2" fill="#C3CE9E" stroke="#34322C" stroke-width="1.3"/>
     <path d="M144 146 V202" stroke="#34322C" stroke-width="1.2"/>
@@ -1461,40 +1464,39 @@ function lodgeMap() {
     <path d="M149.5 157 h11 v11 h-11 z M149.5 162.5 h11 M155 157 v11" stroke="#C44F41" stroke-width="1.1" fill="none"/>
     <text x="155" y="189" text-anchor="middle" font-size="11.5" font-weight="bold" font-family="Georgia,serif" fill="#C44F41">ice</text></g>
   ${rm(174, 146, 25, 50, "112")}${rm(199, 146, 25, 50, "111")}${rm(224, 146, 25, 50, "110")}${rm(249, 146, 25, 50, "109")}
-  ${stairs(280, 132, 52, 12)}
-  ${rm(280, 148, 52, 34, "108")}${rm(280, 186, 52, 34, "107")}${rm(280, 224, 52, 34, "106")}${rm(280, 262, 52, 34, "105")}
-  <g><rect x="282" y="304" width="48" height="60" rx="3" fill="#E9E6DE" stroke="#8B5E4A" stroke-width="1.4"/>
-    <rect x="288" y="310" width="36" height="48" rx="2" fill="#5B7FB4" opacity=".32"/>
-    <rect x="288" y="310" width="36" height="48" rx="2" stroke="#5B7FB4" stroke-width="1.4"/>
-    <g stroke="#FFFDF8" stroke-width="1.3" opacity=".85" stroke-linecap="round"><path d="M293 326 c5 -4, 10 4, 15 0 s8 -3, 11 -1M293 344 c5 -4, 10 4, 15 0 s8 -3, 11 -1"/></g>
-    <g stroke="#34322C" stroke-width="1.2" stroke-linecap="round"><path d="M300 310 v-4 M307 310 v-4"/></g>
-    <g fill="#FFFDF8" stroke="#34322C" stroke-width="1.1"><rect x="262" y="312" width="15" height="7" rx="3"/><rect x="262" y="328" width="15" height="7" rx="3"/></g>
-    <path d="M269 306 v-10 M262 296 h14" stroke="#C44F41" stroke-width="1.4" stroke-linecap="round"/></g>
-  ${rm(280, 376, 52, 34, "104")}${rm(280, 414, 52, 34, "103")}
-  ${stairs(334, 456, 14, 22)}
-  <path d="M341 478 C 344 488, 350 492, 356 496" stroke="#8A9A3E" stroke-width="1.6" stroke-dasharray="3 4" stroke-linecap="round"/>
-  <text x="304" y="480" font-size="10" font-style="italic" fill="#6B675A" font-family="Georgia,serif" text-anchor="middle">stairs to the river</text>
-  <g><rect x="118" y="266" width="100" height="110" rx="34" fill="#E4E0D6" stroke="#34322C" stroke-width="1.1"/>
-    <g fill="none" stroke="#4E6B52" stroke-width="1.3"><circle cx="146" cy="294" r="7.5"/><circle cx="170" cy="322" r="7.5"/><circle cx="144" cy="346" r="7.5"/></g>
-    <g><rect x="184" y="294" width="13" height="10" rx="1.5" fill="#4A473E" stroke="#34322C" stroke-width="1"/>
-      <path d="M187 295.5 V302.5 M190.5 295.5 V302.5 M194 295.5 V302.5" stroke="#C3CE9E" stroke-width=".7" opacity=".85"/>
-      <rect x="199" y="294" width="13" height="10" rx="1.5" fill="#4A473E" stroke="#34322C" stroke-width="1"/>
-      <path d="M202 295.5 V302.5 M205.5 295.5 V302.5 M209 295.5 V302.5" stroke="#C3CE9E" stroke-width=".7" opacity=".85"/>
-      <path d="M190 290 c-2 -3, 2 -4, 0 -7M205 290 c-2 -3, 2 -4, 0 -7" stroke="#C44F41" stroke-width="1.1" stroke-linecap="round" opacity=".7"/></g>
-    <text x="198" y="316" text-anchor="middle" font-size="10" font-family="Georgia,serif" fill="#34322C">BBQ</text></g>
-  <g><rect x="42.5" y="235" width="76" height="154" rx="4" fill="#34322C" opacity=".13"/>
-    <rect x="40" y="232" width="76" height="154" rx="4" fill="#AFBC83" stroke="#34322C" stroke-width="1.5"/>
-    <text x="78" y="348" text-anchor="middle" font-size="12.5" font-family="Georgia,serif" fill="#34322C">office</text>
-    <path d="M88 386 h18 v6 h-18 z" fill="#C44F41" opacity=".9"/></g>
-  <rect x="46" y="288" width="64" height="6" rx="2" fill="#8A9A3E" opacity=".5" stroke="#34322C" stroke-width=".9"/>
-  ${rm(46, 246, 32, 42, "117")}${rm(78, 246, 32, 42, "118")}
-  ${stairs(116, 238, 13, 26)}
-  <text x="133" y="248" font-size="10.5" font-style="italic" fill="#6B675A" font-family="Georgia,serif">upstairs,</text>
-  <text x="133" y="260" font-size="10.5" font-style="italic" fill="#6B675A" font-family="Georgia,serif">over the office</text>
-  ${rm(186, 466, 40, 38, "101")}${rm(228, 466, 40, 38, "102")}
+  ${stairs(282, 136, 52, 12)}
+  ${rm(282, 152, 52, 36, "108")}${rm(282, 192, 52, 36, "107")}${rm(282, 232, 52, 36, "106")}${rm(282, 272, 52, 36, "105")}
+  <g><rect x="284" y="318" width="48" height="64" rx="3" fill="#E9E6DE" stroke="#8B5E4A" stroke-width="1.4"/>
+    <rect x="290" y="324" width="36" height="52" rx="2" fill="#5B7FB4" opacity=".32"/>
+    <rect x="290" y="324" width="36" height="52" rx="2" stroke="#5B7FB4" stroke-width="1.4"/>
+    <g stroke="#FFFDF8" stroke-width="1.3" opacity=".85" stroke-linecap="round"><path d="M295 342 c5 -4, 10 4, 15 0 s8 -3, 11 -1M295 360 c5 -4, 10 4, 15 0 s8 -3, 11 -1"/></g>
+    <g stroke="#34322C" stroke-width="1.2" stroke-linecap="round"><path d="M302 324 v-4 M309 324 v-4"/></g>
+    <g fill="#FFFDF8" stroke="#34322C" stroke-width="1.1"><rect x="262" y="358" width="15" height="7" rx="3"/><rect x="262" y="372" width="15" height="7" rx="3"/></g></g>
+  ${rm(282, 392, 52, 36, "104")}${rm(282, 432, 52, 36, "103")}
+  ${stairs(336, 478, 14, 22)}
+  <path d="M343 500 C 346 510, 352 514, 357 518" stroke="#8A9A3E" stroke-width="1.6" stroke-dasharray="3 4" stroke-linecap="round"/>
+  <text x="306" y="502" font-size="10" font-style="italic" fill="#6B675A" font-family="Georgia,serif" text-anchor="middle">stairs to the river</text>
+  <g><rect x="124" y="306" width="64" height="76" rx="16" fill="#E4E0D6" stroke="#34322C" stroke-width="1.1"/>
+    <g fill="none" stroke="#4E6B52" stroke-width="1.2"><circle cx="142" cy="330" r="6.5"/><circle cx="150" cy="360" r="6.5"/></g>
+    <g><rect x="156" y="312" width="11" height="9" rx="1.5" fill="#4A473E" stroke="#34322C" stroke-width=".9"/>
+      <path d="M158.5 313 V320 M161.5 313 V320 M164.5 313 V320" stroke="#C3CE9E" stroke-width=".6" opacity=".85"/>
+      <rect x="169" y="312" width="11" height="9" rx="1.5" fill="#4A473E" stroke="#34322C" stroke-width=".9"/>
+      <path d="M171.5 313 V320 M174.5 313 V320 M177.5 313 V320" stroke="#C3CE9E" stroke-width=".6" opacity=".85"/>
+      <path d="M161 308 c-1.6 -2.4, 1.6 -3.2, 0 -5.6M174 308 c-1.6 -2.4, 1.6 -3.2, 0 -5.6" stroke="#C44F41" stroke-width="1" stroke-linecap="round" opacity=".7"/></g>
+    <text x="168" y="334" text-anchor="middle" font-size="9.5" font-family="Georgia,serif" fill="#34322C">BBQ</text></g>
+  <g><rect x="42.5" y="243" width="76" height="160" rx="4" fill="#34322C" opacity=".13"/>
+    <rect x="40" y="240" width="76" height="160" rx="4" fill="#AFBC83" stroke="#34322C" stroke-width="1.5"/>
+    <text x="78" y="362" text-anchor="middle" font-size="12.5" font-family="Georgia,serif" fill="#34322C">office</text>
+    <path d="M88 400 h18 v6 h-18 z" fill="#C44F41" opacity=".9"/></g>
+  <rect x="46" y="296" width="64" height="6" rx="2" fill="#8A9A3E" opacity=".5" stroke="#34322C" stroke-width=".9"/>
+  ${rm(46, 254, 32, 42, "117")}${rm(78, 254, 32, 42, "118")}
+  ${stairs(116, 250, 13, 26)}
+  <text x="133" y="263" font-size="10.5" font-style="italic" fill="#6B675A" font-family="Georgia,serif">upstairs,</text>
+  <text x="133" y="275" font-size="10.5" font-style="italic" fill="#6B675A" font-family="Georgia,serif">over the office</text>
+  ${rm(190, 520, 40, 38, "101")}${rm(232, 520, 40, 38, "102")}
   ${tree(54, 108, 20)}${tree(88, 86, 14)}${tree(238, 106, 18)}${tree(308, 92, 15)}
-  ${tree(52, 440, 21)}${tree(88, 474, 15)}${tree(146, 446, 12)}${tree(196, 428, 14)}
-  ${tree(320, 522, 15)}${tree(150, 500, 14)}${tree(64, 512, 16)}${tree(202, 118, 11)}
+  ${tree(52, 470, 21)}${tree(88, 506, 15)}${tree(196, 484, 14)}${tree(268, 400, 15)}
+  ${tree(300, 552, 16)}${tree(148, 552, 14)}${tree(60, 552, 16)}${tree(202, 118, 11)}
 </svg>`;
 }
 function nowArrival(c, sc) {
