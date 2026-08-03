@@ -1430,9 +1430,6 @@ function lodgeMap() {
   const tree = (x, y, r) => `<g><ellipse cx="${x}" cy="${y}" rx="${r}" ry="${r * .44}" fill="#8A9A3E" opacity=".92"/>` +
     `<ellipse cx="${x + r * .48}" cy="${y + r * .34}" rx="${r * .6}" ry="${r * .28}" fill="#8A9A3E" opacity=".68"/>` +
     `<path d="M${x} ${y + r * .44} C${x} ${y + r * .8}, ${x - .6} ${y + r} , ${x - 1} ${y + r * 1.3}" stroke="#34322C" stroke-width="1.2" stroke-linecap="round"/></g>`;
-  /* a plain outbuilding (storage, etc.) — drawn so the grounds read true, left unlabelled */
-  const shed = (x, y, w, h) => `<g><rect x="${x + 2}" y="${y + 2.5}" width="${w}" height="${h}" rx="2" fill="#8A9A3E" opacity=".16"/>` +
-    `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="2" fill="#FFFDF8" stroke="#34322C" stroke-width="1.1"/></g>`;
   /* stair run */
   const stairs = (x, y, w, h) => `<g><rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#FFFDF8" stroke="#34322C" stroke-width="1.1"/>` +
     `<path d="${Array.from({ length: 5 }, (_, i) => `M${x} ${y + h * (i + 1) / 6} H${x + w}`).join("")}" stroke="#34322C" stroke-width=".8" opacity=".6"/></g>`;
@@ -1449,7 +1446,6 @@ function lodgeMap() {
   <text x="14" y="240" font-size="10.5" font-style="italic" fill="#6B675A" font-family="Georgia,serif" text-anchor="middle" transform="rotate(-90 14 240)">Sierra Way</text>
   <path d="M26 322 H44" stroke="#E9E6DE" stroke-width="15"/>
   <path d="M26 315 H46 M26 330 H46" stroke="#34322C" stroke-width=".9" opacity=".45"/>
-  ${shed(40, 196, 54, 19)}
   <g><rect x="110" y="178.5" width="58" height="54" rx="2" fill="#8A9A3E" opacity=".16"/>
     <rect x="108" y="176" width="58" height="54" rx="2" fill="#FFFDF8" stroke="#34322C" stroke-width="1.3"/>
     <path d="M146 176 V230" stroke="#34322C" stroke-width="1.2"/>
@@ -1469,26 +1465,25 @@ function lodgeMap() {
   ${rm(280, 380, 50, 30, "104")}${rm(280, 413, 50, 30, "103")}
   <path d="M330 300 C 342 296, 348 302, 352 310" stroke="#8A9A3E" stroke-width="1.6" stroke-dasharray="3 4" stroke-linecap="round"/>
   <text x="252" y="304" font-size="9.5" font-style="italic" fill="#6B675A" font-family="Georgia,serif" text-anchor="end">to the river ›</text>
-  ${shed(150, 420, 26, 46)}
   ${rm(190, 424, 38, 34, "101")}${rm(230, 424, 38, 34, "102")}
-  <g><rect x="40" y="240" width="70" height="106" rx="4" fill="#8A9A3E" opacity=".18" transform="translate(2.5,3)"/>
-    <rect x="40" y="240" width="70" height="106" rx="4" fill="#FFFDF8" stroke="#34322C" stroke-width="1.5"/>
-    <path d="M40 268 h70 M40 314 h70" stroke="#34322C" stroke-width="1" opacity=".45"/>
-    <text x="75" y="259" text-anchor="middle" font-size="10" font-family="Georgia,serif" fill="#34322C">deck</text>
-    <text x="75" y="288" text-anchor="middle" font-size="9.5" font-family="Georgia,serif" fill="#34322C">kitchen</text>
-    <text x="75" y="300" text-anchor="middle" font-size="9.5" font-family="Georgia,serif" fill="#34322C">&amp; dining</text>
-    <text x="75" y="334" text-anchor="middle" font-size="10.5" font-family="Georgia,serif" fill="#34322C">front desk</text>
-    <path d="M100 346 h16 v6 h-16 z" fill="#C44F41" opacity=".9"/></g>
-  <g>${stairs(112, 240, 14, 22)}
-    <path d="M126 244 C 136 240, 142 236, 150 234" stroke="#34322C" stroke-width="1" opacity=".7"/>
-    <text x="152" y="235" font-size="9.5" font-style="italic" fill="#6B675A" font-family="Georgia,serif">117 &amp; 118 above</text></g>
-  <g><path d="M124 258 C 176 252, 208 274, 206 312 C 204 346, 160 358, 130 344 C 112 336, 112 276, 124 258 Z" fill="#E9E6DE" opacity=".55" stroke="#34322C" stroke-width="1" stroke-dasharray="4 4"/>
-    <ellipse cx="176" cy="322" rx="22" ry="15" fill="#FFFDF8" stroke="#34322C" stroke-width="1.2"/>
-    <circle cx="150" cy="292" r="9" fill="#FFFDF8" stroke="#34322C" stroke-width="1.4"/>
-    <path d="M144 292 h12" stroke="#34322C" stroke-width="1.2"/>
-    <path d="M144 300 l-3 8M156 300 l3 8" stroke="#34322C" stroke-width="1.3" stroke-linecap="round"/>
-    <path d="M146 279 c-3 -5, 3 -7, 0 -12M154 279 c-3 -5, 3 -7, 0 -12" stroke="#C44F41" stroke-width="1.3" stroke-linecap="round" opacity=".8"/>
-    <text x="150" y="322" text-anchor="middle" font-size="10.5" font-family="Georgia,serif" fill="#34322C">BBQ</text></g>
+  <g><rect x="118" y="264" width="100" height="96" rx="34" fill="#E9E6DE" opacity=".7" stroke="#34322C" stroke-width="1.1"/>
+    <rect x="132" y="306" width="70" height="42" rx="19" fill="#FFFDF8" stroke="#34322C" stroke-width="1.2"/>
+    <g><circle cx="154" cy="327" r="8" fill="#FFFDF8" stroke="#34322C" stroke-width="1.4"/>
+      <path d="M148.5 325 h11" stroke="#34322C" stroke-width="1.2"/>
+      <path d="M149 334 l-2.5 7M159 334 l2.5 7" stroke="#34322C" stroke-width="1.3" stroke-linecap="round"/>
+      <path d="M150 315 c-3 -4, 3 -6, 0 -10M158 315 c-3 -4, 3 -6, 0 -10" stroke="#C44F41" stroke-width="1.3" stroke-linecap="round" opacity=".75"/></g>
+    <text x="180" y="331" text-anchor="middle" font-size="11" font-family="Georgia,serif" fill="#34322C">BBQ</text></g>
+  <g><rect x="42.5" y="239" width="72" height="120" rx="4" fill="#8A9A3E" opacity=".18"/>
+    <rect x="40" y="236" width="72" height="120" rx="4" fill="#FFFDF8" stroke="#34322C" stroke-width="1.5"/>
+    <path d="M40 276 h72 M40 320 h72" stroke="#34322C" stroke-width="1" opacity=".45"/>
+    <text x="76" y="261" text-anchor="middle" font-size="11" font-family="Georgia,serif" fill="#34322C">deck</text>
+    <text x="76" y="295" text-anchor="middle" font-size="10" font-family="Georgia,serif" fill="#34322C">kitchen</text>
+    <text x="76" y="307" text-anchor="middle" font-size="10" font-family="Georgia,serif" fill="#34322C">&amp; dining</text>
+    <text x="76" y="343" text-anchor="middle" font-size="11" font-family="Georgia,serif" fill="#34322C">front desk</text>
+    <path d="M88 356 h18 v6 h-18 z" fill="#C44F41" opacity=".9"/></g>
+  <g>${stairs(112, 236, 13, 22)}
+    <path d="M125 244 H136" stroke="#34322C" stroke-width="1" opacity=".7"/>
+    <text x="139" y="247" font-size="9.5" font-style="italic" fill="#6B675A" font-family="Georgia,serif">117 &amp; 118 above</text></g>
   ${tree(54, 128, 20)}${tree(88, 108, 14)}${tree(232, 128, 18)}${tree(300, 116, 15)}
   ${tree(46, 390, 21)}${tree(80, 420, 15)}${tree(112, 396, 13)}${tree(240, 360, 16)}
   ${tree(250, 452, 19)}${tree(300, 462, 14)}${tree(196, 148, 12)}${tree(60, 452, 16)}
