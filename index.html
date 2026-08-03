@@ -2015,7 +2015,14 @@ const SCREENS = [
   { id: "lodge", label: "The Lodge", render: renderLodge,
     icon: `<svg width="21" height="21" viewBox="0 0 22 22"><path d="M3 11l8-7 8 7M5.5 9.2V19h11V9.2M9.5 19v-5h3v5"/></svg>` },
 ];
-let cur = "now";
+/* #v=explore / #v=lodge opens straight to that screen; anything else starts on Now */
+let cur = (() => {
+  try {
+    const v = (new URLSearchParams((location.hash || "").replace(/^#/, "")).get("v")
+      || new URLSearchParams(location.search || "").get("v") || "").trim().toLowerCase();
+    return SCREENS.some(s => s.id === v) ? v : "now";
+  } catch (e) { return "now"; }
+})();
 function paint(toTop) {
   const y = window.scrollY;
   const c = clock();
