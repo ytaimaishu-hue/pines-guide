@@ -1417,42 +1417,71 @@ function roomCard() {
     <p style="margin:3px 0 0;font-size:14px">${body}Anything acting up — fireplace, A/C, anything? The desk sorts it tonight: <a href="${telHref(DATA.lodge.phone)}">${DATA.lodge.phone}</a>.</p></div>`;
 }
 function lodgeMap() {
+  /* a room block: soft cast shadow under it so the buildings read as buildings, not boxes */
   const rm = (x, y, w, h, n) => {
     const yours = roomNum === n;
-    return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="3" fill="${yours ? "#FBEFEA" : "none"}" stroke="${yours ? "#C44F41" : "#34322C"}" stroke-width="${yours ? "2.2" : "1.3"}"/>
-      <text x="${x + w / 2}" y="${y + h / 2 + 4}" text-anchor="middle" font-size="11" font-family="Georgia,serif" font-weight="${yours ? "bold" : "normal"}" fill="${yours ? "#C44F41" : "#34322C"}">${n}</text>` +
-      (yours ? `<text x="${x + w / 2}" y="${y - 5}" text-anchor="middle" font-size="10" font-style="italic" fill="#C44F41" font-family="Georgia,serif">yours</text>` : "");
+    return `<g><rect x="${x + 2.5}" y="${y + 3}" width="${w}" height="${h}" rx="2.5" fill="#8A9A3E" opacity=".18"/>` +
+      `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="2.5" fill="${yours ? "#FBEFEA" : "#FFFDF8"}" stroke="${yours ? "#C44F41" : "#34322C"}" stroke-width="${yours ? "2.4" : "1.2"}"/>` +
+      `<path d="M${x + 5} ${y + 6} H${x + w - 5}" stroke="${yours ? "#C44F41" : "#34322C"}" stroke-width=".9" opacity=".3"/>` +
+      `<text x="${x + w / 2}" y="${y + h / 2 + 5.5}" text-anchor="middle" font-size="12" font-family="Georgia,serif" font-weight="${yours ? "bold" : "normal"}" fill="${yours ? "#C44F41" : "#34322C"}">${n}</text>` +
+      (yours ? `<text x="${x + w / 2}" y="${y - 5}" text-anchor="middle" font-size="10" font-style="italic" fill="#C44F41" font-family="Georgia,serif">yours</text>` : "") + `</g>`;
   };
+  /* pine canopy + trunk */
+  const tree = (x, y, r) => `<g><ellipse cx="${x}" cy="${y}" rx="${r}" ry="${r * .44}" fill="#8A9A3E" opacity=".92"/>` +
+    `<ellipse cx="${x + r * .48}" cy="${y + r * .34}" rx="${r * .6}" ry="${r * .28}" fill="#8A9A3E" opacity=".68"/>` +
+    `<path d="M${x} ${y + r * .44} C${x} ${y + r * .8}, ${x - .6} ${y + r} , ${x - 1} ${y + r * 1.3}" stroke="#34322C" stroke-width="1.2" stroke-linecap="round"/></g>`;
   return `
-<svg class="scene" width="360" height="330" viewBox="0 0 360 330" fill="none" aria-hidden="true">
-  <path d="M348 10 C 344 90, 352 180, 346 250 C 343 290, 348 310, 346 326" stroke="#5B7FB4" stroke-width="12" opacity=".28" stroke-linecap="round"/>
-  <text x="296" y="322" font-size="10" font-style="italic" fill="#5B7FB4" font-family="Georgia,serif">the Kern →</text>
-  <path d="M14 6 C 18 90, 12 200, 16 326" stroke="#34322C" stroke-width="1.5" stroke-dasharray="5 4" opacity=".7"/>
-  <text x="20" y="318" font-size="10" font-style="italic" fill="#6B675A" font-family="Georgia,serif">Sierra Way</text>
-  <rect x="96" y="14" width="58" height="26" rx="3" stroke="#34322C" stroke-width="1.3"/>
-  <text x="125" y="31" text-anchor="middle" font-size="9.5" font-family="Georgia,serif" fill="#34322C">laundry</text>
-  <rect x="160" y="14" width="66" height="26" rx="3" stroke="#C44F41" stroke-width="1.5" fill="#FBEFEA"/>
-  <text x="193" y="26" text-anchor="middle" font-size="9.5" font-weight="bold" font-family="Georgia,serif" fill="#C44F41">ICE &amp;</text>
-  <text x="193" y="36" text-anchor="middle" font-size="9.5" font-weight="bold" font-family="Georgia,serif" fill="#C44F41">VENDING</text>
-  ${rm(112, 58, 36, 30, "112")}${rm(148, 58, 36, 30, "111")}${rm(184, 58, 36, 30, "110")}${rm(220, 58, 36, 30, "109")}
-  ${rm(276, 44, 54, 30, "108")}${rm(276, 78, 54, 30, "107")}${rm(276, 112, 54, 30, "106")}${rm(276, 146, 54, 30, "105")}
-  <rect x="278" y="184" width="50" height="40" rx="12" fill="#5B7FB4" opacity=".22"/>
-  <rect x="278" y="184" width="50" height="40" rx="12" stroke="#5B7FB4" stroke-width="1.5"/>
-  <text x="303" y="208" text-anchor="middle" font-size="10" font-family="Georgia,serif" fill="#34322C">pool</text>
-  ${rm(276, 232, 54, 30, "104")}${rm(276, 266, 54, 30, "103")}
-  ${rm(178, 268, 36, 30, "101")}${rm(214, 268, 36, 30, "102")}
-  <rect x="240" y="14" width="90" height="14" rx="3" stroke="#34322C" stroke-width="1.2"/>
-  <text x="285" y="24.5" text-anchor="middle" font-size="8.5" font-family="Georgia,serif" fill="#34322C">laundry</text>
-  ${rm(92, 98, 24, 16, "117")}${rm(118, 98, 24, 16, "118")}
-  <text x="117" y="94" text-anchor="middle" font-size="8.5" font-style="italic" fill="#6B675A" font-family="Georgia,serif">upstairs, by the deck</text>
-  <rect x="56" y="120" width="80" height="64" rx="3" stroke="#34322C" stroke-width="1.4"/>
-  <text x="96" y="146" text-anchor="middle" font-size="10" font-family="Georgia,serif" fill="#34322C">front desk</text>
-  <text x="96" y="160" text-anchor="middle" font-size="10" font-family="Georgia,serif" fill="#34322C">kitchen · deck</text>
-  <text x="160" y="200" font-size="9.5" font-style="italic" fill="#6B675A" font-family="Georgia,serif">patio</text>
-  <ellipse cx="96" cy="230" rx="58" ry="26" stroke="#34322C" stroke-width="1.2" stroke-dasharray="4 4" opacity=".55"/>
-  <text x="96" y="234" text-anchor="middle" font-size="9.5" font-style="italic" fill="#6B675A" font-family="Georgia,serif">parking loop</text>
-  <g fill="#8A9A3E"><ellipse cx="52" cy="66" rx="20" ry="8"/><ellipse cx="244" cy="188" rx="18" ry="8"/><ellipse cx="140" cy="296" rx="20" ry="8"/></g>
-  <g stroke="#34322C" stroke-width="1.3" stroke-linecap="round"><path d="M52 73 C52 81,51 86,50 92 M244 195 C244 203,243 208,242 214 M140 303 C140 311,139 316,138 322"/></g>
+<svg class="scene" width="360" height="404" viewBox="0 0 360 404" fill="none" aria-hidden="true">
+  <rect x="34" y="4" width="292" height="396" rx="10" fill="#8A9A3E" opacity=".07"/>
+  <path d="M330 2 C 322 70, 340 150, 330 220 C 322 286, 338 340, 330 402" stroke="#5B7FB4" stroke-width="30" opacity=".2" stroke-linecap="round"/>
+  <path d="M330 2 C 322 70, 340 150, 330 220 C 322 286, 338 340, 330 402" stroke="#5B7FB4" stroke-width="1.6" opacity=".5"/>
+  <g stroke="#5B7FB4" stroke-width="1.1" opacity=".5" stroke-linecap="round"><path d="M326 60 c8 6, 12 -4, 20 2M322 148 c8 6, 12 -4, 20 2M330 246 c8 6, 12 -4, 20 2M324 330 c8 6, 12 -4, 20 2"/></g>
+  <text x="336" y="196" font-size="10.5" font-style="italic" fill="#5B7FB4" font-family="Georgia,serif" transform="rotate(90 336 196)">the Kern</text>
+  <rect x="4" y="0" width="26" height="404" fill="#E9E6DE"/>
+  <path d="M4 0 V404 M30 0 V404" stroke="#34322C" stroke-width="1.2" opacity=".65"/>
+  <path d="M17 6 V398" stroke="#FFFDF8" stroke-width="1.8" stroke-dasharray="12 12" opacity=".95"/>
+  <text x="17" y="212" font-size="10.5" font-style="italic" fill="#6B675A" font-family="Georgia,serif" text-anchor="middle" transform="rotate(-90 17 212)">Sierra Way</text>
+  <path d="M30 250 H70" stroke="#E9E6DE" stroke-width="16"/>
+  <path d="M30 242 H72 M30 258 H72" stroke="#34322C" stroke-width="1" opacity=".5"/>
+  <rect x="46" y="236" width="86" height="66" rx="5" fill="#E9E6DE" opacity=".8" stroke="#34322C" stroke-width="1" stroke-dasharray="4 4"/>
+  <circle cx="60" cy="250" r="8.5" fill="#FFFDF8" stroke="#34322C" stroke-width="1.2"/>
+  <text x="60" y="254" text-anchor="middle" font-size="11" font-weight="bold" font-family="Georgia,serif" fill="#34322C">P</text>
+  ${rm(112, 44, 40, 34, "112")}${rm(154, 44, 40, 34, "111")}${rm(196, 44, 40, 34, "110")}${rm(238, 44, 40, 34, "109")}
+  <rect x="196" y="8" width="66" height="24" rx="3" fill="#FBEFEA" stroke="#C44F41" stroke-width="1.5"/>
+  <path d="M206 14 h9 v9 h-9 z" stroke="#C44F41" stroke-width="1.2" fill="none"/>
+  <text x="238" y="24" text-anchor="middle" font-size="10" font-weight="bold" font-family="Georgia,serif" fill="#C44F41">ice</text>
+  ${rm(266, 96, 56, 32, "108")}${rm(266, 132, 56, 32, "107")}${rm(266, 168, 56, 32, "106")}${rm(266, 204, 56, 32, "105")}
+  <path d="M322 186 C 336 184, 342 190, 348 196" stroke="#8A9A3E" stroke-width="1.6" stroke-dasharray="3 4" stroke-linecap="round"/>
+  <text x="300" y="253" font-size="9.5" font-style="italic" fill="#6B675A" font-family="Georgia,serif" text-anchor="middle">to the river</text>
+  <path d="M266 246 C 286 250, 300 246, 312 242" stroke="#8A9A3E" stroke-width="1.6" stroke-dasharray="3 4" stroke-linecap="round"/>
+  ${rm(266, 264, 56, 32, "104")}${rm(266, 300, 56, 32, "103")}
+  ${rm(168, 336, 44, 32, "101")}${rm(216, 336, 44, 32, "102")}
+  <g><rect x="176" y="188" width="66" height="50" rx="16" fill="#5B7FB4" opacity=".28"/>
+    <rect x="176" y="188" width="66" height="50" rx="16" stroke="#5B7FB4" stroke-width="1.6"/>
+    <g stroke="#FFFDF8" stroke-width="1.4" opacity=".85" stroke-linecap="round"><path d="M186 206 c7 -4, 13 4, 20 0 s13 -4, 20 0M186 220 c7 -4, 13 4, 20 0 s13 -4, 20 0"/></g>
+    <g stroke="#34322C" stroke-width="1.3" stroke-linecap="round"><path d="M226 188 v-7 M234 188 v-7 M226 184 h8"/></g>
+    <g fill="#FFFDF8" stroke="#34322C" stroke-width="1.1"><rect x="150" y="196" width="18" height="8" rx="3"/><rect x="150" y="212" width="18" height="8" rx="3"/></g>
+    <path d="M159 186 v-12 M151 174 h16" stroke="#C44F41" stroke-width="1.5" stroke-linecap="round"/></g>
+  <g><rect x="62" y="132" width="94" height="72" rx="4" fill="#FFFDF8" stroke="#34322C" stroke-width="1.5"/>
+    <rect x="64.5" y="135" width="94" height="72" rx="4" fill="#8A9A3E" opacity=".18"/>
+    <rect x="62" y="132" width="94" height="72" rx="4" fill="#FFFDF8" stroke="#34322C" stroke-width="1.5"/>
+    <path d="M109 132 V204" stroke="#34322C" stroke-width=".9" opacity=".3"/>
+    <path d="M62 178 h94" stroke="#34322C" stroke-width=".9" opacity=".3"/>
+    <path d="M100 204 h18 v6 h-18 z" fill="#C44F41" opacity=".9"/>
+    <text x="109" y="164" text-anchor="middle" font-size="10.5" font-family="Georgia,serif" fill="#34322C">front desk</text></g>
+  <g>${rm(66, 92, 40, 26, "117")}${rm(110, 92, 40, 26, "118")}
+    <rect x="66" y="120" width="84" height="7" rx="3" fill="#8A9A3E" opacity=".35" stroke="#34322C" stroke-width="1"/>
+    <text x="108" y="86" text-anchor="middle" font-size="9.5" font-style="italic" fill="#6B675A" font-family="Georgia,serif">upstairs · shared balcony</text></g>
+  <g><circle cx="180" cy="272" r="9" fill="#FFFDF8" stroke="#34322C" stroke-width="1.4"/>
+    <path d="M174 272 h12" stroke="#34322C" stroke-width="1.2"/>
+    <path d="M174 280 l-3 8M186 280 l3 8" stroke="#34322C" stroke-width="1.3" stroke-linecap="round"/>
+    <path d="M176 259 c-3 -5, 3 -7, 0 -12M184 259 c-3 -5, 3 -7, 0 -12" stroke="#C44F41" stroke-width="1.3" stroke-linecap="round" opacity=".8"/>
+    <rect x="202" y="266" width="34" height="14" rx="2" fill="#FFFDF8" stroke="#34322C" stroke-width="1.3"/>
+    <path d="M206 280 v8M232 280 v8M202 273 h34" stroke="#34322C" stroke-width="1.2" stroke-linecap="round"/>
+    <text x="206" y="303" font-size="10" font-family="Georgia,serif" fill="#34322C">BBQ</text></g>
+  ${tree(52, 60, 21)}${tree(84, 44, 15)}${tree(46, 330, 22)}${tree(74, 356, 16)}
+  ${tree(246, 340, 20)}${tree(292, 366, 15)}${tree(150, 300, 14)}${tree(300, 60, 17)}
+  ${tree(122, 372, 18)}${tree(246, 160, 12)}
 </svg>`;
 }
 function nowArrival(c, sc) {
