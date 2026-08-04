@@ -1256,12 +1256,23 @@ function sceneHero(c, txt) {
   ${txt.sub ? `<text x="20" y="246" font-family="Georgia,serif" font-size="11" font-style="italic" fill="${night ? "#B9C2CE" : "#6B675A"}">${txt.sub}</text>` : ""}
 </svg>`;
 }
+/* a small quiet canopy for the landing greeting — the EXACT tree() formula already
+   live on the property map (same two ellipses + trunk curve), not a new invention.
+   Rendered and eyeballed as a PNG before wiring this in — reads as a real soft
+   pine canopy, unlike the first attempt (a hand-drawn "bough" that came out
+   looking like arrows, caught the same way and reverted). */
+const landingCanopy = `<svg width="42" height="36" viewBox="0 0 34 38" fill="none" aria-hidden="true" style="margin-top:8px">
+  <ellipse cx="16" cy="16" rx="14" ry="6.16" fill="#8A9A3E" opacity=".92"/>
+  <ellipse cx="22.72" cy="20.76" rx="8.4" ry="3.92" fill="#8A9A3E" opacity=".68"/>
+  <path d="M16 22.16 C16 27.2, 15.4 30, 15 34.2" stroke="#34322C" stroke-width="1.2" stroke-linecap="round"/>
+</svg>`;
 /* content-first override — the landing leads with words, not paint.
    cap/sub (the single "do this" pick) are deliberately NOT rendered here —
    the facts card goes first (welcomeCard), the pick is demoted to bigActs below it. */
 function sceneHero(c, txt) {
   return `<div class="t-display">${txt.top}</div>
-    ${txt.skyline ? `<p class="logi">${txt.skyline}</p>` : ""}`;
+    ${txt.skyline ? `<p class="logi">${txt.skyline}</p>` : ""}
+    ${landingCanopy}`;
 }
 function openNowTick(c) {
   const open = DATA.eat.map(p => ({ p, st: statusFor(p, c) })).filter(x => x.st.order <= 1)
