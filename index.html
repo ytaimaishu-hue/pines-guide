@@ -437,6 +437,7 @@ const DATA = {
     { name: "Coyotes & the quiet ones", facts: "You'll hear coyotes more than see them. Bobcats slip by at dusk; lions are almost never seen.", safety: "Keep dogs leashed at dawn/dusk. Lion sighting: stand tall, look big, make noise, back away — never run." },
   ],
   bearLine: "A fed bear is a dead bear — the Forest Service's rule of thumb, and it's on us to keep them wild. Food and coolers in your room or trunk, never the balcony. Bold bear? Tell the front desk.",
+  bearLink: "https://wildlife.ca.gov/Conservation/Mammals/Black-Bear",
   seasons: {
     winter: "Mild and quiet — sunny 50° days, frosty nights, snow dustings gone by lunch. Real snow play: Alta Sierra, 40 minutes up Hwy 155. Bald eagles fish the river.",
     spring: "Wildflowers, green hills, a roaring river. April–June snowmelt is big-water season — raft with the pros, admire from shore otherwise.",
@@ -1894,7 +1895,7 @@ function exploreDo(c) {
         ${g.list.map(s => `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0"><span>${esc(s)}</span><a class="act" href="${mapsQ(s)}" target="_blank" rel="noopener">Directions</a></div>`).join("")}</div>`).join("")}
     </details>
     <details class="grp"><summary>Wildlife & seasons <span class="chev">⌄</span></summary>
-      <div class="note bearRow">${bearSvg}<p style="margin:0"><b>About the bears:</b> ${esc(DATA.bearLine)}</p></div>
+      <div class="note bearRow">${bearSvg}<p style="margin:0"><b>About the bears:</b> ${esc(DATA.bearLine)} <a href="${DATA.bearLink}" target="_blank" rel="noopener">Official info, CA Fish &amp; Wildlife</a>.</p></div>
       ${DATA.wildlife.map(w => `<details class="row"><summary><h3>${esc(w.name)}</h3><p class="desc" style="font-style:normal">${esc(w.facts)}</p></summary><div class="more"><p class="safe">${esc(w.safety)}</p></div></details>`).join("")}
       <details class="grp"><summary>The seasons here <span class="chev">⌄</span></summary>
         <p style="font-size:14px;font-style:italic">${esc(DATA.snowAnswer)}</p>
@@ -2065,7 +2066,7 @@ function renderExplore() {
         ${g.list.map(s => `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0"><span>${esc(s)}</span><a class="act" href="${mapsQ(s)}" target="_blank" rel="noopener">Directions</a></div>`).join("")}</div>`).join("")}
     </details>
     <details class="grp"><summary>Wildlife & the seasons <span class="chev">⌄</span></summary>
-      <div class="note bearRow">${bearSvg}<p style="margin:0"><b>About the bears:</b> ${esc(DATA.bearLine)}</p></div>
+      <div class="note bearRow">${bearSvg}<p style="margin:0"><b>About the bears:</b> ${esc(DATA.bearLine)} <a href="${DATA.bearLink}" target="_blank" rel="noopener">Official info, CA Fish &amp; Wildlife</a>.</p></div>
       ${DATA.wildlife.map(w => `<div class="row" style="padding:10px 0"><h3 style="font-size:15.5px">${esc(w.name)}</h3><p class="desc" style="font-style:normal">${esc(w.facts)}</p><p class="safe" style="font-size:13px">${esc(w.safety)}</p></div>`).join("")}
       <p style="font-size:14px;font-style:italic;margin-top:10px">${esc(DATA.snowAnswer)}</p>
       ${["spring", "summer", "fall", "winter"].map(s => `<div class="seas"><b>${s}${s === seasonOf(c.month) ? " · now" : ""}</b>${esc(DATA.seasons[s])}</div>`).join("")}
