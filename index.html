@@ -1320,8 +1320,8 @@ function welcomeCard(sc) {
       ${inkMark("wave")}Pool gate <button class="act" data-copy="${esc(E.pool)}" style="padding:2px 8px;min-height:30px"><b style="color:var(--coral-deep)">${esc(E.pool)}</b></button> — towels at the desk<br>
       ${esc(E.coffee)}
     </div>
-    ${wNow ? `<a href="${WEATHER_LINK}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:6px;margin-top:8px;text-decoration:none">
-      ${weatherIcon(wxCurrentCode())}<span class="logi" style="color:var(--ink)">${esc(wNow)}${wStay ? " · " + esc(wStay) : ""} <b style="color:var(--coral-deep)">→</b></span>
+    ${wNow ? `<a href="${WEATHER_LINK}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;margin-top:8px">
+      ${weatherIcon(wxCurrentCode())}<span style="color:var(--coral-deep);font-weight:700;font-size:14.5px">${esc(wNow)}</span>${wStay ? `<span class="logi" style="text-decoration:none;margin-left:1px">· ${esc(wStay)}</span>` : ""}
     </a>` : ""}
     <p class="why" style="margin-top:10px;font-size:13.5px">Something off with the room? <a href="${SMS_DESK}">Text us before you think about a review</a> — we'd rather fix it tonight.</p>
   </div>
