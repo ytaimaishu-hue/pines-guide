@@ -199,6 +199,7 @@ const DATA = {
     pool: "C1278", poolSub: "towels at the desk",
     checkout: "11 AM", checkin: "3 PM", keys: "keys in the box",
     coffee: "Coffee's in your room — no lodge breakfast; town does it better.",
+    gym: { name: "FitHaus", code: "7463#", note: "sauna, cold plunge, open 24 hours — it's already paid for, go use it" },
   },
   personas: [
     { id: "oneNight", label: "One night" },
@@ -836,6 +837,38 @@ function ingestParams() {
 }
 ingestParams();
 
+/* ===================== WEATHER — guest's own phone fetches it, no key, no server ===================== */
+let wx = null;
+function loadWeather() {
+  fetch("https://api.open-meteo.com/v1/forecast?latitude=35.754&longitude=-118.425&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min,weather_code&temperature_unit=fahrenheit&timezone=America%2FLos_Angeles&forecast_days=10")
+    .then(r => r.ok ? r.json() : null)
+    .then(j => { if (j && j.current && j.daily) { wx = j; safePaint(); } })
+    .catch(() => {});
+}
+loadWeather();
+function wxTxt(code) {
+  if (code === 0) return "clear";
+  if (code <= 2) return "partly cloudy";
+  if (code === 3) return "overcast";
+  if (code === 45 || code === 48) return "foggy";
+  if (code >= 51 && code <= 67) return "rain";
+  if (code >= 71 && code <= 77) return "snow";
+  if (code >= 80 && code <= 82) return "showers";
+  if (code >= 95) return "thunderstorms";
+  return "mild";
+}
+function ymd(d) { return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; }
+function wxNow() {
+  if (!wx || !wx.current) return "";
+  return `${Math.round(wx.current.temperature_2m)}° and ${wxTxt(wx.current.weather_code)} right now`;
+}
+function wxForStay(sc) {
+  if (!wx || !wx.daily || !sc || !sc.days) return "";
+  const rows = sc.days.map(d => wx.daily.time.indexOf(ymd(d))).filter(i => i >= 0).slice(0, 6);
+  if (!rows.length) return "";
+  return rows.map(i => `${DAY_ABBR[new Date(wx.daily.time[i] + "T12:00:00").getDay()]} ${Math.round(wx.daily.temperature_2m_max[i])}°/${Math.round(wx.daily.temperature_2m_min[i])}° ${wxTxt(wx.daily.weather_code[i])}`).join(" · ");
+}
+
 /* ===================== STAY STATE MACHINE ===================== */
 function stayDays() {
   if (!stay || !stay.a || !stay.d) return [];
@@ -1192,11 +1225,12 @@ function sceneHero(c, txt) {
   ${txt.sub ? `<text x="20" y="246" font-family="Georgia,serif" font-size="11" font-style="italic" fill="${night ? "#B9C2CE" : "#6B675A"}">${txt.sub}</text>` : ""}
 </svg>`;
 }
-/* content-first override — the landing leads with words, not paint */
+/* content-first override — the landing leads with words, not paint.
+   cap/sub (the single "do this" pick) are deliberately NOT rendered here —
+   the facts card goes first (welcomeCard), the pick is demoted to bigActs below it. */
 function sceneHero(c, txt) {
   return `<div class="t-display">${txt.top}</div>
-    ${txt.skyline ? `<p class="logi">${txt.skyline}</p>` : ""}
-    ${txt.cap ? `<p class="why" style="font-size:16.5px;margin-top:10px"><b>${txt.cap}</b>${txt.sub ? ` <span class="logi" style="font-weight:400">· ${txt.sub}</span>` : ""}</p>` : ""}`;
+    ${txt.skyline ? `<p class="logi">${txt.skyline}</p>` : ""}`;
 }
 function openNowTick(c) {
   const open = DATA.eat.map(p => ({ p, st: statusFor(p, c) })).filter(x => x.st.order <= 1)
@@ -1217,15 +1251,32 @@ function bigActs(primaryLabel, primaryGoto, primaryHref) {
     <a class="bigbtn half" href="${SMS_DESK}">Text the desk</a>
   </div>`;
 }
-function essCardNow() {
+/* THE FIRST THING ON THE PAGE — impossible-to-get-wrong facts, before any suggestion.
+   Ryan: "why do we have to tell them what to do on the first page... give them
+   something that is literally impossible to get wrong." Room, wifi, pool code,
+   check-in/out, weather, how to reach us, and the gym perk — nothing here is a guess. */
+function welcomeCard(sc) {
   const E = DATA.essentials;
+  const rt = room ? ROOM_KEYS[room] : null;
+  const roomBit = (roomNum || rt)
+    ? `Room <b>${esc(roomNum || (rt ? rt.label : ""))}</b>${rt ? " · " + esc(rt.type) : ""} — it's lit up on the map under The Lodge.`
+    : `The desk will hand you your room number at check-in.`;
+  const wNow = wxNow();
+  const wStay = sc && sc.days && sc.days.length > 1 ? wxForStay(sc) : "";
   return `<div class="esscard"><span class="label">The essentials</span>
-    <div style="margin-top:6px;font-size:14.5px;line-height:1.9">
+    <div style="margin-top:6px;font-size:14.5px;line-height:1.95">
+      ${roomBit}<br>
+      Check-in <b>${esc(E.checkin)}</b> · check-out <b>${esc(E.checkout)}</b> — ${esc(E.keys)}<br>
       Wi-Fi <b>${esc(E.wifiNet)}</b> — password <button class="act" data-copy="${esc(E.wifiPass)}" style="padding:2px 8px;min-height:30px"><b style="color:var(--coral-deep)">${esc(E.wifiPass)}</b></button> (tap to copy)<br>
       Pool gate <button class="act" data-copy="${esc(E.pool)}" style="padding:2px 8px;min-height:30px"><b style="color:var(--coral-deep)">${esc(E.pool)}</b></button> — towels at the desk<br>
-      Checkout <b>11 AM</b> — keys go in the lockbox by the office door<br>
       ${esc(E.coffee)}
-    </div></div>`;
+    </div>
+    ${wNow ? `<p class="logi" style="margin-top:8px">${esc(wNow)}${wStay ? " · " + esc(wStay) : ""}</p>` : ""}
+    <p class="why" style="margin-top:10px;font-size:13.5px">Something off with the room? <a href="${SMS_DESK}">Text us before you think about a review</a> — we'd rather fix it tonight.</p>
+  </div>
+  <div class="tick alt2"><span class="label" style="color:var(--olive-deep)">On us this stay</span>
+    <p style="margin:3px 0 0;font-size:14px">A free day pass to <b>${esc(E.gym.name)}</b> — door code <button class="act" data-copy="${esc(E.gym.code)}" style="padding:2px 8px;min-height:30px"><b style="color:var(--coral-deep)">${esc(E.gym.code)}</b></button>. ${esc(E.gym.note)}.</p>
+  </div>`;
 }
 
 /* ===================== SHARED FRAGMENTS ===================== */
@@ -1384,7 +1435,9 @@ function nowPre(c, sc) {
     : dogOn() ? "Pack the leash and a towel for river paws."
     : "Pack for " + seasonOf(m) + " — layers do it.";
   const topTxt = sc.arrivingToday || sc.cd === 0 ? `Today's the day${n}.` : `${sc.cd} day${sc.cd === 1 ? "" : "s"} till river time${n}`;
-  return sceneHero(c, { top: topTxt, skyline: seasonOf(m) + " on the Kern", cap: `Arriving ${DAY_FULL[arr.getDay()]}, ${MONTHS[arr.getMonth()]} ${arr.getDate()}`, sub: "check-in from 3 — the porch light will be on" })
+  return sceneHero(c, { top: topTxt, skyline: seasonOf(m) + " on the Kern" })
+    + welcomeCard(sc)
+    + `<p class="why" style="margin-top:10px"><b>Arriving ${DAY_FULL[arr.getDay()]}, ${MONTHS[arr.getMonth()]} ${arr.getDate()}.</b> <span class="logi" style="font-weight:400">check-in from 3 — the porch light will be on</span></p>`
     + card
     + bigActs("", null)
     + `<p class="why" style="margin-top:14px">${prep}</p>
@@ -1532,14 +1585,11 @@ function nowArrival(c, sc) {
   }
   const evs = picked.has("event") ? eventsTick(c, sc, 2) : "";
   const n2 = guestName ? ", " + esc(guestName.split(/\s+/)[0]) : "";
-  const cap = din ? "Dinner: " + esc(din.name) + " — " + statusFor(din, c).text : "Kernville's tucked in for the night";
-  return sceneHero(c, { top: "Evenin'" + n2 + ".", skyline: "You made it. Night 1 of " + sc.nights + ".", cap, sub: din ? esc(din.area) + (din.book ? " · book ahead" : "") : "the river's still up, though" })
+  return sceneHero(c, { top: "Evenin'" + n2 + ".", skyline: "You made it. Night 1 of " + sc.nights + "." })
+    + welcomeCard(sc)
     + bigActs(din ? "Dinner: " + esc(din.name) + " →" : "Plan tomorrow →", din ? "eat" : "do")
-    + essCardNow()
-    + roomCard()
     + beats.slice(0, 2).join("")
     + evs
-    + (room ? "" : `<p class="logi" style="font-style:italic">Anything off with the room? <a href="${SMS_DESK}">Text us tonight</a> — we'd rather fix it now.</p>`)
     + fixSheetHtml(false);
 }
 
@@ -1616,19 +1666,13 @@ function nowFull(c, sc) {
   }
   const evs = eventsTick(c, sc, 2);
   const [hi] = greetingWords(c);
-  return sceneHero(c, {
-      top: hi,
-      skyline: greetLine(c, sc),
-      cap: primary ? primary.lab + ": " + esc(primary.name) : "All quiet on the river",
-      sub: primary ? esc(primary.sub).slice(0, 64) : "",
-    })
+  return sceneHero(c, { top: hi, skyline: greetLine(c, sc) })
+    + welcomeCard(sc)
     + bigActs(primary ? primary.lab + ": " + esc(primary.name) + " →" : "Explore the valley →", primary ? primary.gotoK : "do")
     + `${beats.slice(0, 3).join("")}
     ${openNowTick(c)}
     ${oneNight ? "" : `<span class="label" style="display:block;margin-top:18px">Your days, sketched</span>${dayStrip(c, sc)}`}
     ${evs}
-    ${essCardNow()}
-    ${roomCard()}
     ${fixSheetHtml(false)}`;
 }
 function greetingWords(c) {
@@ -1665,9 +1709,9 @@ function nowCheckout(c, sc) {
   return sceneHero(c, {
       top: "Last mornin'" + n3 + ".",
       skyline: "Out by 11 — keys go in the lockbox by the office door.",
-      cap: "One more good hour before the canyon",
-      sub: "sunrise " + shortTime(sun.rise) + " · the desk answers texts from the road",
     })
+    + welcomeCard(sc)
+    + `<p class="why" style="margin-top:10px"><b>One more good hour before the canyon.</b> <span class="logi" style="font-weight:400">sunrise ${shortTime(sun.rise)} · the desk answers texts from the road</span></p>`
     + move
     + bigActs("", null)
     + `<p class="why">${nextSeason} Come on back.</p>
@@ -1675,13 +1719,13 @@ function nowCheckout(c, sc) {
     ${fixSheetHtml(false)}`;
 }
 function nowPast(c) {
+  const nextSeason = { winter: "come back for spring's wildflowers and big water", spring: "come back for summer festivals and river days", summer: "come back for fall's golden cottonwoods", fall: "come back for the quiet winter secret" }[seasonOf(c.month)];
   return sceneHero(c, {
       top: "Thanks for staying" + (guestName ? ", " + esc(guestName.split(/\s+/)[0]) : "") + ".",
       skyline: "The pines already miss you.",
-      cap: "The river will keep your spot",
-      sub: { winter: "come back for spring's wildflowers and big water", spring: "come back for summer festivals and river days", summer: "come back for fall's golden cottonwoods", fall: "come back for the quiet winter secret" }[seasonOf(c.month)],
     })
-    + `<div class="bigacts"><a class="bigbtn primary" href="${DATA.lodge.site}" target="_blank" rel="noopener">Book your next stay</a></div>
+    + `<p class="why" style="margin-top:10px"><b>The river will keep your spot.</b> <span class="logi" style="font-weight:400">${esc(nextSeason)}</span></p>
+    <div class="bigacts"><a class="bigbtn primary" href="${DATA.lodge.site}" target="_blank" rel="noopener">Book your next stay</a></div>
     <p class="logi" style="margin-top:12px">Loved it? <a href="${DATA.lodge.reviewUrl}" target="_blank" rel="noopener">A kind word online</a> keeps a small place alive.</p>`;
 }
 function nowNone(c) {
@@ -1707,12 +1751,8 @@ function nowNone(c) {
     : act ? "While the light's good: " + esc(act.name)
     : "All quiet on the river";
   const capGoto = m0 ? "eat" : ad ? "secrets" : "do";
-  return sceneHero(c, {
-      top: hi,
-      skyline: "Welcome to river time.",
-      cap,
-      sub: `sunset ${shortTime(sun.set)} · sunrise ${shortTime(sun.rise)} — computed for this bend of the river`,
-    })
+  return sceneHero(c, { top: hi, skyline: "Welcome to river time." })
+    + welcomeCard(null)
     + bigActs(cap === "All quiet on the river" ? "Explore the valley →" : cap + " →", capGoto)
     + `${m0 ? verdict(mealKind === "breakfast" ? "First thing " + inkMark("mug") : "Dinner tonight " + inkMark("fork"), esc(m0.name),
         m0.quote.split(/[.—]/)[0].trim().toLowerCase(),
@@ -1722,9 +1762,8 @@ function nowNone(c) {
     ${act ? verdict("While the light's good " + inkMark("boot"), esc(act.name), whyFor(act, c, c.n),
         [act.drive || act.cat, act.diff].filter(Boolean).join(" · "),
         btn("Directions", mapsQ(act.name), true), null, "do") : ""}
-    ${openNowTick(c)}`
-    + essCardNow()
-    + `${tm ? `<p class="why" style="margin-top:12px">First one up tomorrow: <b>${esc(tm.p.name)}</b>, opens ${shortTime(tm.t.open)}.</p>` : ""}
+    ${openNowTick(c)}
+    ${tm ? `<p class="why" style="margin-top:12px">First one up tomorrow: <b>${esc(tm.p.name)}</b>, opens ${shortTime(tm.t.open)}.</p>` : ""}
     ${evs.length ? `<div class="tick"><span class="label" style="color:var(--olive-deep)">Tonight in town</span><div style="font-size:14px;margin-top:3px"><b>${esc(evs[0].name)}</b> — ${esc(evs[0].blurb)}</div></div>` : ""}
     ${feat ? `<div class="tick alt2"><span class="label" style="color:var(--coral-deep)">Today's house secret</span><div style="font-size:14px;margin-top:3px"><b>${esc(feat.name)}</b> — ${esc(feat.blurb)}</div></div>` : ""}
     <p class="why" style="margin-top:12px">Staying with us? Tell the guide your dates and it starts planning your days.</p>
@@ -2039,6 +2078,9 @@ function renderLodge() {
       <div>Pool gate <button class="act" data-copy="${esc(E.pool)}" style="border:0;text-decoration:underline;padding:2px 4px;min-height:32px"><span class="bigv">${esc(E.pool)}</span></button> · ${esc(E.poolSub)}</div>
       <div>Checkout <b>11 AM</b> — ${esc(E.keys)} · check-in from <b>3 PM</b></div>
       <div style="font-size:13.5px;color:var(--faded);margin-top:3px">${esc(E.coffee)}</div>
+    </div>
+    <div class="tick alt2"><span class="label" style="color:var(--olive-deep)">On us this stay</span>
+      <p style="margin:3px 0 0;font-size:14px">A free day pass to <b>${esc(E.gym.name)}</b> — door code <button class="act" data-copy="${esc(E.gym.code)}" style="padding:2px 8px;min-height:30px"><b style="color:var(--coral-deep)">${esc(E.gym.code)}</b></button>. ${esc(E.gym.note)}.</p>
     </div>
     ${squiggle()}
     <span class="label">In your room</span>
