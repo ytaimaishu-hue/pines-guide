@@ -755,6 +755,17 @@ const ROOM_KEYS = {
   suite: { label: "Suite", type: "King & Couch Suite" },
   shared: { label: "Shared balcony", type: "Two-Unit Shared Balcony" },
 };
+/* room number -> ROOM_KEYS code, so a bare #r=107 (the permanent room QR cards) also
+   resolves a room TYPE, not just a number. Source: confirmed room/type mapping mined
+   from 6 months of ResNexus confirmations (see project memory). */
+const NUM_TO_ROOMKEY = {
+  101: "creek", 102: "creek", 103: "creek", 104: "creek",
+  105: "river", 106: "river", 107: "river", 108: "river",
+  109: "mtnfam", 110: "mtnfam", 111: "mtnfam",
+  112: "mtn",
+  117: "studio",
+  118: "suite",
+};
 const cleanName = s => String(s || "").replace(/[^\p{L}\p{M}\s'\-]/gu, "").trim().slice(0, 40);
 let guestName = "", picked = new Set(), stay = null, fixSheet = false, room = "", roomNum = "";
 try { room = ROOM_KEYS[localStorage.getItem("wpl-room")] ? localStorage.getItem("wpl-room") : ""; } catch (e) {}
@@ -831,7 +842,11 @@ function ingestParams() {
     if (gv("r") != null) {
       const rv = gv("r").trim();
       if (ROOM_KEYS[rv]) { room = rv; store("wpl-room", room); }
-      else if (/^\d{3}$/.test(rv)) { roomNum = rv; store("wpl-roomnum", roomNum); }
+      else if (/^\d{3}$/.test(rv)) {
+        roomNum = rv; store("wpl-roomnum", roomNum);
+        const rk = NUM_TO_ROOMKEY[Number(rv)];
+        if (rk) { room = rk; store("wpl-room", room); }
+      }
     }
   } catch (e) {}
 }
