@@ -199,7 +199,16 @@ const DATA = {
     pool: "C1278", poolSub: "towels at the desk",
     checkout: "11 AM", checkin: "3 PM", keys: "keys in the box",
     coffee: "Coffee's in your room — no lodge breakfast; town does it better.",
-    gym: { name: "FitHaus", code: "7463#", note: "sauna, cold plunge, open 24 hours — it's already paid for, go use it" },
+    gym: {
+      name: "FitHaus HealthClub",
+      note: "sauna, cold plunge, open 24 hours — it's already paid for, go use it",
+      address: "50 Tobias St, Kernville — the black building at Tobias & Scodie",
+      waiver: "First visit: you'll need a one-time liability waiver with FitHaus before the door code works — their own QR code handles it, it's on the instructions below.",
+      door: "Wake the keypad (touch it, or the thumb sensor), then enter your passcode followed by 7463#. You've got 15 seconds to get in and shut the door before it locks — same on the way out. It'll say “locked” once it catches, so wait for that.",
+      etiquette: "Complimentary towels & lockers — soiled towels go in the marked bin. Wipe equipment down after, re-rack your weights, prop the door if you're using the outdoor gym (close it again if no one else is out there). Full house rules are posted at their front desk.",
+      contact: "On-site issue? Call or text Philip at (760) 549-9188.",
+      pdfUrl: "amenity-instructions.pdf",
+    },
   },
   personas: [
     { id: "oneNight", label: "One night" },
@@ -1291,8 +1300,25 @@ function welcomeCard(sc) {
     ${wNow ? `<p class="logi" style="margin-top:8px">${esc(wNow)}${wStay ? " · " + esc(wStay) : ""}</p>` : ""}
     <p class="why" style="margin-top:10px;font-size:13.5px">Something off with the room? <a href="${SMS_DESK}">Text us before you think about a review</a> — we'd rather fix it tonight.</p>
   </div>
-  <div class="tick alt2"><span class="label" style="color:var(--olive-deep)">On us this stay</span>
-    <p style="margin:3px 0 0;font-size:14px">A free day pass to <b>${esc(E.gym.name)}</b> — door code <button class="act" data-copy="${esc(E.gym.code)}" style="padding:2px 8px;min-height:30px"><b style="color:var(--coral-deep)">${esc(E.gym.code)}</b></button>. ${esc(E.gym.note)}.</p>
+  ${fitHausCard()}`;
+}
+/* FitHaus needs a real waiver before the door code does anything — Ryan: "force them to
+   read it first... so they don't break rules or at least read the document". The waiver
+   requirement is always visible; the code/rules/real PDF sit behind one deliberate tap,
+   which is the strongest a static page with no login can actually enforce. */
+function fitHausCard() {
+  const G = DATA.essentials.gym;
+  return `<div class="tick alt2"><span class="label" style="color:var(--olive-deep)">On us this stay</span>
+    <p style="margin:3px 0 0;font-size:14px">A free day pass to <b>${esc(G.name)}</b> — ${esc(G.note)}. ${esc(G.address)}.</p>
+    <p class="why" style="margin:8px 0 0;font-size:13.5px">${esc(G.waiver)}</p>
+    <details class="row" style="margin-top:6px"><summary><h3 style="font-size:14px">Door code &amp; house rules</h3></summary>
+      <div class="more">
+        <p style="font-size:13.5px">${esc(G.door)}</p>
+        <p style="font-size:13.5px;margin-top:6px">${esc(G.etiquette)}</p>
+        <p style="font-size:13.5px;margin-top:6px">${esc(G.contact)}</p>
+        <p style="margin-top:8px"><a href="${G.pdfUrl}" target="_blank" rel="noopener">Read FitHaus's full instructions (PDF)</a></p>
+      </div>
+    </details>
   </div>`;
 }
 
@@ -2100,9 +2126,7 @@ function renderLodge() {
       <div>Checkout <b>11 AM</b> — ${esc(E.keys)} · check-in from <b>3 PM</b></div>
       <div style="font-size:13.5px;color:var(--faded);margin-top:3px">${esc(E.coffee)}</div>
     </div>
-    <div class="tick alt2"><span class="label" style="color:var(--olive-deep)">On us this stay</span>
-      <p style="margin:3px 0 0;font-size:14px">A free day pass to <b>${esc(E.gym.name)}</b> — door code <button class="act" data-copy="${esc(E.gym.code)}" style="padding:2px 8px;min-height:30px"><b style="color:var(--coral-deep)">${esc(E.gym.code)}</b></button>. ${esc(E.gym.note)}.</p>
-    </div>
+    ${fitHausCard()}
     ${squiggle()}
     <span class="label">In your room</span>
     ${DATA.roomHelp.map(r => `<details class="row"><summary><h3 style="font-size:16px">${esc(r.q)}</h3></summary><div class="more"><p>${esc(r.a)}</p></div></details>`).join("")}
