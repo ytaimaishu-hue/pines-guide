@@ -429,15 +429,16 @@ const DATA = {
     { t: "The town under the lake", d: "The lake bottom was once old Kernville itself, moved when the dam went in. In drought years, remnants surface. The museum tells it best." },
   ],
   wildlife: [
-    { name: "Black bear", facts: "California's only bear — often cinnamon-colored. Shy, after your cooler, not you.", safety: "Don't feed, don't run, don't leave food out. Make noise, look big, back away slowly. Fight back if one makes contact — never play dead with a black bear." },
+    { name: "Black bear", facts: "California's only bear — often cinnamon-colored. Shy, after your cooler, not you.", safety: "The official Forest Service guidance is just above, in the callout — that's their call, not ours." },
     { name: "Mule deer", facts: "Big ears, calm faces, out at dawn and dusk by the river.", safety: "Never feed. Drive slow at dusk — where there's one deer, there's a second." },
     { name: "Western rattlesnake", facts: "The valley's only venomous snake, sunning April–October. The rattle is a courtesy, not a threat.", safety: "Closed shoes, watch where you step and reach, give any snake six feet. Bites are rare — stay calm, keep still, get to an ER." },
     { name: "Bald & golden eagles", facts: "Bald eagles fish the river November–March; goldens ride the ridges year-round.", safety: "Binoculars, distance, and never toss food to a raptor. That big dark circler is usually a turkey vulture." },
     { name: "Wild turkeys", facts: "Flocks strut the oak woodlands; spring toms gobble like they own the place.", safety: "Harmless if unfed. Give displaying toms space; they can get pushy." },
     { name: "Coyotes & the quiet ones", facts: "You'll hear coyotes more than see them. Bobcats slip by at dusk; lions are almost never seen.", safety: "Keep dogs leashed at dawn/dusk. Lion sighting: stand tall, look big, make noise, back away — never run." },
   ],
-  bearLine: "A fed bear is a dead bear — the Forest Service's rule of thumb, and it's on us to keep them wild. Food and coolers in your room or trunk, never the balcony. Bold bear? Tell the front desk.",
-  bearLink: "https://wildlife.ca.gov/Conservation/Mammals/Black-Bear",
+  bearLine: "Kernville sits inside Sequoia National Forest — real bear country. Here's the Forest Service's own official guidance, not our paraphrase of it:",
+  bearLink: "https://www.fs.usda.gov/sites/nfs/files/r05/sequoia/publication/Bears%202025.pdf",
+  bearLinkLabel: "Sequoia National Forest — official bear safety guide (PDF)",
   seasons: {
     winter: "Mild and quiet — sunny 50° days, frosty nights, snow dustings gone by lunch. Real snow play: Alta Sierra, 40 minutes up Hwy 155. Bald eagles fish the river.",
     spring: "Wildflowers, green hills, a roaring river. April–June snowmelt is big-water season — raft with the pros, admire from shore otherwise.",
@@ -1895,7 +1896,9 @@ function exploreDo(c) {
         ${g.list.map(s => `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0"><span>${esc(s)}</span><a class="act" href="${mapsQ(s)}" target="_blank" rel="noopener">Directions</a></div>`).join("")}</div>`).join("")}
     </details>
     <details class="grp"><summary>Wildlife & seasons <span class="chev">⌄</span></summary>
-      <div class="note bearRow">${bearSvg}<p style="margin:0"><b>About the bears:</b> ${esc(DATA.bearLine)} <a href="${DATA.bearLink}" target="_blank" rel="noopener">Official info, CA Fish &amp; Wildlife</a>.</p></div>
+      <div class="note bearRow">${bearSvg}<div><p style="margin:0"><b>About the bears:</b> ${esc(DATA.bearLine)}</p>
+      <p style="margin:6px 0 0"><a href="${DATA.bearLink}" target="_blank" rel="noopener">${esc(DATA.bearLinkLabel)}</a></p>
+      <p class="logi" style="margin:6px 0 0">Bold bear on the property? Tell the front desk.</p></div></div>
       ${DATA.wildlife.map(w => `<details class="row"><summary><h3>${esc(w.name)}</h3><p class="desc" style="font-style:normal">${esc(w.facts)}</p></summary><div class="more"><p class="safe">${esc(w.safety)}</p></div></details>`).join("")}
       <details class="grp"><summary>The seasons here <span class="chev">⌄</span></summary>
         <p style="font-size:14px;font-style:italic">${esc(DATA.snowAnswer)}</p>
@@ -2066,7 +2069,9 @@ function renderExplore() {
         ${g.list.map(s => `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0"><span>${esc(s)}</span><a class="act" href="${mapsQ(s)}" target="_blank" rel="noopener">Directions</a></div>`).join("")}</div>`).join("")}
     </details>
     <details class="grp"><summary>Wildlife & the seasons <span class="chev">⌄</span></summary>
-      <div class="note bearRow">${bearSvg}<p style="margin:0"><b>About the bears:</b> ${esc(DATA.bearLine)} <a href="${DATA.bearLink}" target="_blank" rel="noopener">Official info, CA Fish &amp; Wildlife</a>.</p></div>
+      <div class="note bearRow">${bearSvg}<div><p style="margin:0"><b>About the bears:</b> ${esc(DATA.bearLine)}</p>
+      <p style="margin:6px 0 0"><a href="${DATA.bearLink}" target="_blank" rel="noopener">${esc(DATA.bearLinkLabel)}</a></p>
+      <p class="logi" style="margin:6px 0 0">Bold bear on the property? Tell the front desk.</p></div></div>
       ${DATA.wildlife.map(w => `<div class="row" style="padding:10px 0"><h3 style="font-size:15.5px">${esc(w.name)}</h3><p class="desc" style="font-style:normal">${esc(w.facts)}</p><p class="safe" style="font-size:13px">${esc(w.safety)}</p></div>`).join("")}
       <p style="font-size:14px;font-style:italic;margin-top:10px">${esc(DATA.snowAnswer)}</p>
       ${["spring", "summer", "fall", "winter"].map(s => `<div class="seas"><b>${s}${s === seasonOf(c.month) ? " · now" : ""}</b>${esc(DATA.seasons[s])}</div>`).join("")}
