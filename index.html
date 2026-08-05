@@ -666,14 +666,18 @@ const ZONE_OF = {
   "Sherman Peak": 6, "Wind Wolves Preserve": 6, "Tehachapi Loop & depot town": 6, "Sequoia National Park (the honest truth)": 6,
 };
 /* [full name, the distance line, short name for the jump strip] */
+/* [heading, full description, jump-chip label]
+   Chip labels carry the drive time — Ryan: "what if people don't know where these
+   are? i've lived here 5 years - i don't even know." "The valley" means nothing to
+   someone from LA; "The valley · 10–25 min" tells them everything they need. */
 const ZONES = [
   null,
   ["A short walk", "out the door · 0–5 minutes on foot", "On foot"],
-  ["In town", "a 15-minute stroll or a 4-minute drive", "In town"],
-  ["Down the valley", "10–25 minutes by car, toward the lake", "The valley"],
-  ["Up the canyon", "25–45 minutes — north into the forest, or south to the tubs", "The canyon"],
-  ["The high country", "50 minutes to 1½ hours · pack water, fill the tank", "High country"],
-  ["Proper expeditions", "1½ hours and up — make a day of it", "Expeditions"],
+  ["In town", "a 15-minute stroll or a 4-minute drive", "In town · 4 min"],
+  ["Down the valley", "10–25 minutes by car, toward the lake", "The valley · 10–25 min"],
+  ["Up the canyon", "25–45 minutes — north into the forest, or south to the tubs", "The canyon · 25–45 min"],
+  ["The high country", "50 minutes to 1½ hours · pack water, fill the tank", "High country · 50 min+"],
+  ["Proper expeditions", "1½ hours and up — make a day of it", "Expeditions · 1½ hr+"],
 ];
 /* printed-guide picks — from the house booklet */
 const STAFF_EATS = new Set(["Sequoia Mountain Bakery", "Big Blue Bear Cafe", "Cheryl's Diner", "Something Sweeter", "McNally's Outpost", "The Pizza Barn", "Kern River Brewing Co. — The Pub", "El Rio Mexican & American", "Ewings on the Kern"]);
