@@ -90,8 +90,16 @@
   .esscard{border:1.4px solid var(--ink);border-radius:var(--w1);padding:14px 17px;margin:22px 0}
   .esscard .bigv{font-size:19px;font-weight:700;color:var(--coral-deep)}
   /* the room number, sized so nobody walks into the wrong one */
+  /* The room plate is a link to the property map. It used to be a static block
+     followed by a line telling the guest to go find the Lodge tab themselves —
+     a step of friction right where they're standing in the parking lot. */
   .roomplate{display:flex;align-items:center;gap:12px;margin-top:8px;padding:11px 14px;
-    background:var(--blush);border:1.6px solid var(--coral);border-radius:var(--w2)}
+    background:var(--blush);border:1.6px solid var(--coral);border-radius:var(--w2);
+    text-decoration:none;color:inherit;cursor:pointer}
+  .roomplate:active{background:#F7E2DA}
+  .roomgo{margin-left:auto;flex:none;display:flex;align-items:center;gap:5px;
+    font-size:12px;font-style:italic;color:var(--coral-deep);text-align:right;max-width:88px}
+  .roomgo svg{flex:none}
   .roomlab{display:block;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--coral-deep)}
   .roomnum{display:inline-block;font-family:var(--serif);font-size:44px;font-weight:700;line-height:1.05;color:var(--coral-deep);letter-spacing:.01em}
   .roomtype{display:inline-block;font-size:13.5px;font-style:italic;color:var(--faded);margin-left:9px;vertical-align:6px}
@@ -1557,7 +1565,7 @@ function welcomeCard(sc) {
      room number bigger and more obvious - so they don't go to the wrong fucking
      room!" So it leads the card as a big coral numeral with a key tag, not as a
      word buried in a sentence. */
-  const roomBig = (roomNum || rt) ? `<div class="roomplate">
+  const roomBig = (roomNum || rt) ? `<a class="roomplate" href="#v=lodge">
       <svg width="30" height="30" viewBox="0 0 30 30" fill="none" aria-hidden="true">
         <circle cx="9.5" cy="9.5" r="5.5" stroke="#C44F41" stroke-width="2"/>
         <path d="M13 13 L24 24" stroke="#C44F41" stroke-width="2.4" stroke-linecap="round"/>
@@ -1566,8 +1574,8 @@ function welcomeCard(sc) {
       <div><span class="roomlab">Your room</span>
         <span class="roomnum">${esc(roomNum || (rt ? rt.label : ""))}</span>
         ${rt ? `<span class="roomtype">${esc(rt.type)}</span>` : ""}</div>
-    </div>
-    <p class="logi" style="margin:6px 0 0">It's lit up on the map under <b>The Lodge</b> — tap the tab below if you can't find it.</p>`
+      <span class="roomgo">Show me on the map<svg width="7" height="12" viewBox="0 0 7 12" fill="none" aria-hidden="true"><path d="M1 1L6 6L1 11" stroke="#C44F41" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    </a>`
     : `<p class="why" style="margin:0 0 4px">The desk will hand you your room number at check-in.</p>`;
   return `<div class="esscard"><span class="label">The essentials</span>
     ${roomBig}
@@ -1780,7 +1788,10 @@ function roomCard() {
   const rt = room ? ROOM_KEYS[room] : null;
   const r = rt ? DATA.rooms.find(x => x.name === rt.type) : null;
   const head = "Your room" + (roomNum ? " · " + esc(roomNum) : "") + (rt ? " · " + esc(rt.type) : "");
-  const body = (r ? esc(r.features) + " " : (roomNum ? "It's lit up on the map under The Lodge. " : ""));
+  /* No "it's on the map under The Lodge" fallback any more — the room plate on the
+     landing screen is itself the link to the map, so repeating the directions here
+     is the friction Ryan asked to remove, twice over. */
+  const body = (r ? esc(r.features) + " " : "");
   return `<div class="tick alt2"><span class="label" style="color:var(--olive-deep)">${head}</span>
     <p style="margin:3px 0 0;font-size:14px">${body}Anything acting up — fireplace, A/C, anything? The desk sorts it tonight: <a href="${telHref(DATA.lodge.phone)}">${DATA.lodge.phone}</a>.</p></div>`;
 }
