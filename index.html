@@ -1151,23 +1151,6 @@ const keyScene = `
   <g fill="#8A9A3E"><ellipse cx="30" cy="30" rx="16" ry="7"/><ellipse cx="172" cy="28" rx="16" ry="7"/></g>
   <g stroke="#34322C" stroke-width="1.4" stroke-linecap="round"><path d="M30 36 C 30 46, 29 52, 28 58 M172 34 C 172 44, 171 52, 170 58"/></g>
 </svg>`;
-const townMap = `
-<svg class="scene" width="420" height="252" viewBox="0 0 420 252" fill="none" aria-hidden="true">
-  <path d="M210 6 C 200 40, 226 70, 214 104 C 204 132, 178 150, 170 178 C 163 200, 168 226, 160 248" stroke="#5B7FB4" stroke-width="14" opacity=".28" stroke-linecap="round"/>
-  <path d="M210 6 C 200 40, 226 70, 214 104 C 204 132, 178 150, 170 178 C 163 200, 168 226, 160 248" stroke="#5B7FB4" stroke-width="2" opacity=".55" stroke-linecap="round"/>
-  <path d="M236 4 C 230 44, 248 84, 238 122 C 230 152, 210 172, 204 202 C 200 222, 203 238, 201 250" stroke="#34322C" stroke-width="1.5" stroke-dasharray="5 4" opacity=".8"/>
-  <path d="M198 128 L 236 120" stroke="#34322C" stroke-width="3" stroke-linecap="round"/>
-  <g fill="#8A9A3E"><ellipse cx="304" cy="28" rx="22" ry="9"/><ellipse cx="326" cy="38" rx="15" ry="7" opacity=".85"/><ellipse cx="46" cy="66" rx="20" ry="8"/><ellipse cx="66" cy="76" rx="14" ry="6" opacity=".85"/><ellipse cx="310" cy="196" rx="18" ry="8"/></g>
-  <g stroke="#34322C" stroke-width="1.3" stroke-linecap="round"><path d="M304 36 C304 46,303 52,302 58 M46 73 C46 81,45 86,44 92 M310 203 C310 211,309 216,308 222"/></g>
-  <path d="M256 44 L256 30 L268 22 L280 30 L280 44 Z" stroke="#C44F41" stroke-width="1.7" fill="#FBEFEA"/>
-  <text x="252" y="58" font-size="11" font-weight="bold" fill="#C44F41" font-family="Georgia,serif">You're here</text>
-  <circle cx="244" cy="84" r="3.4" fill="#8A9A3E"/><text x="252" y="88" font-size="10" fill="#34322C" font-family="Georgia,serif">Brewery · El Rio (4-min walk)</text>
-  <circle cx="228" cy="150" r="3.4" fill="#8A9A3E"/><text x="236" y="146" font-size="10" fill="#34322C" font-family="Georgia,serif">Downtown: Cheryl's · Pizza Barn</text>
-  <text x="236" y="158" font-size="10" fill="#34322C" font-family="Georgia,serif">bakery · Sporty · shops · museum</text>
-  <circle cx="176" cy="170" r="3.4" fill="#5B7FB4"/><text x="52" y="174" font-size="10" fill="#34322C" font-family="Georgia,serif">Riverside Park · the float</text>
-  <text x="240" y="14" font-size="10" fill="#6B675A" font-style="italic" font-family="Georgia,serif">↑ upriver: trails & secrets</text>
-  <text x="96" y="244" font-size="10" fill="#6B675A" font-style="italic" font-family="Georgia,serif">↓ 10–15 min: Lake Isabella · Airpark Cafe</text>
-</svg>`;
 const sprig = `<svg width="30" height="26" viewBox="0 0 30 26" fill="none" aria-hidden="true">
   <ellipse cx="15" cy="8" rx="11" ry="5" fill="#8A9A3E"/>
   <ellipse cx="8" cy="11" rx="6" ry="3" fill="#8A9A3E" opacity=".85"/>
@@ -1284,7 +1267,10 @@ function openNowTick(c) {
     .sort((a, b) => a.st.order - b.st.order || fitScore(b.p.goodFor) - fitScore(a.p.goodFor)).slice(0, 3);
   if (!open.length) return "";
   return `<div class="tick"><span class="label" style="color:var(--olive-deep)">Open right now in town</span>
-    ${open.map(x => `<div style="display:flex;justify-content:space-between;gap:8px;font-size:14px;margin-top:5px"><span><b>${esc(x.p.name)}</b> <span class="logi">· ${esc(x.p.area)}</span></span><span class="st"><span class="dot"></span>${x.st.text}</span></div>`).join("")}
+    ${open.map(x => `<div style="margin-top:9px">
+      <div style="display:flex;justify-content:space-between;gap:8px;font-size:14px"><span><b>${esc(x.p.name)}</b> <span class="logi">· ${esc(x.p.area)}</span></span><span class="st"><span class="dot"></span>${x.st.text}</span></div>
+      <div class="acts" style="margin-top:5px">${x.p.phone ? `<a class="act" href="${telHref(x.p.phone)}">Call</a>` : ""}<a class="act" href="${mapsQ(x.p.name)}" target="_blank" rel="noopener">Directions</a></div>
+    </div>`).join("")}
   </div>`;
 }
 function bigActs(primaryLabel, primaryGoto, primaryHref) {
@@ -1643,7 +1629,7 @@ function nowArrival(c, sc) {
   const n2 = guestName ? ", " + esc(guestName.split(/\s+/)[0]) : "";
   return sceneHero(c, { top: "Evenin'" + n2 + ".", skyline: "You made it. Night 1 of " + sc.nights + "." })
     + welcomeCard(sc)
-    + bigActs(din ? "Dinner: " + esc(din.name) + " →" : "Plan tomorrow →", din ? "eat" : "do")
+    + bigActs(din ? "Where to eat tonight →" : "Plan tomorrow →", din ? "eat" : "do")
     + beats.slice(0, 2).join("")
     + evs
     + fixSheetHtml(false);
@@ -1724,7 +1710,7 @@ function nowFull(c, sc) {
   const [hi] = greetingWords(c);
   return sceneHero(c, { top: hi, skyline: greetLine(c, sc) })
     + welcomeCard(sc)
-    + bigActs(primary ? primary.lab + ": " + esc(primary.name) + " →" : "Explore the valley →", primary ? primary.gotoK : "do")
+    + bigActs(primary ? "Ideas for " + primary.lab.toLowerCase() + " →" : "Explore the valley →", primary ? primary.gotoK : "do")
     + `${beats.slice(0, 3).join("")}
     ${openNowTick(c)}
     ${oneNight ? "" : `<span class="label" style="display:block;margin-top:18px">Your days, sketched</span>${dayStrip(c, sc)}`}
@@ -1809,7 +1795,7 @@ function nowNone(c) {
   const capGoto = m0 ? "eat" : ad ? "secrets" : "do";
   return sceneHero(c, { top: hi, skyline: "Welcome to river time." })
     + welcomeCard(null)
-    + bigActs(cap === "All quiet on the river" ? "Explore the valley →" : cap + " →", capGoto)
+    + bigActs(cap === "All quiet on the river" ? "Explore the valley →" : (m0 ? (mealKind === "breakfast" ? "Where to eat this morning →" : "Where to eat tonight →") : "Ideas for tonight →"), capGoto)
     + `${m0 ? verdict(mealKind === "breakfast" ? "First thing " + inkMark("mug") : "Dinner tonight " + inkMark("fork"), esc(m0.name),
         m0.quote.split(/[.—]/)[0].trim().toLowerCase(),
         statusFor(m0, c).text + " · " + esc(m0.area),
@@ -2081,8 +2067,7 @@ function renderExplore() {
   return `
     <div class="t-display">Explore</div>
     <p class="logi">The valley, laid out by how far it is from your door.</p>
-    ${townMap}
-    <p class="logi" style="font-style:italic;margin-top:2px">Downtown is a 15-minute stroll south, the lake 10 minutes past that, and the canyon runs 20 wild miles north.</p>
+    <p class="logi" style="font-style:italic;margin-top:6px">Downtown is a 15-minute stroll south, the lake 10 minutes past that, and the canyon runs 20 wild miles north.</p>
     <div class="contactrow" style="margin-top:8px">
       <a class="cbtn" href="${DATA.lodge.mapUrl}" target="_blank" rel="noopener">Open us in your maps app</a>
     </div>
