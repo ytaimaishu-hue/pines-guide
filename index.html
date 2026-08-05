@@ -195,9 +195,6 @@
   /* Always-there way to reach the desk. TEXT is the primary action on purpose —
      Ryan: "we prefer they text first - so the phones do not blow up all day!"
      Calling is still one tap away inside, just not the default. */
-  .deskBtn{position:fixed;right:14px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:70;
-    background:var(--coral);color:#fff;border:0;border-radius:999px;padding:12px 18px;font-family:var(--serif);
-    font-size:14.5px;font-weight:700;box-shadow:0 2px 10px rgba(52,50,44,.25);cursor:pointer;min-height:46px}
   .deskWrap{position:fixed;inset:0;z-index:88;background:rgba(52,50,44,.45);display:flex;align-items:flex-end}
   .deskCard{background:var(--paper);width:100%;max-width:480px;margin:0 auto;border-radius:18px 18px 0 0;padding:20px 18px calc(22px + env(safe-area-inset-bottom));text-align:center}
   .deskCard h3{font-size:19px;margin:0 0 4px}
@@ -216,7 +213,6 @@
   </header>
   <main id="main"></main>
   <nav id="nav" aria-label="Guide sections"></nav>
-  <button class="deskBtn" id="deskBtn" aria-haspopup="true">Text the desk</button>
   <div class="toast" id="toast" role="status"></div>
 </div>
 
@@ -2343,8 +2339,13 @@ function paint(toTop) {
   document.getElementById("main").innerHTML =
     SCREENS.map(s => `<section class="screen ${s.id === cur ? "on" : ""}">${s.id === cur ? s.render() : ""}</section>`).join("") +
     `<footer>Hours and rivers both change with the seasons —<br>when in doubt, holler at the front desk.</footer>`;
+  /* Contact sits in the nav as a fourth tab rather than a floating button — Ryan:
+     "TEXT THE DESK IS TOO INVASIE - JUST ADD A 4TH OPTION TO CONTACT US? JUST TO
+     KEEP IT CLEANER". It opens the text/call sheet instead of switching screens,
+     so it never steals a tap from the three real tabs. */
   document.getElementById("nav").innerHTML = SCREENS.map(s =>
-    `<button class="${s.id === cur ? "on" : ""}" data-nav="${s.id}" aria-label="${s.label}">${s.icon}<span class="nlabel">${s.label}</span></button>`).join("");
+    `<button class="${s.id === cur ? "on" : ""}" data-nav="${s.id}" aria-label="${s.label}">${s.icon}<span class="nlabel">${s.label}</span></button>`).join("")
+    + `<button data-desk aria-label="Contact us"><svg width="21" height="21" viewBox="0 0 22 22"><path d="M3.5 5.5h15v9.5h-9L5.5 19v-4H3.5z"/><path d="M7 9h8M7 12h5"/></svg><span class="nlabel">Contact</span></button>`;
   const sh = document.getElementById("shelf");
   if (sh) { const t = sh.querySelector(".dcard.today"); if (t) sh.scrollLeft = Math.max(0, t.offsetLeft - 12); }
   window.scrollTo({ top: toTop ? 0 : y });
@@ -2442,7 +2443,8 @@ document.addEventListener("visibilitychange", safePaint);
 setInterval(safePaint, 60000);
 /* Reach-the-desk sheet. Text first, call second, and the text is pre-filled with the
    guest's room so the desk knows who's asking without a round trip. */
-document.getElementById("deskBtn").addEventListener("click", () => {
+document.addEventListener("click", (e) => {
+  if (!e.target.closest("[data-desk]")) return;
   const rm = roomNum ? "Room " + roomNum + ": " : "";
   const wrap = document.createElement("div");
   wrap.className = "deskWrap";
