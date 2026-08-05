@@ -824,6 +824,10 @@ function ingestParams() {
     const qp = new URLSearchParams(location.search || "");
     const hp = new URLSearchParams((location.hash || "").replace(/^#/, ""));
     const gv = k => hp.get(k) || qp.get(k);
+    /* #fresh=1 wipes whatever this phone remembered first — an escape hatch for a
+       device stuck showing a stale countdown from an old link. Safe to combine:
+       #fresh=1&n=...&a=... clears, then applies the new stay. */
+    if (gv("fresh") != null || gv("reset") != null) purgeAll();
     const normDate = s => {
       const m = (s || "").match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{4})$/);
       return m ? `${m[3]}-${String(m[1]).padStart(2, "0")}-${String(m[2]).padStart(2, "0")}` : (s || "");
@@ -1458,7 +1462,8 @@ function nowPre(c, sc) {
     + welcomeCard(sc)
     + (arrivingToday
       ? `<p class="why" style="margin-top:10px"><b>See you this afternoon.</b> <span class="logi" style="font-weight:400">Running late or need anything on the road? <a href="${SMS_DESK}">Text us</a> — we'll leave your keys in the box by the office door.</span></p>`
-      : `<p class="why" style="margin-top:10px"><b>Arriving ${DAY_FULL[arr.getDay()]}, ${MONTHS[arr.getMonth()]} ${arr.getDate()}.</b> <span class="logi" style="font-weight:400">check-in from 3 — the porch light will be on</span></p>`)
+      : `<p class="why" style="margin-top:10px"><b>Arriving ${DAY_FULL[arr.getDay()]}, ${MONTHS[arr.getMonth()]} ${arr.getDate()}.</b> <span class="logi" style="font-weight:400">check-in from 3 — the porch light will be on</span></p>
+         <button data-clearall style="background:none;border:0;padding:4px 0;font-family:var(--serif);font-size:12.5px;color:var(--faded);text-decoration:underline;cursor:pointer;min-height:32px">Not your stay? Start fresh</button>`)
     + bigActs("", null)
     + `<p class="why" style="margin-top:14px">${prep}</p>
     ${eventsTick(c, sc, 2)}
@@ -1675,25 +1680,6 @@ function greetingWords(c) {
 }
 function nowCheckout(c, sc) {
   const sun = sunTimes(c.n);
-  let move;
-  if (picked.has("adventure")) {
-    move = verdict("One last move", "Whiskey Flat, first flat mile", `sunrise ${shortTime(sun.rise)}, checkout 11 — it fits; go`, "trailhead 2 min · end of Burlando Rd", "");
-  } else if (dogOn()) {
-    move = verdict("One last move", "River-sniff loop at Riverside Park", "one more riverfront lap — the dog earned it", "keys in the box, leash in the car", "");
-  } else if (picked.has("event")) {
-    move = verdict("One last move", "Beat the crowd out", "event traffic builds by mid-morning — roll before 10", "canyon or desert route, your call", "");
-  } else if (picked.has("family")) {
-    const airOpen = openAt(DATA.eat.find(p => p.name === "Airpark Cafe"), c.day, Math.max(c.min, 480));
-    move = airOpen
-      ? verdict("One last move", "Airpark Cafe", "runway pancakes on the way out — open today", "5-min drive south · fits before 11", btn("Directions", mapsQ("Airpark Cafe Kernville"), true))
-      : verdict("One last move", "Cheryl's Diner", "Kernville's kitchen table for the road", "open from 7 · downtown", btn("Directions", mapsQ("Cheryl's Diner Kernville"), true));
-  } else {
-    const bak = DATA.eat.find(p => p.name === "Sequoia Mountain Bakery");
-    const bakOpen = openAt(bak, c.day, Math.max(c.min, 480));
-    move = bakOpen
-      ? verdict("One last move", "Bakery pastries to-go", "before the case empties — take the canyon home slow", "open " + statusFor(bak, c).text, btn("Directions", mapsQ("Sequoia Mountain Bakery Kernville"), true))
-      : verdict("One last move", "Cheryl's Diner", "one more booth before the canyon", "open from 7", "");
-  }
   const nextSeason = { winter: "Spring brings wildflowers and the big water.", spring: "Summer brings festivals and river days.", summer: "Fall brings golden cottonwoods and thin crowds.", fall: "Winter is the quiet secret." }[seasonOf(c.month)];
   const n3 = guestName ? ", " + esc(guestName.split(/\s+/)[0]) : "";
   return sceneHero(c, {
@@ -1702,7 +1688,6 @@ function nowCheckout(c, sc) {
     })
     + welcomeCard(sc)
     + `<p class="why" style="margin-top:10px"><b>One more good hour before the canyon.</b> <span class="logi" style="font-weight:400">sunrise ${shortTime(sun.rise)} · the desk answers texts from the road</span></p>`
-    + move
     + bigActs("", null)
     + `<p class="why">${nextSeason} Come on back.</p>
     <p class="logi">Loved it? <a href="${DATA.lodge.reviewUrl}" target="_blank" rel="noopener">A kind word online</a> keeps a small place alive.</p>
