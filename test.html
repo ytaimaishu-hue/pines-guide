@@ -1,5 +1,5 @@
 <meta charset="utf-8">
-<title>TEST BUILD — Whispering Pines Guest Guide</title>
+<title>Whispering Pines Lodge — Guest Guide</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <style>
   :root {
@@ -2595,57 +2595,6 @@ paint();
       }
     });
   });
-})();
-
-
-
-(function () {
-  try {
-    if (!location.hash && !localStorage.getItem("wpl-roomnum")) {
-      var t = new Date(), f = function (d) { return (d.getMonth()+1) + "/" + d.getDate() + "/" + String(d.getFullYear()).slice(2); };
-      location.replace(location.pathname + "#fresh=1&n=Victor&a=" + f(t) + "&d=" + f(new Date(+t + 3*864e5)) + "&p=couple&r=107");
-    }
-  } catch (e) {}
-})();
-
-
-/* TEST BUILD ONLY — desktop hand-off. Testers open the Slack link on a laptop, but
-   the guide is a phone product, so show a QR that puts it in their hand instead of
-   making them retype a URL. Phones never see this. Dismissible either way. */
-(function () {
-  try {
-    var isPhone = window.matchMedia("(max-width: 700px)").matches
-      || ("ontouchstart" in window && window.innerWidth < 900);
-    if (isPhone) return;
-    if (sessionStorage.getItem("wpl-qr-dismissed")) return;
-
-    var css = document.createElement("style");
-    css.textContent = ".qrWrap{position:fixed;inset:0;z-index:120;background:rgba(52,50,44,.55);display:flex;align-items:center;justify-content:center;padding:24px}"
-      + ".qrCard{background:#FFFDF8;max-width:420px;width:100%;border-radius:20px;padding:30px 30px 24px;text-align:center;font-family:Georgia,serif;color:#34322C}"
-      + ".qrCard h2{font-size:24px;margin:0 0 6px;font-weight:700}"
-      + ".qrCard p{font-size:15px;color:#6B675A;margin:0 0 18px;line-height:1.5}"
-      + ".qrCard img{width:210px;height:210px;display:block;margin:0 auto 16px;border:1px solid #E3E0D6;border-radius:10px}"
-      + ".qrCard .u{font-size:12.5px;color:#6B675A;word-break:break-all;margin-bottom:18px}"
-      + ".qrCard button{font-family:Georgia,serif;font-size:15px;padding:12px 18px;border-radius:12px 4px 12px 4px;"
-      + "border:1.4px solid #E0655A;background:none;color:#C44F41;cursor:pointer;min-height:46px;width:100%}";
-    document.head.appendChild(css);
-
-    var w = document.createElement("div");
-    w.className = "qrWrap";
-    w.innerHTML = '<div class="qrCard">'
-      + "<h2>Point your phone at this</h2>"
-      + "<p>This is a phone guide \u2014 it's what a guest sees standing in their room. Scan to open it on yours.</p>"
-      + '<img src="data:image/png;base64,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" alt="QR code to open the guide on your phone">'
-      + '<div class="u">guide.pineskernville.com/test</div>'
-      + "<button>Just look on this computer</button></div>";
-    w.addEventListener("click", function (e) {
-      if (e.target.tagName === "BUTTON" || e.target === w) {
-        try { sessionStorage.setItem("wpl-qr-dismissed", "1"); } catch (x) {}
-        w.remove();
-      }
-    });
-    document.body.appendChild(w);
-  } catch (e) {}
 })();
 
 </script>
