@@ -890,12 +890,6 @@ function wxNow() {
   if (!wx || !wx.current) return "";
   return `${Math.round(wx.current.temperature_2m)}° and ${wxTxt(wx.current.weather_code)} right now`;
 }
-function wxForStay(sc) {
-  if (!wx || !wx.daily || !sc || !sc.days) return "";
-  const rows = sc.days.map(d => wx.daily.time.indexOf(ymd(d))).filter(i => i >= 0).slice(0, 6);
-  if (!rows.length) return "";
-  return rows.map(i => `${DAY_ABBR[new Date(wx.daily.time[i] + "T12:00:00").getDay()]} ${Math.round(wx.daily.temperature_2m_max[i])}°/${Math.round(wx.daily.temperature_2m_min[i])}° ${wxTxt(wx.daily.weather_code[i])}`).join(" · ");
-}
 function wxCurrentCode() { return wx && wx.current ? wx.current.weather_code : null; }
 
 /* ===================== STAY STATE MACHINE ===================== */
@@ -1277,8 +1271,12 @@ const landingCanopy = `<svg width="42" height="36" viewBox="0 0 34 38" fill="non
    cap/sub (the single "do this" pick) are deliberately NOT rendered here —
    the facts card goes first (welcomeCard), the pick is demoted to bigActs below it. */
 function sceneHero(c, txt) {
+  const wNow = wxNow();
   return `<div class="t-display">${txt.top}</div>
     ${txt.skyline ? `<p class="logi">${txt.skyline}</p>` : ""}
+    ${wNow ? `<a href="${WEATHER_LINK}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px">
+      ${weatherIcon(wxCurrentCode())}<span style="color:var(--coral-deep);font-weight:700;font-size:15px">${esc(wNow)}</span>
+    </a>` : ""}
     ${landingCanopy}`;
 }
 function openNowTick(c) {
@@ -1310,8 +1308,6 @@ function welcomeCard(sc) {
   const roomBit = (roomNum || rt)
     ? `Room <b>${esc(roomNum || (rt ? rt.label : ""))}</b>${rt ? " · " + esc(rt.type) : ""} — it's lit up on the map under The Lodge.`
     : `The desk will hand you your room number at check-in.`;
-  const wNow = wxNow();
-  const wStay = sc && sc.days && sc.days.length > 1 ? wxForStay(sc) : "";
   return `<div class="esscard"><span class="label">The essentials</span>
     <div style="margin-top:6px;font-size:14.5px;line-height:1.95">
       ${roomBit}<br>
@@ -1320,9 +1316,6 @@ function welcomeCard(sc) {
       ${inkMark("wave")}Pool gate <button class="act" data-copy="${esc(E.pool)}" style="padding:2px 8px;min-height:30px"><b style="color:var(--coral-deep)">${esc(E.pool)}</b></button> — towels at the desk<br>
       ${esc(E.coffee)}
     </div>
-    ${wNow ? `<a href="${WEATHER_LINK}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;margin-top:8px">
-      ${weatherIcon(wxCurrentCode())}<span style="color:var(--coral-deep);font-weight:700;font-size:14.5px">${esc(wNow)}</span>${wStay ? `<span class="logi" style="text-decoration:none;margin-left:1px">· ${esc(wStay)}</span>` : ""}
-    </a>` : ""}
     <p class="why" style="margin-top:10px;font-size:13.5px">Something off with the room? <a href="${SMS_DESK}">Text us before you think about a review</a> — we'd rather fix it tonight.</p>
   </div>
   ${fitHausCard()}`;
