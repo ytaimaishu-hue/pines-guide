@@ -110,7 +110,12 @@
   .bearlist li{margin:7px 0}
 
   .chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 2px}
-  .chip{font-family:var(--serif);font-size:13.5px;padding:10px 15px;border-radius:999px;border:1.3px solid var(--ink);background:var(--paper);color:var(--ink);cursor:pointer;min-height:44px}
+  .chip{font-family:var(--serif);font-size:13.5px;padding:10px 15px;border-radius:999px;border:1.3px solid var(--ink);background:var(--paper);color:var(--ink);cursor:pointer;min-height:44px;
+        display:inline-flex;align-items:center;justify-content:center;gap:6px}
+  /* Filter icons. currentColor so they flip to white on the active coral chip
+     without a second rule. "Everything" stays iconless — it isn't a category,
+     and leaving it bare is what keeps the row at two lines on a 375px phone. */
+  .ci{width:13px;height:13px;flex:none;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
   .chip.on{border-color:var(--coral);background:var(--coral);color:#fff}
   .morez{display:block;width:100%;margin:-4px 0 18px;padding:11px;border:1.2px dashed var(--olive-deep);background:none;border-radius:12px;font-family:var(--serif);font-size:13.5px;font-style:italic;color:var(--olive-deep);cursor:pointer;min-height:44px}
   .chip.dogchip.on{border-color:var(--olive);background:var(--olive)}
@@ -195,7 +200,7 @@
      Bleed it to the phone's edges so its labels render at their designed size.
      Phones only — on a wide screen it stays the normal centred 380. */
   @media (max-width:520px){
-    .scene.bleed{width:calc(100% + 44px);max-width:none;margin-left:-22px;margin-right:-22px}
+    .scene.bleed{width:calc(100% + 44px);max-width:none;height:auto;margin-left:-22px;margin-right:-22px}
   }
   .divid{display:block;margin:26px auto 0}
   .mark{vertical-align:-2px;margin-right:5px}
@@ -1301,6 +1306,17 @@ const keyScene = `
    middle, bands stepping away by drive time, real landmarks in each band. Answers
    "where is this stuff relative to me" at a glance instead of in a paragraph.
    Every label measured against the 380 canvas before drawing. */
+/* Explore filter icons — 13x13, monoline, drawn on the same grid as each other so
+   they sit at a consistent weight beside the labels. Rendered to a PNG and looked
+   at before shipping (both dark-on-paper and white-on-coral, at true 13px): the
+   first pass had two wave periods that flattened into dashes at that size, so the
+   water mark is one full S per line. */
+const FILTER_ICON = {
+  eat: `<svg class="ci" viewBox="0 0 13 13" aria-hidden="true"><path d="M2 1.5V5M4 1.5V5M6 1.5V5M2 5H6M4 5V11.5"/><path d="M9.2 6.2C9.2 4 10.2 2.2 11.4 1.4C12 3.2 11.4 5.2 9.2 6.2Z"/><path d="M9.9 6.2V11.5"/></svg>`,
+  trail: `<svg class="ci" viewBox="0 0 13 13" aria-hidden="true"><path d="M6.5 1.4L3.4 6H9.6Z"/><path d="M6.5 4.8L2.2 10.4H10.8Z"/><path d="M6.5 10.4V12.4"/></svg>`,
+  water: `<svg class="ci" viewBox="0 0 13 13" aria-hidden="true"><path d="M1 4.5C4 0.9 9 8.1 12 4.5"/><path d="M1 9.2C4 5.6 9 12.8 12 9.2"/></svg>`,
+  secret: `<svg class="ci" viewBox="0 0 13 13" aria-hidden="true"><circle cx="3.7" cy="6.7" r="2.5"/><path d="M6.2 6.7H12"/><path d="M10.2 6.7V9.2"/><path d="M12 6.7V8.6"/></svg>`,
+};
 const zoneMap = `
 <svg class="scene bleed" width="380" height="478" viewBox="0 0 380 478" fill="none" aria-hidden="true" style="margin-top:10px">
   <rect x="0" y="16"  width="380" height="80" fill="#8A9A3E" opacity=".05"/>
@@ -2255,14 +2271,14 @@ function renderExplore() {
   return `
     <div class="t-display">Explore</div>
     <p class="logi">The valley, laid out by how far it is from your door.</p>
+    <div class="chips" style="margin-top:12px">${[["all", "Everything"], ["eat", "Eat & drink"], ["trail", "Trails"], ["water", "On the water"], ["secret", "Local secrets"]].map(([k, l]) =>
+      `<button class="chip ${exFilter === k ? "on" : ""}" data-exf="${k}">${FILTER_ICON[k] || ""}${l}</button>`).join("")}</div>
+    ${present.length > 1 ? `<div class="zjump">${present.map(z =>
+      `<button data-jump="${z}">${ZONES[z][2]}</button>`).join("")}</div>` : ""}
     ${zoneMap}
     <div class="contactrow" style="margin-top:8px">
       <a class="cbtn" href="${DATA.lodge.mapUrl}" target="_blank" rel="noopener">Open us in your maps app</a>
     </div>
-    <div class="chips" style="margin-top:12px">${[["all", "Everything"], ["eat", "Eat & drink"], ["trail", "Trails"], ["water", "On the water"], ["secret", "Local secrets"]].map(([k, l]) =>
-      `<button class="chip ${exFilter === k ? "on" : ""}" data-exf="${k}">${l}</button>`).join("")}</div>
-    ${present.length > 1 ? `<div class="zjump">${present.map(z =>
-      `<button data-jump="${z}">${ZONES[z][2]}</button>`).join("")}</div>` : ""}
     ${feat ? `<span class="label" style="display:block;margin-top:16px">Today's house secret</span>
       <div class="beat"><span class="slotlab">Psst</span>
         <div class="pickname">${esc(feat.name)}</div>
