@@ -2526,121 +2526,35 @@ document.addEventListener("click", (e) => {
 });
 paint();
 
-/* ===================== TEST-BUILD FEEDBACK LAYER =====================
-   Only in the test build — never shipped to guests. Lets a tester tap any part of
-   the guide and type a note about it. Everything is kept on their own phone
-   (localStorage); nothing is uploaded, no account, no backend, no per-note cost.
-   When they're done, one button copies the whole batch — or texts it to the desk. */
+/* ===== TEST BUILD ONLY — one-time rescue of notes saved before feedback
+   moved to Slack. Installs nothing unless this phone already has notes. ===== */
 (function () {
   "use strict";
   var KEY = "wpl-testnotes";
   var notes = [];
   try { notes = JSON.parse(localStorage.getItem(KEY) || "[]"); } catch (e) {}
-  var picking = false;
+  if (!Array.isArray(notes) || !notes.length) return;
 
   var css = document.createElement("style");
   css.textContent = [
-    ".fbBtn{position:fixed;left:14px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:80;",
+    ".nrBtn{position:fixed;left:14px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:80;",
       "background:var(--coral);color:#fff;border:0;border-radius:999px;padding:12px 17px;font-family:var(--serif);",
       "font-size:14.5px;font-weight:700;box-shadow:0 2px 10px rgba(52,50,44,.25);cursor:pointer;min-height:46px}",
-    ".fbBtn.picking{background:var(--olive-deep)}",
-    ".fbCount{background:#fff;color:var(--coral-deep);border-radius:999px;padding:1px 7px;margin-left:7px;font-size:12.5px}",
-    ".fbWrap{position:fixed;inset:0;z-index:90;background:rgba(52,50,44,.45);display:flex;align-items:flex-end}",
-    /* cap the sheet and let it scroll — Ryan saved a note and couldn't find it
-       again, because the saved list sits under the compose box and fell off the
-       bottom of the screen on a phone */
-    ".fbCard{background:var(--paper);width:100%;max-width:480px;margin:0 auto;border-radius:18px 18px 0 0;",
+    ".nrWrap{position:fixed;inset:0;z-index:90;background:rgba(52,50,44,.45);display:flex;align-items:flex-end}",
+    ".nrCard{background:var(--paper);width:100%;max-width:480px;margin:0 auto;border-radius:18px 18px 0 0;",
       "padding:18px 18px calc(20px + env(safe-area-inset-bottom));max-height:86vh;overflow:auto}",
-    ".fbCard h3{font-size:18px;margin:0 0 4px}",
-    ".fbCtx{font-size:13px;color:var(--faded);font-style:italic;margin:0 0 10px;word-break:break-word}",
-    ".fbCard textarea{width:100%;min-height:110px;font-family:var(--serif);font-size:16px;padding:11px 12px;",
-      "border:1.3px solid var(--ink);border-radius:10px 3px 10px 3px;background:var(--paper);color:var(--ink)}",
-    ".fbRow{display:flex;gap:9px;margin-top:12px;flex-wrap:wrap}",
-    ".fbRow button,.fbRow a{flex:1 1 46%;text-align:center;font-family:var(--serif);font-size:15px;font-weight:700;",
+    ".nrCard h3{font-size:18px;margin:0 0 6px}",
+    ".nrCard p{font-size:13.5px;color:var(--faded);margin:0 0 12px;line-height:1.5}",
+    ".nrList{border-top:1px solid var(--line);padding-top:10px;margin-bottom:14px}",
+    ".nrItem{font-size:13.5px;padding:8px 0;border-bottom:1px solid var(--line)}",
+    ".nrItem b{color:var(--coral-deep);display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase}",
+    ".nrRow{display:flex;gap:9px;flex-wrap:wrap}",
+    ".nrRow button{flex:1 1 46%;text-align:center;font-family:var(--serif);font-size:15px;font-weight:700;",
       "padding:13px 10px;border-radius:12px 4px 12px 4px;border:1.5px solid var(--coral);background:var(--coral);",
-      "color:#fff;cursor:pointer;text-decoration:none;min-height:46px}",
-    ".fbRow .ghost{background:none;color:var(--coral-deep)}",
-    ".fbList{margin-top:14px;max-height:38vh;overflow:auto;border-top:1px solid var(--line);padding-top:10px}",
-    ".fbItem{font-size:13.5px;padding:8px 0;border-bottom:1px solid var(--line)}",
-    ".fbItem b{color:var(--coral-deep);display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase}",
-    ".fbItem .x{float:right;color:var(--faded);cursor:pointer;padding:0 4px}",
-    ".fbHi{outline:2.5px solid var(--olive) !important;outline-offset:2px;border-radius:4px}"
+      "color:#fff;cursor:pointer;min-height:46px}",
+    ".nrRow .ghost{background:none;color:var(--coral-deep)}"
   ].join("");
   document.head.appendChild(css);
-
-  var btn = document.createElement("button");
-  btn.className = "fbBtn";
-  document.body.appendChild(btn);
-
-  function save() { try { localStorage.setItem(KEY, JSON.stringify(notes)); } catch (e) {} paintBtn(); }
-  function paintBtn() {
-    btn.innerHTML = picking
-      ? "Tap what you mean \u2192"
-      : "\uD83D\uDCAC Add a note" + (notes.length ? '<span class="fbCount">' + notes.length + "</span>" : "");
-    btn.classList.toggle("picking", picking);
-  }
-
-  function screenName() {
-    var on = document.querySelector("#nav button.on .nlabel");
-    return on ? on.textContent.trim() : "Guide";
-  }
-
-  function openSheet(ctx) {
-    var wrap = document.createElement("div");
-    wrap.className = "fbWrap";
-    wrap.innerHTML =
-      '<div class="fbCard">' +
-        "<h3>What's on your mind?</h3>" +
-        '<p class="fbCtx">' + (ctx ? "About: \u201c" + ctx + "\u201d" : "On the " + screenName() + " screen") + "</p>" +
-        '<textarea placeholder="Wrong hours? Confusing? Missing something? Just say it plainly."></textarea>' +
-        '<div class="fbRow">' +
-          '<button class="fbSave">Save this note</button>' +
-          '<button class="ghost fbClose">Cancel</button>' +
-        "</div>" +
-        (notes.length
-          ? '<span class="label" style="display:block;margin-top:18px">' +
-              "Saved on this phone · " + notes.length + "</span>" +
-            '<p class="fbCtx" style="margin:2px 0 0">These stay on your phone until you send them ' +
-              "— nobody sees them until you do.</p>" +
-            '<div class="fbList"></div><div class="fbRow">' +
-              '<button class="fbCopy">Copy all ' + notes.length + " notes</button>" +
-              '<a class="ghost fbText" href="#">Text them in</a>' +
-            "</div>"
-          : "") +
-      "</div>";
-    document.body.appendChild(wrap);
-    var ta = wrap.querySelector("textarea");
-    ta.focus();
-
-    var list = wrap.querySelector(".fbList");
-    if (list) {
-      list.innerHTML = notes.map(function (n, i) {
-        return '<div class="fbItem"><span class="x" data-del="' + i + '">\u2715</span><b>' +
-               (n.ctx || n.screen) + "</b>" + n.text + "</div>";
-      }).join("");
-    }
-
-    function close() { wrap.remove(); paintBtn(); }
-    wrap.addEventListener("click", function (e) {
-      if (e.target === wrap || e.target.closest(".fbClose")) { close(); return; }
-      var del = e.target.closest("[data-del]");
-      if (del) { notes.splice(+del.dataset.del, 1); save(); close(); openSheet(ctx); return; }
-      if (e.target.closest(".fbSave")) {
-        var t = ta.value.trim();
-        if (t) { notes.push({ text: t, ctx: ctx || "", screen: screenName() }); save(); }
-        close(); return;
-      }
-      if (e.target.closest(".fbCopy")) {
-        navigator.clipboard.writeText(asText()).then(function () {
-          e.target.textContent = "Copied \u2713";
-        }, function () { e.target.textContent = "Select the notes above to copy"; });
-        return;
-      }
-      if (e.target.closest(".fbText")) {
-        e.target.setAttribute("href", "sms:+17603763733?&body=" + encodeURIComponent(asText()));
-      }
-    });
-  }
 
   function asText() {
     return "Whispering Pines guide \u2014 test notes\n\n" + notes.map(function (n, i) {
@@ -2648,34 +2562,39 @@ paint();
     }).join("\n\n");
   }
 
-  btn.addEventListener("click", function (e) {
-    e.stopPropagation();
-    if (picking) { picking = false; paintBtn(); return; }
-    openSheet("");
-  });
+  var btn = document.createElement("button");
+  btn.className = "nrBtn";
+  btn.textContent = "\uD83D\uDCAC Send your " + notes.length + " note" + (notes.length > 1 ? "s" : "");
+  document.body.appendChild(btn);
 
-  /* long-press the button to enter "tap the thing you mean" mode */
-  var lp;
-  btn.addEventListener("pointerdown", function () {
-    lp = setTimeout(function () { picking = true; paintBtn(); }, 450);
-  });
-  ["pointerup", "pointerleave", "pointercancel"].forEach(function (ev) {
-    btn.addEventListener(ev, function () { clearTimeout(lp); });
-  });
+  btn.addEventListener("click", function () {
+    var wrap = document.createElement("div");
+    wrap.className = "nrWrap";
+    wrap.innerHTML = '<div class="nrCard">' +
+      "<h3>Post these in Slack</h3>" +
+      "<p>Feedback moved to <b>#guest-app-build</b> \u2014 just say it in the channel from now on. " +
+      "Copy the notes you already saved and paste them there, then you can clear them.</p>" +
+      '<div class="nrList">' + notes.map(function (n) {
+        return '<div class="nrItem"><b>' + (n.ctx || n.screen) + "</b>" + n.text + "</div>";
+      }).join("") + "</div>" +
+      '<div class="nrRow"><button class="nrCopy">Copy all ' + notes.length + " notes</button>" +
+      '<button class="ghost nrDone">Clear them</button></div></div>';
+    document.body.appendChild(wrap);
 
-  document.addEventListener("click", function (e) {
-    if (!picking) return;
-    if (e.target.closest(".fbBtn") || e.target.closest(".fbWrap")) return;
-    e.preventDefault(); e.stopPropagation();
-    var el = e.target.closest("div,p,section,li,button,a,h1,h2,h3,summary,span") || e.target;
-    var label = (el.textContent || "").replace(/\s+/g, " ").trim().slice(0, 70);
-    el.classList.add("fbHi");
-    setTimeout(function () { el.classList.remove("fbHi"); }, 900);
-    picking = false; paintBtn();
-    openSheet(label);
-  }, true);
-
-  paintBtn();
+    wrap.addEventListener("click", function (e) {
+      if (e.target === wrap) { wrap.remove(); return; }
+      if (e.target.closest(".nrCopy")) {
+        navigator.clipboard.writeText(asText()).then(function () {
+          e.target.textContent = "Copied \u2713 now paste in Slack";
+        }, function () { e.target.textContent = "Select the notes above to copy"; });
+        return;
+      }
+      if (e.target.closest(".nrDone")) {
+        try { localStorage.removeItem(KEY); } catch (x) {}
+        wrap.remove(); btn.remove();
+      }
+    });
+  });
 })();
 
 
