@@ -138,11 +138,15 @@
   .tile .tlabel{font-weight:700;font-size:16px}
   .tile .tsub{font-size:11.5px;color:var(--faded);font-style:italic;line-height:1.35}
   .backlink{font-size:13px;color:var(--coral-deep)}
-  .zonehead{display:flex;gap:12px;align-items:center;margin:34px 0 0;scroll-margin-top:62px}
-  /* wraps rather than scrolling sideways — a horizontally-scrolling strip hid half
-     the chips off-screen and just looked broken once the labels carried drive times */
-  .zjump{display:flex;flex-wrap:wrap;gap:8px;padding:11px 0 13px;margin:14px 0 4px;background:var(--paper);border-bottom:1px solid rgba(52,50,44,.14)}
-  .zjump button{flex:0 0 auto;font-family:var(--serif);font-size:12.5px;padding:8px 14px;border-radius:999px;border:1.2px solid rgba(52,50,44,.3);background:var(--paper);color:var(--faded);cursor:pointer;white-space:nowrap;min-height:38px}
+  /* scroll-margin must clear the pinned .zjump bar (2 rows ≈ 99px) or a jumped-to
+     zone heading lands hidden underneath it */
+  .zonehead{display:flex;gap:12px;align-items:center;margin:34px 0 0;scroll-margin-top:112px}
+  /* PINNED so you can jump between zones without scrolling back up (Ryan: "you click
+     on something and it scrolls down - then you have to scroll back up? it needs to be
+     pinned"), and WRAPPED rather than scrolling sideways, which used to hide half the
+     chips off-screen. Labels are kept short precisely so this stays 1–2 rows tall. */
+  .zjump{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:7px;padding:9px 22px 10px;margin:14px -22px 4px;background:var(--paper);border-bottom:1px solid rgba(52,50,44,.14)}
+  .zjump button{flex:0 0 auto;font-family:var(--serif);font-size:12px;padding:7px 12px;border-radius:999px;border:1.2px solid rgba(52,50,44,.3);background:var(--paper);color:var(--faded);cursor:pointer;white-space:nowrap;min-height:36px}
   .zjump button.on{border-color:var(--coral);color:var(--coral);font-weight:bold}
   .bigacts{display:flex;gap:10px;margin:14px 0 0;flex-wrap:wrap}
   .bigbtn{flex:1 1 100%;text-align:center;font-size:16px;font-weight:700;padding:15px 12px;border:1.6px solid var(--ink);border-radius:var(--w1);background:var(--paper);color:var(--ink);font-family:var(--serif);cursor:pointer;text-decoration:none;display:block}
@@ -668,17 +672,21 @@ const ZONE_OF = {
 };
 /* [full name, the distance line, short name for the jump strip] */
 /* [heading, full description, jump-chip label]
-   Chip labels carry the drive time — Ryan: "what if people don't know where these
-   are? i've lived here 5 years - i don't even know." "The valley" means nothing to
-   someone from LA; "The valley · 10–25 min" tells them everything they need. */
+   Chips carry DIRECTION + TIME, not local nicknames. Ryan, twice: "what if people
+   don't know where these are? i've lived here 5 years - i dont' even know" and
+   "10-25 minutes - canyon 25-45m - what direction? it's so fucking random".
+   "South · 10–25 min" is instantly placeable; "The valley" is not. Kept short on
+   purpose so the strip stays pinned in one or two rows instead of scrolling
+   sideways and hiding half the chips. The evocative names live on in the section
+   headings just below, where there's room for them. */
 const ZONES = [
   null,
   ["A short walk", "out the door · 0–5 minutes on foot", "On foot"],
-  ["In town", "a 15-minute stroll or a 4-minute drive", "In town · 4 min"],
-  ["Down the valley", "10–25 minutes by car, toward the lake", "The valley · 10–25 min"],
-  ["Up the canyon", "25–45 minutes — north into the forest, or south to the tubs", "The canyon · 25–45 min"],
-  ["The high country", "50 minutes to 1½ hours · pack water, fill the tank", "High country · 50 min+"],
-  ["Proper expeditions", "1½ hours and up — make a day of it", "Expeditions · 1½ hr+"],
+  ["In town", "a 15-minute stroll or a 4-minute drive south", "In town · 4 min"],
+  ["Down the valley — south", "10–25 minutes south by car, toward Lake Isabella", "South · 15 min"],
+  ["Up the canyon — north", "25–45 minutes north, up Sierra Way into the forest", "North · 30 min"],
+  ["The high country — north", "50 minutes to 1½ hours north and up · pack water, fill the tank", "High country · 1 hr"],
+  ["Day trips", "1½ hours and up, either direction — make a day of it", "Day trips"],
 ];
 /* printed-guide picks — from the house booklet */
 const STAFF_EATS = new Set(["Sequoia Mountain Bakery", "Big Blue Bear Cafe", "Cheryl's Diner", "Something Sweeter", "McNally's Outpost", "The Pizza Barn", "Kern River Brewing Co. — The Pub", "El Rio Mexican & American", "Ewings on the Kern"]);
