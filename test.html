@@ -169,15 +169,15 @@
   .tile .tlabel{font-weight:700;font-size:16px}
   .tile .tsub{font-size:11.5px;color:var(--faded);font-style:italic;line-height:1.35}
   .backlink{font-size:13px;color:var(--coral-deep)}
-  /* scroll-margin must clear the pinned .exfilters bar (2 rows, 113px tall, so its
-     bottom sits at ~117) or a jumped-to
+  /* scroll-margin must clear the whole pinned .exbar (filters + distance strip,
+     199px tall, bottom at ~203; showBar() un-tucks it before any jump) or a jumped-to
      zone heading lands hidden underneath it */
-  .zonehead{display:flex;gap:12px;align-items:center;margin:34px 0 0;scroll-margin-top:126px}
+  .zonehead{display:flex;gap:12px;align-items:center;margin:34px 0 0;scroll-margin-top:212px}
   /* Jump target for the filter chips. Picking "Trails" used to leave you looking
      at the map with the trails below it — Ryan: "it should jump straight to eat
      or drink, not be stuck on the map". Same offset as .zonehead so it clears
      the pinned bar. */
-  #exlist{scroll-margin-top:126px}
+  #exlist{scroll-margin-top:212px}
   /* PINNED so you can jump between zones without scrolling back up (Ryan: "you click
      on something and it scrolls down - then you have to scroll back up? it needs to be
      pinned"), and WRAPPED rather than scrolling sideways, which used to hide half the
@@ -190,9 +190,16 @@
      distance strip gives up its sticky in exchange: the fixed chrome stays the
      same height it already was, and the strip still sits right under the
      filters near the top of the tab. */
-  .exfilters{position:sticky;top:0;z-index:21;background:var(--paper);
-    padding:8px 22px;margin:10px -22px 4px;border-bottom:1px solid rgba(52,50,44,.14)}
-  .zjump{display:flex;flex-wrap:wrap;gap:7px;padding:9px 22px 10px;margin:14px -22px 4px;background:var(--paper);border-bottom:1px solid rgba(52,50,44,.14)}
+  /* Both control rows ride in one bar. Pinning both permanently would hold
+     ~212px — a quarter of the screen — so instead the bar tucks away while
+     you're reading and comes back the moment you scroll up, which is already
+     the gesture you make when you want to navigate. Costs nothing while
+     reading, and neither row is ever more than a flick away. */
+  .exbar{position:sticky;top:0;z-index:21;background:var(--paper);
+    margin:10px -22px 4px;transition:transform .22s ease;will-change:transform}
+  .exbar.tucked{transform:translateY(-100%)}
+  .exfilters{background:var(--paper);padding:8px 22px 0;margin:0}
+  .zjump{display:flex;flex-wrap:wrap;gap:7px;padding:6px 22px 9px;margin:0;background:var(--paper);border-bottom:1px solid rgba(52,50,44,.14)}
   .zjump button{flex:0 0 auto;font-family:var(--serif);font-size:12px;padding:7px 12px;border-radius:999px;border:1.2px solid rgba(52,50,44,.3);background:var(--paper);color:var(--faded);cursor:pointer;white-space:nowrap;min-height:36px}
   .zjump button.on{border-color:var(--coral);color:var(--coral);font-weight:bold}
   .bigacts{display:flex;gap:10px;margin:14px 0 0;flex-wrap:wrap}
@@ -2305,10 +2312,12 @@ function renderExplore() {
   return `
     <div class="t-display">Explore</div>
     <p class="logi">The valley, laid out by how far it is from your door.</p>
-    <div class="chips exfilters">${[["all", "Everything"], ["eat", "Eat & drink"], ["trail", "Trails"], ["water", "On the water"], ["secret", "Local secrets"]].map(([k, l]) =>
-      `<button class="chip ${exFilter === k ? "on" : ""}" data-exf="${k}">${FILTER_ICON[k] || ""}${l}</button>`).join("")}</div>
-    ${present.length > 1 ? `<div class="zjump">${present.map(z =>
-      `<button data-jump="${z}">${ZONES[z][2]}</button>`).join("")}</div>` : ""}
+    <div class="exbar" id="exbar">
+      <div class="chips exfilters">${[["all", "Everything"], ["eat", "Eat & drink"], ["trail", "Trails"], ["water", "On the water"], ["secret", "Local secrets"]].map(([k, l]) =>
+        `<button class="chip ${exFilter === k ? "on" : ""}" data-exf="${k}">${FILTER_ICON[k] || ""}${l}</button>`).join("")}</div>
+      ${present.length > 1 ? `<div class="zjump">${present.map(z =>
+        `<button data-jump="${z}">${ZONES[z][2]}</button>`).join("")}</div>` : ""}
+    </div>
     ${zoneMap}
     <div class="contactrow" style="margin-top:8px">
       <a class="cbtn nav" href="${DATA.lodge.mapUrl}" target="_blank" rel="noopener"><svg class="navico" viewBox="0 0 16 16" aria-hidden="true"><path d="M14.8 1.2L1.4 6.8L7 9L9.2 14.6Z"/></svg>Open us in your maps app</a>
@@ -2451,7 +2460,11 @@ document.addEventListener("click", (e) => {
     return;
   }
   const jp = e.target.closest("[data-jump]");
-  if (jp) { const el = document.getElementById("z" + jp.dataset.jump); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); return; }
+  if (jp) {
+    const el = document.getElementById("z" + jp.dataset.jump);
+    if (el) { showBar(); el.scrollIntoView({ behavior: "smooth", block: "start" }); }
+    return;
+  }
   const xz = e.target.closest("[data-exz]");
   if (xz) { const z = +xz.dataset.exz; exOpen.has(z) ? exOpen.delete(z) : exOpen.add(z); paint(); return; }
   const ex = e.target.closest("[data-exf]");
@@ -2460,7 +2473,7 @@ document.addEventListener("click", (e) => {
     /* Land on the results, not on the map. paint() restores the old scroll
        position synchronously, so this has to run after it. */
     const list = document.getElementById("exlist");
-    if (list) list.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (list) { showBar(); list.scrollIntoView({ behavior: "smooth", block: "start" }); }
     return;
   }
   const ak = e.target.closest("[data-ask]");
@@ -2489,11 +2502,40 @@ document.addEventListener("input", (e) => {
   }
 });
 /* the jump strip marks whichever zone you're standing in as you scroll */
+/* The control bar tucks out of the way while you read and comes straight back
+   when you scroll up. Ryan had both halves of the same complaint — pinning the
+   filters meant losing the zones, pinning the zones meant losing the filters —
+   and pinning both permanently costs a quarter of the screen. TUCK_AFTER keeps
+   it put through small thumb-jitter, and it never tucks near the top of the
+   tab, where the bar is part of the layout rather than an overlay. */
+const TUCK_AFTER = 12;
+let lastY = window.scrollY;
+function showBar() {
+  const b = document.getElementById("exbar");
+  if (b) b.classList.remove("tucked");
+  lastY = window.scrollY;
+}
 let spyTick = 0;
 window.addEventListener("scroll", () => {
   if (cur !== "explore" || spyTick) return;
   spyTick = requestAnimationFrame(() => {
     spyTick = 0;
+    const bar = document.getElementById("exbar");
+    if (bar) {
+      const y = window.scrollY, dy = y - lastY;
+      if (Math.abs(dy) > TUCK_AFTER) {
+        /* Measure the map, not the bar. offsetTop on a STUCK sticky element
+           reports its pinned position, which climbs with the scroll — so a
+           threshold built from it is never crossed and the bar never tucks.
+           The map is ordinary flow, and "its bottom has passed the top of the
+           screen" is exactly the moment you've stopped looking at the map and
+           started reading the list. */
+        const map = document.querySelector("#main svg.scene");
+        const past = map ? map.getBoundingClientRect().bottom < 0 : y > 400;
+        bar.classList.toggle("tucked", dy > 0 && past);
+        lastY = y;
+      }
+    }
     const strip = document.querySelector(".zjump");
     const btns = document.querySelectorAll(".zjump [data-jump]");
     if (!btns.length) return;
@@ -2501,11 +2543,12 @@ window.addEventListener("scroll", () => {
        sized for a one-row bar — once the bar wrapped to two rows (~103px) a heading
        you jumped to landed at ~112px, never satisfied the test, and the chip ABOVE
        stayed lit. That's the "click north, it highlights south" bug. */
-    /* Measure whatever is actually pinned — that's the filters bar now, not the
-       distance strip. Hardcoding this cutoff is what caused the old
-       "tap north, it lights south" off-by-one. */
-    const bar = document.querySelector(".exfilters") || strip;
-    const cut = (bar ? bar.getBoundingClientRect().bottom : 84) + 14;
+    /* Measure whatever is actually pinned — the whole control bar, not one row
+       of it. Hardcoding this cutoff is what caused the old "tap north, it
+       lights south" off-by-one. Clamped at 0 because a tucked bar reports a
+       negative bottom, which would otherwise disqualify every zone. */
+    const pinned = bar || strip;
+    const cut = (pinned ? Math.max(pinned.getBoundingClientRect().bottom, 0) : 84) + 14;
     let active = "";
     btns.forEach(b => {
       const el = document.getElementById("z" + b.dataset.jump);
