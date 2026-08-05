@@ -172,6 +172,11 @@
   /* scroll-margin must clear the pinned .zjump bar (2 rows ≈ 99px) or a jumped-to
      zone heading lands hidden underneath it */
   .zonehead{display:flex;gap:12px;align-items:center;margin:34px 0 0;scroll-margin-top:112px}
+  /* Jump target for the filter chips. Picking "Trails" used to leave you looking
+     at the map with the trails below it — Ryan: "it should jump straight to eat
+     or drink, not be stuck on the map". Same offset as .zonehead so it clears
+     the pinned bar. */
+  #exlist{scroll-margin-top:112px}
   /* PINNED so you can jump between zones without scrolling back up (Ryan: "you click
      on something and it scrolls down - then you have to scroll back up? it needs to be
      pinned"), and WRAPPED rather than scrolling sideways, which used to hide half the
@@ -2297,6 +2302,7 @@ function renderExplore() {
     <div class="contactrow" style="margin-top:8px">
       <a class="cbtn nav" href="${DATA.lodge.mapUrl}" target="_blank" rel="noopener"><svg class="navico" viewBox="0 0 16 16" aria-hidden="true"><path d="M14.8 1.2L1.4 6.8L7 9L9.2 14.6Z"/></svg>Open us in your maps app</a>
     </div>
+    <div id="exlist"></div>
     ${feat ? `<span class="label" style="display:block;margin-top:16px">Today's house secret</span>
       <div class="beat"><span class="slotlab">Psst</span>
         <div class="pickname">${esc(feat.name)}</div>
@@ -2438,7 +2444,14 @@ document.addEventListener("click", (e) => {
   const xz = e.target.closest("[data-exz]");
   if (xz) { const z = +xz.dataset.exz; exOpen.has(z) ? exOpen.delete(z) : exOpen.add(z); paint(); return; }
   const ex = e.target.closest("[data-exf]");
-  if (ex) { exFilter = ex.dataset.exf; exOpen.clear(); paint(); return; }
+  if (ex) {
+    exFilter = ex.dataset.exf; exOpen.clear(); paint();
+    /* Land on the results, not on the map. paint() restores the old scroll
+       position synchronously, so this has to run after it. */
+    const list = document.getElementById("exlist");
+    if (list) list.scrollIntoView({ behavior: "smooth", block: "start" });
+    return;
+  }
   const ak = e.target.closest("[data-ask]");
   if (ak) {
     askQuery = ak.dataset.ask;
