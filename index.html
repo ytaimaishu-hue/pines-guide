@@ -2453,6 +2453,7 @@ document.addEventListener("click", (e) => {
     <p>Texting reaches us fastest — we watch it all day.</p>
     <a href="sms:+17603763733?&body=${encodeURIComponent(rm)}">Text the desk</a>
     <a class="call" href="${telHref(DATA.lodge.phone)}">Call ${esc(DATA.lodge.phone)}</a>
+    <a class="call" href="mailto:${DATA.lodge.email}?subject=${encodeURIComponent(rm || "Whispering Pines")}">Email us</a>
     <button class="cancel">Never mind</button>
   </div>`;
   wrap.addEventListener("click", (e) => {
