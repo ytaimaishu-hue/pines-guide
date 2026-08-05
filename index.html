@@ -831,29 +831,33 @@ function ingestParams() {
        #fresh=1&n=...&a=... clears, then applies the new stay. */
     if (gv("fresh") != null || gv("reset") != null) purgeAll();
     /* Accept every date shape a booking system might hand us, so a ResNexus
-       [Arrival] merge tag works no matter which format it renders:
-         2026-08-15                    (what we generate ourselves)
-         8/15/2026  08-15-2026         (US numeric)
-         Mon, Aug 15, 2026             (how ResNexus prints dates in its emails)
-         August 15, 2026 / 15 Aug 2026 (long forms)
-       Anything unparseable is passed through untouched and rejected downstream. */
+       [Arrival] merge tag works whatever it renders. VERIFIED against a real
+       ResNexus template preview (Aug 2026): it emits "Fri 12/26/25" — a weekday
+       prefix AND a two-digit year — so both must be handled. Also covers:
+         2026-08-15                     (what we generate ourselves)
+         8/15/2026  08-15-2026          (US numeric, 4-digit year)
+         Mon, Aug 15, 2026 / Aug 15, 2026 / August 15, 2026 / 15 Aug 2026
+       Anything unparseable is passed through untouched and rejected downstream,
+       which surfaces the "fix your dates" sheet rather than showing a wrong stay. */
     const MON = { jan:1, feb:2, mar:3, apr:4, may:5, jun:6, jul:7, aug:8, sep:9, oct:10, nov:11, dec:12 };
     const pad = n => String(n).padStart(2, "0");
+    /* two-digit years: 25 -> 2025. Lodge bookings are never last century. */
+    const yr = y => (String(y).length === 2 ? 2000 + Number(y) : Number(y));
     const normDate = s => {
-      const raw = String(s || "").trim();
-      if (!raw) return "";
-      if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw;
-      const num = raw.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{4})$/);
-      if (num) return `${num[3]}-${pad(num[1])}-${pad(num[2])}`;
-      /* month-name forms, with or without a leading weekday. Strip ONLY a real
-         weekday name — a generic [A-Za-z]+ strip would eat "Aug" out of
-         "Aug 4, 2026" and break it. */
-      const txt = raw.replace(/^(?:sun|mon|tue[s]?|wed[nes]*|thu[rs]*|fri|sat[ur]*)(?:day)?\.?,?\s+/i, "");
-      let m = txt.match(/^([A-Za-z]{3,9})\.?\s+(\d{1,2})(?:st|nd|rd|th)?,?\s+(\d{4})$/);
-      if (m && MON[m[1].slice(0, 3).toLowerCase()]) return `${m[3]}-${pad(MON[m[1].slice(0, 3).toLowerCase()])}-${pad(m[2])}`;
-      m = txt.match(/^(\d{1,2})\s+([A-Za-z]{3,9})\.?,?\s+(\d{4})$/);
-      if (m && MON[m[2].slice(0, 3).toLowerCase()]) return `${m[3]}-${pad(MON[m[2].slice(0, 3).toLowerCase()])}-${pad(m[1])}`;
-      return raw;
+      const raw0 = String(s || "").trim();
+      if (!raw0) return "";
+      if (/^\d{4}-\d{2}-\d{2}$/.test(raw0)) return raw0;
+      /* Strip a leading weekday first — ResNexus prefixes one. Strip ONLY real
+         weekday names; a generic [A-Za-z]+ strip would eat "Aug" out of
+         "Aug 4, 2026" and silently break it. */
+      const raw = raw0.replace(/^(?:sun|mon|tue[s]?|wed[nes]*|thu[rs]*|fri|sat[ur]*)(?:day)?\.?,?\s+/i, "");
+      const num = raw.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2}|\d{4})$/);
+      if (num) return `${yr(num[3])}-${pad(num[1])}-${pad(num[2])}`;
+      let m = raw.match(/^([A-Za-z]{3,9})\.?\s+(\d{1,2})(?:st|nd|rd|th)?,?\s+(\d{2}|\d{4})$/);
+      if (m && MON[m[1].slice(0, 3).toLowerCase()]) return `${yr(m[3])}-${pad(MON[m[1].slice(0, 3).toLowerCase()])}-${pad(m[2])}`;
+      m = raw.match(/^(\d{1,2})\s+([A-Za-z]{3,9})\.?,?\s+(\d{2}|\d{4})$/);
+      if (m && MON[m[2].slice(0, 3).toLowerCase()]) return `${yr(m[3])}-${pad(MON[m[2].slice(0, 3).toLowerCase()])}-${pad(m[1])}`;
+      return raw0;
     };
     const newName = gv("n") != null ? cleanName(gv("n")) : null;
     let a = gv("a"), d = gv("d");
