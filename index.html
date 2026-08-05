@@ -1442,50 +1442,23 @@ function eventsTick(c, sc, limit) {
   </div>`;
 }
 function nowPre(c, sc) {
-  const arr = sc.days[0], dep = sc.days[sc.days.length - 1];
+  const arr = sc.days[0];
   const m = arr.getMonth() + 1;
   const n = guestName ? ", " + esc(guestName.split(/\s+/)[0]) : "";
-  const head = sc.arrivingToday || sc.cd === 0
-    ? `Today's the day${n} — rooms ready at 3`
-    : `<span style="font-size:34px">${sc.cd}</span> day${sc.cd === 1 ? "" : "s"} till river time${n}`;
-  /* booking verdict by persona, weekday/season-verified */
-  const wds = new Set(sc.days.map(d => d.getDay()));
-  let card = "";
-  if (picked.has("couple")) {
-    const ewingsDay = sc.days.find(d => [4, 5, 6, 0].includes(d.getDay()) && +midOf(d) !== +midOf(dep));
-    card = ewingsDay
-      ? verdict("Book this first", "Ewings on the Kern", `your ${DAY_FULL[ewingsDay.getDay()]} — golden hour on the deck; it books out${dogOn() ? " (patio takes the dog)" : ""}`, "Thu–Sun 5–9 · ask for the deck", btn("Call", telHref("(760) 376-2411")),
-        [{ name: "Johnny McNally's Fairview Lodge", line: "the 1941 roadhouse, 25 min upriver" }, { name: "Kern River Brewing Co.", line: "no reservation needed" }], "eat")
-      : verdict("Book this first", "Johnny McNally's Fairview Lodge", "your nights miss the Ewings deck — the 1941 roadhouse is the move (closed Tue–Wed; call)", "25-min canyon drive · call ahead", btn("Call", telHref("(760) 376-2430")),
-        [{ name: "Kern River Brewing Co.", line: "no reservation needed" }, { name: "Paradise Cove Lodge", line: "lakeshore prime rib, Wed–Sun" }], "eat");
-  } else if (picked.has("family")) {
-    card = m >= 4 && m <= 9
-      ? verdict("Book this first", "Lickety Split raft run", "the family run — Saturday trips sell out in " + MONTHS[m - 1], "Sierra South · kids ~8 up", btn("Call", telHref("(760) 376-3745")), null, "do")
-      : verdict("Book this first", "Silver City Ghost Town", "the kid anchor that runs in " + MONTHS[m - 1], "call ahead (760) 379-5146", btn("Call", telHref("(760) 379-5146")), null, "do");
-  } else if (picked.has("adventure")) {
-    card = m >= 5 && m <= 11
-      ? verdict("Book this first", "The Cannell Plunge shuttle", MONTHS[m - 1] + " is open season — shuttles book a week out", "Sierra South · from ~$75", btn("Book", "https://www.sierrasouth.com"), null, "secrets")
-      : verdict("Book this first", "Kern Slabs & Walker Pass", "high country's snowed shut — " + MONTHS[m - 1] + " is granite-and-desert season", "guides via Sierra South", btn("Call", telHref("(760) 376-3745")), null, "do");
-  } else if (picked.has("event")) {
-    const evs = eventsDuringStay(c, sc);
-    card = evs.length
-      ? verdict("Your event", esc(evs[0].e.name), DAY_ABBR[evs[0].d.getDay()] + " " + MONTHS[evs[0].d.getMonth()] + " " + evs[0].d.getDate() + " — book dinner before town fills", "park early at Riverside Park", btn("Call the desk", telHref(DATA.lodge.phone)), null, "events")
-      : verdict("Book this first", "Dinner near the venue", "town books out on event weekends", "the desk knows this week's flyer", btn("Call the desk", telHref(DATA.lodge.phone)), null, "events");
-  } else if (dogOn()) {
-    card = verdict("Bring the leash", "Dogs stay in select rooms", "$15/night — tell the desk when you book so we put you in a dog room", "Trail of 100 Giants allows dogs; the parks don't", btn("Call the desk", telHref(DATA.lodge.phone)), null, "do");
-  } else {
-    const din = rotatePick(mealPool("dinner", sc.days[0].getDay(), 1110, m), null, 0);
-    card = din ? verdict("Book this first", esc(din.name), "open your arrival " + DAY_FULL[sc.days[0].getDay()] + " — first night sorted", esc(din.area), btn("Call", telHref(din.phone)), null, "eat") : "";
-  }
+  const arrivingToday = sc.arrivingToday || sc.cd === 0;
   const prep = picked.has("family") ? "Pack life jackets and water shoes."
     : picked.has("adventure") ? "Pack layers — you'll cross 5,000 feet of climate."
     : dogOn() ? "Pack the leash and a towel for river paws."
     : "Pack for " + seasonOf(m) + " — layers do it.";
-  const topTxt = sc.arrivingToday || sc.cd === 0 ? `Today's the day${n}.` : `${sc.cd} day${sc.cd === 1 ? "" : "s"} till river time${n}`;
-  return sceneHero(c, { top: topTxt, skyline: seasonOf(m) + " on the Kern" })
+  const topTxt = arrivingToday ? `Today's the day${n}.` : `${sc.cd} day${sc.cd === 1 ? "" : "s"} till river time${n}`;
+  return sceneHero(c, {
+      top: topTxt,
+      skyline: arrivingToday ? "Room's ready at 3 — the porch light will be on." : seasonOf(m) + " on the Kern",
+    })
     + welcomeCard(sc)
-    + `<p class="why" style="margin-top:10px"><b>Arriving ${DAY_FULL[arr.getDay()]}, ${MONTHS[arr.getMonth()]} ${arr.getDate()}.</b> <span class="logi" style="font-weight:400">check-in from 3 — the porch light will be on</span></p>`
-    + card
+    + (arrivingToday
+      ? `<p class="why" style="margin-top:10px"><b>See you this afternoon.</b> <span class="logi" style="font-weight:400">Running late or need anything on the road? <a href="${SMS_DESK}">Text us</a> — we'll leave your keys in the box by the office door.</span></p>`
+      : `<p class="why" style="margin-top:10px"><b>Arriving ${DAY_FULL[arr.getDay()]}, ${MONTHS[arr.getMonth()]} ${arr.getDate()}.</b> <span class="logi" style="font-weight:400">check-in from 3 — the porch light will be on</span></p>`)
     + bigActs("", null)
     + `<p class="why" style="margin-top:14px">${prep}</p>
     ${eventsTick(c, sc, 2)}
@@ -1598,39 +1571,15 @@ function lodgeMap() {
 </svg>`;
 }
 function nowArrival(c, sc) {
-  const beats = [];
-  const g = goldenSlot(c);
-  if (g) {
-    const gl = picked.has("couple") ? (dogOn() ? "balcony, something cold — the dog gets the river walk after" : "balcony, something cold")
-      : picked.has("family") ? "pool before dark — gate code above"
-      : dogOn() ? "golden-hour river walk; the dog has opinions about smells"
-      : "the pool, river view included";
-    beats.push(verdict("Golden hour " + sunHorizon, shortTime(g.gold), gl, "sunset " + shortTime(g.sun.set), "", null, "do"));
-  }
   const late = c.min >= 1260;
   const dinProbe = Math.max(c.min, 1110);
   const din = pickMeal("dinner", c.day, late ? c.min : dinProbe, c.month, "dinner", 0);
-  if (!din && late) {
-    const nd = (c.day + (c.min < 300 ? 0 : 1)) % 7;
-    const tm = mealPool("breakfast", nd, 480, c.month)
-      .map(p => ({ p, t: parseHours(p.hours[DAYS[nd]]) })).filter(x => x.t && x.t !== "unknown").sort((a, b) => a.t.open - b.t.open)[0];
-    beats.push(verdict("Late arrival", "Kernville's tucked in for the night", "", tm ? `First one up ${c.min < 240 ? "later this morning" : "tomorrow"} is ${esc(tm.p.name)} at ${shortTime(tm.t.open)} — worth setting an alarm for.` : "", ""));
-  }
-  if (picked.has("adventure")) {
-    const sunTom = sunTimes(new Date(+c.n + 864e5));
-    beats.push(verdict("Tomorrow, first light", "Whiskey Flat trailhead", "sunrise " + shortTime(sunTom.rise) + " — the trailhead is 2 minutes away", "gear by the door tonight", ""));
-  } else if (dogOn()) {
-    beats.push(verdict("With the dog", "Riverside Park river walk", "flat riverfront the dog can walk off the drive on", "in town · dogs OK", ""));
-  } else {
-    const ad = afterDarkLine(c);
-    if (ad) beats.push(verdict("After dark " + (ad.moon ? moonDisc(c.n) : ""), esc(ad.name), ad.why, ad.logi, "", null, "secrets"));
-  }
   const evs = picked.has("event") ? eventsTick(c, sc, 2) : "";
   const n2 = guestName ? ", " + esc(guestName.split(/\s+/)[0]) : "";
   return sceneHero(c, { top: "Evenin'" + n2 + ".", skyline: "You made it. Night 1 of " + sc.nights + "." })
     + welcomeCard(sc)
     + bigActs(din ? "Where to eat tonight →" : "Plan tomorrow →", din ? "eat" : "do")
-    + beats.slice(0, 2).join("")
+    + openNowTick(c)
     + evs
     + fixSheetHtml(false);
 }
@@ -1711,8 +1660,7 @@ function nowFull(c, sc) {
   return sceneHero(c, { top: hi, skyline: greetLine(c, sc) })
     + welcomeCard(sc)
     + bigActs(primary ? "Ideas for " + primary.lab.toLowerCase() + " →" : "Explore the valley →", primary ? primary.gotoK : "do")
-    + `${beats.slice(0, 3).join("")}
-    ${openNowTick(c)}
+    + `${openNowTick(c)}
     ${oneNight ? "" : `<span class="label" style="display:block;margin-top:18px">Your days, sketched</span>${dayStrip(c, sc)}`}
     ${evs}
     ${fixSheetHtml(false)}`;
@@ -1796,15 +1744,7 @@ function nowNone(c) {
   return sceneHero(c, { top: hi, skyline: "Welcome to river time." })
     + welcomeCard(null)
     + bigActs(cap === "All quiet on the river" ? "Explore the valley →" : (m0 ? (mealKind === "breakfast" ? "Where to eat this morning →" : "Where to eat tonight →") : "Ideas for tonight →"), capGoto)
-    + `${m0 ? verdict(mealKind === "breakfast" ? "First thing " + inkMark("mug") : "Dinner tonight " + inkMark("fork"), esc(m0.name),
-        m0.quote.split(/[.—]/)[0].trim().toLowerCase(),
-        statusFor(m0, c).text + " · " + esc(m0.area),
-        btn("Call", telHref(m0.phone)) + btn("Directions", mapsQ(m0.name), true), altsFor(meal, m0), "eat")
-      : ad ? verdict("After dark " + moonDisc(c.n), esc(ad.name), ad.why, ad.logi, "", null, "secrets") : ""}
-    ${act ? verdict("While the light's good " + inkMark("boot"), esc(act.name), whyFor(act, c, c.n),
-        [act.drive || act.cat, act.diff].filter(Boolean).join(" · "),
-        btn("Directions", mapsQ(act.name), true), null, "do") : ""}
-    ${openNowTick(c)}
+    + `${openNowTick(c)}
     ${tm ? `<p class="why" style="margin-top:12px">First one up tomorrow: <b>${esc(tm.p.name)}</b>, opens ${shortTime(tm.t.open)}.</p>` : ""}
     ${evs.length ? `<div class="tick"><span class="label" style="color:var(--olive-deep)">Tonight in town</span><div style="font-size:14px;margin-top:3px"><b>${esc(evs[0].name)}</b> — ${esc(evs[0].blurb)}</div></div>` : ""}
     ${feat ? `<div class="tick alt2"><span class="label" style="color:var(--coral-deep)">Today's house secret</span><div style="font-size:14px;margin-top:3px"><b>${esc(feat.name)}</b> — ${esc(feat.blurb)}</div></div>` : ""}
@@ -2108,9 +2048,11 @@ function renderExplore() {
 }
 
 /* ===================== THE LODGE ===================== */
+/* NOTE: wifi/pool codes and the FitHaus perk deliberately live ONLY on the Now
+   screen's essentials card — Ryan: "why are we doing these 2 things on 2 of the 3
+   pages at the top! stop that!" Now is the default tab, so it's the canonical home. */
 function renderLodge() {
   const c = clock(), sc = stayCtx(c);
-  const E = DATA.essentials;
   return `
     <div class="t-display">The Lodge</div>
     <p class="logi">Est. 1950s · eight acres on the Kern</p>
@@ -2118,13 +2060,6 @@ function renderLodge() {
       <a class="cbtn call" href="${telHref(DATA.lodge.phone)}">Call the desk · ${DATA.lodge.phone}</a>
     </div>
     <p class="logi">${esc(DATA.lodge.deskHours)}</p>
-    <div class="esscard"><span class="label">The essentials</span>
-      <div style="margin-top:6px">${inkMark("wifi")}Wi-Fi <b>${esc(E.wifiNet)}</b> · password <button class="act" data-copy="${esc(E.wifiPass)}" style="border:0;text-decoration:underline;padding:2px 4px;min-height:32px"><span class="bigv">${esc(E.wifiPass)}</span></button></div>
-      <div>${inkMark("wave")}Pool gate <button class="act" data-copy="${esc(E.pool)}" style="border:0;text-decoration:underline;padding:2px 4px;min-height:32px"><span class="bigv">${esc(E.pool)}</span></button> · ${esc(E.poolSub)}</div>
-      <div>Checkout <b>11 AM</b> — ${esc(E.keys)} · check-in from <b>3 PM</b></div>
-      <div style="font-size:13.5px;color:var(--faded);margin-top:3px">${esc(E.coffee)}</div>
-    </div>
-    ${fitHausCard()}
     ${squiggle()}
     <span class="label">In your room</span>
     ${DATA.roomHelp.map(r => `<details class="row"><summary><h3 style="font-size:16px">${esc(r.q)}</h3></summary><div class="more"><p>${esc(r.a)}</p></div></details>`).join("")}
