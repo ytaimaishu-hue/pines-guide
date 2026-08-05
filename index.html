@@ -654,20 +654,31 @@ const ZONE_OF = {
   "Kern River Brewing Co. — The Pub": 1, "El Rio Mexican & American": 1, "The Lodge backyard": 1,
   "Cheryl's Diner": 2, "Big Blue Bear Cafe": 2, "Sequoia Mountain Bakery": 2, "Something Sweeter": 2,
   "The Pizza Barn": 2, "McNally's Outpost": 2, "Ewings on the Kern": 2,
+  /* Airpark Cafe moved up from "Down the valley" (3): its own listing says
+     "5-min drive south", which is an in-town drive, not a 10–25 min valley run. */
+  "Airpark Cafe": 2,
   "Riverside Park river walk": 2, "Whiskey Flat Trail": 2, "Cannell Meadow Trail (lower)": 2,
   "The Sporty": 2, "Kern Valley Museum & the movie past": 2, "Kayak school & SUP": 2,
   "Right in town — Riverside Park stretch": 2, "Sierra South": 2, "Whitewater Voyages": 2, "Kern River Outfitters": 2, "Mountain & River Adventures": 2,
-  "Airpark Cafe": 3, "Nelda's Diner": 3, "Isabella Peak Trail": 3, "Kern Slabs climbing": 3,
+  "Nelda's Diner": 3, "Isabella Peak Trail": 3, "Kern Slabs climbing": 3,
   "The river the locals swim": 3, "Indian taco Saturdays at Nuui Cunni": 3, "Sunset prime rib at Paradise Cove": 3,
   "Old Kernville, rising from the lake": 3, "Gold panning at Keyesville": 3, "Stargazing & star parties": 3,
   "Silver City Ghost Town": 3, "Lake Isabella on the water": 3, "Audubon Kern River Preserve": 3, "Lake Isabella": 3,
   "Johnny McNally's Fairview Lodge": 4, "Johnsondale Bridge River Trail": 4, "Packsaddle Cave Trail": 4,
   "Salmon Creek Falls": 4, "Unal Trail": 4, "Remington Hot Springs": 4, "South Creek Falls & the Brush Creek slides": 4,
-  "Seven Teacups overlook": 4, "Just Outstanding — the other legendary descent": 4, "Bodfish–Caliente backroad": 4,
+  "Seven Teacups overlook": 4, "Just Outstanding — the other legendary descent": 4,
   "Upriver pullouts (Mtn 99)": 4, "Johnsondale Bridge wild trout water": 4,
   "Sunday Peak": 5, "Trail of 100 Giants": 5, "The Cannell Plunge": 5, "Bald Mountain Lookout, 9,382 ft": 5,
   "Sherman Pass Scenic Drive": 5, "Dome Rock & The Needles": 5, "Freeman Creek Grove — the connoisseurs' sequoias": 5,
-  "Walker Pass — walk the PCT": 5, "Red Rock Canyon State Park": 5, "Bakersfield Basque dinner houses": 5,
+  "Walker Pass — walk the PCT": 5,
+  /* Moved out of "The high country" (5) — Ryan: "bakersfield basque dinner houses is
+     in high country - ??? uh - audit these". Bakersfield is a city on the valley
+     floor ~400 ft, 1hr10 southwest; Red Rock is Mojave desert, 1¼ hr east. Neither
+     is high country at any drive time. Both are genuine make-a-day-of-it trips. */
+  "Red Rock Canyon State Park": 6, "Bakersfield Basque dinner houses": 6,
+  /* Bodfish–Caliente is a "30–75 min" desert backroad that pairs with the Tehachapi
+     Loop (also 6) — it overran "Up the canyon" (4) by half an hour and isn't canyon. */
+  "Bodfish–Caliente backroad": 6,
   "Sherman Peak": 6, "Wind Wolves Preserve": 6, "Tehachapi Loop & depot town": 6, "Sequoia National Park (the honest truth)": 6,
 };
 /* [full name, the distance line, short name for the jump strip] */
@@ -679,14 +690,20 @@ const ZONE_OF = {
    the real work, answering the question he actually started with: "the valley
    is...where relative to us?" Every one now reads distance + direction + a
    landmark you can picture, measured from the lodge's front door. */
+/* Zones are DISTANCE buckets — "the valley, laid out by how far it is from your
+   door" — so a description may name a dominant direction but must never claim a
+   single one. Writing them as hard compass bearings turned several entries into
+   lies (Remington is south inside "up the canyon"; Unal and Just Outstanding are
+   west; Kern Slabs is north inside "down the valley"). Each line below leads with
+   distance, then names every direction that bucket actually contains. */
 const ZONES = [
   null,
   ["A short walk", "right outside your door — the river, the pool, the lawn · 0–5 minutes on foot", "On foot"],
   ["In town", "straight down Sierra Way — Kernville's few blocks · a 15-minute stroll or a 4-minute drive", "In town"],
-  ["Down the valley", "south, following the river down to Lake Isabella · 10–25 minutes by car", "The valley"],
-  ["Up the canyon", "north, up the river into the Sequoia forest · 25–45 minutes by car", "The canyon"],
-  ["The high country", "north and climbing — pine country above 7,000 feet · 50 minutes to 1½ hours · fill the tank", "High country"],
-  ["Proper expeditions", "1½ hours and up, either direction — make a day of it", "Expeditions"],
+  ["Down the valley", "10–25 minutes by car, mostly south — following the river down toward Lake Isabella", "The valley"],
+  ["Up the canyon", "25–45 minutes — north up the river into the forest, west over Hwy 155, or south to the hot springs", "The canyon"],
+  ["The high country", "50 minutes to 1½ hours, climbing the whole way — big trees, pine ridges and high passes · fill the tank", "High country"],
+  ["Proper expeditions", "an hour-plus each way, any direction — the desert, the city, the big parks · make a day of it", "Expeditions"],
 ];
 /* printed-guide picks — from the house booklet */
 const STAFF_EATS = new Set(["Sequoia Mountain Bakery", "Big Blue Bear Cafe", "Cheryl's Diner", "Something Sweeter", "McNally's Outpost", "The Pizza Barn", "Kern River Brewing Co. — The Pub", "El Rio Mexican & American", "Ewings on the Kern"]);
