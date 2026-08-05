@@ -21,12 +21,18 @@
   main{flex:1;padding:0 22px 112px}
   h1,h2,h3{margin:0;font-weight:700;text-wrap:balance}
   a{color:var(--coral-deep)}
-  .script{font-family:var(--script);color:var(--coral);font-weight:400}
-  .t-display{font-family:var(--script);color:var(--coral);font-size:38px;line-height:1.1;margin:10px 0 0;font-weight:400}
+  /* Script faces render thin and rough on phones — Ryan: "the cursive headings are
+     too hard to read on mobile device". Kept for the one big greeting where it's
+     large enough to read and carries the booklet character; everywhere smaller the
+     script is swapped for the serif so it's legible at a glance. The greeting also
+     gets a heavier weight and the deeper coral for contrast. */
+  .script{font-family:var(--serif);color:var(--coral-deep);font-weight:700;letter-spacing:.01em}
+  .t-display{font-family:var(--script);color:var(--coral-deep);font-size:40px;line-height:1.12;margin:10px 0 0;font-weight:700}
   .t-cd{font-family:var(--script);color:var(--coral);font-size:34px;line-height:1.15;font-weight:400}
   .label{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--faded)}
   header{padding:calc(14px + env(safe-area-inset-top)) 22px 0;display:flex;justify-content:space-between;align-items:baseline;gap:10px}
-  .wordmark{font-family:var(--script);font-size:20px;color:var(--ink)}
+  .wordmark{font-family:var(--script);font-size:22px;color:var(--ink);font-weight:700;line-height:1.15}
+  .tagline{font-family:var(--serif);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--olive-deep);font-weight:700;margin-top:1px}
   .ctx{font-size:13px;color:var(--faded);font-style:italic;white-space:nowrap}
 
   /* species 1: verdict / beat card */
@@ -36,7 +42,7 @@
   .beat:nth-of-type(4n+3){border-radius:var(--w3);transform:rotate(-.25deg);animation-delay:.16s}
   .beat:nth-of-type(4n){border-radius:var(--w4);transform:rotate(.35deg);animation-delay:.16s}
   @keyframes rise{from{opacity:0;translate:0 4px}to{opacity:1}}
-  .slotlab{display:block;font-family:var(--script);color:var(--coral);font-size:22px;line-height:1.15;font-weight:400}
+  .slotlab{display:block;font-family:var(--serif);color:var(--coral-deep);font-size:13px;letter-spacing:.13em;text-transform:uppercase;line-height:1.3;font-weight:700}
   .pickname{font-size:21px;font-weight:700;line-height:1.25;margin-top:1px}
   .why{font-style:italic;font-size:15px;margin:4px 0 0}
   .logi{font-size:13px;color:var(--faded);margin:5px 0 0;font-style:normal}
@@ -174,15 +180,31 @@
   .scene{display:block;margin:8px auto 0;max-width:100%}
   .divid{display:block;margin:26px auto 0}
   .mark{vertical-align:-2px;margin-right:5px}
+  /* Always-there way to reach the desk. TEXT is the primary action on purpose —
+     Ryan: "we prefer they text first - so the phones do not blow up all day!"
+     Calling is still one tap away inside, just not the default. */
+  .deskBtn{position:fixed;right:14px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:70;
+    background:var(--coral);color:#fff;border:0;border-radius:999px;padding:12px 18px;font-family:var(--serif);
+    font-size:14.5px;font-weight:700;box-shadow:0 2px 10px rgba(52,50,44,.25);cursor:pointer;min-height:46px}
+  .deskWrap{position:fixed;inset:0;z-index:88;background:rgba(52,50,44,.45);display:flex;align-items:flex-end}
+  .deskCard{background:var(--paper);width:100%;max-width:480px;margin:0 auto;border-radius:18px 18px 0 0;padding:20px 18px calc(22px + env(safe-area-inset-bottom));text-align:center}
+  .deskCard h3{font-size:19px;margin:0 0 4px}
+  .deskCard p{font-size:13.5px;color:var(--faded);font-style:italic;margin:0 0 14px}
+  .deskCard a,.deskCard button{display:block;width:100%;font-family:var(--serif);font-size:16px;font-weight:700;
+    padding:15px 12px;border-radius:var(--w2);text-decoration:none;margin-bottom:10px;cursor:pointer;min-height:50px;
+    border:1.6px solid var(--coral);background:var(--coral);color:#fff}
+  .deskCard a.call{background:none;color:var(--coral-deep)}
+  .deskCard button.cancel{background:none;border-color:var(--line);color:var(--faded);font-weight:400;margin-bottom:0}
 </style>
 
 <div class="frame">
   <header>
-    <div class="wordmark">Whispering Pines</div>
+    <div><div class="wordmark">Whispering Pines</div><div class="tagline">Unwind on river time</div></div>
     <div class="ctx" id="ctxchip"></div>
   </header>
   <main id="main"></main>
   <nav id="nav" aria-label="Guide sections"></nav>
+  <button class="deskBtn" id="deskBtn" aria-haspopup="true">Text the desk</button>
   <div class="toast" id="toast" role="status"></div>
 </div>
 
@@ -607,7 +629,22 @@ const DATA = {
   ],
 };
 
+/* Ryan: "links to trails if able to all trails or some quick guide so they can see
+   what kind of trail it is" + "websites or links to all businesses".
+   Trails without a verified direct page use AllTrails' search endpoint — same domain
+   already used above, always lands on the right trail with difficulty and photos.
+   (AllTrails blocks automated requests, so these could not be machine-checked; the
+   pattern is standard and the direct links above came from the same source.)
+   Businesses: most small Kernville places genuinely have NO website — the bakery,
+   Cheryl's, Big Blue Bear, Pizza Barn, El Rio and Nelda's are phone-and-Facebook
+   operations. Verified socials are linked; the rest keep Call + Directions rather
+   than shipping a guessed URL that 404s. */
 const LINKS = {
+  "Sequoia Mountain Bakery": ["https://www.instagram.com/sequoiamountainbakery/", "Today's bakes"],
+  "Isabella Peak Trail": ["https://www.alltrails.com/search?q=Isabella%20Peak%20Trail", "Trail guide"],
+  "Salmon Creek Falls": ["https://www.alltrails.com/search?q=Salmon%20Creek%20Falls%20Kernville", "Trail guide"],
+  "Cannell Meadow Trail (lower)": ["https://www.alltrails.com/search?q=Cannell%20Meadow%20Trail", "Trail guide"],
+  "Sherman Peak": ["https://www.alltrails.com/search?q=Sherman%20Peak%20Trail%20Sequoia", "Trail guide"],
   "Kern River Brewing Co. — The Pub": ["https://www.kernriverbrewing.com", "Menu & beer"],
   "Ewings on the Kern": ["https://www.ewingsco.com", "Menu & book"],
   "Johnny McNally's Fairview Lodge": ["https://www.johnnymcnallys.com", "Menu"],
@@ -708,6 +745,14 @@ const ZONES = [
 /* printed-guide picks — from the house booklet */
 const STAFF_EATS = new Set(["Sequoia Mountain Bakery", "Big Blue Bear Cafe", "Cheryl's Diner", "Something Sweeter", "McNally's Outpost", "The Pizza Barn", "Kern River Brewing Co. — The Pub", "El Rio Mexican & American", "Ewings on the Kern"]);
 const HOUSE_TRAILS = new Set(["Cannell Meadow Trail (lower)", "Whiskey Flat Trail", "Isabella Peak Trail", "Salmon Creek Falls", "Trail of 100 Giants", "Unal Trail"]);
+/* Ryan's house rules, in his words: "sequia mountain bakery always first man!!!!"
+   and "nelda's diner NO = that is too far! everything in kernville man!!!!!!"
+   HOUSE_FIRST_EAT wins any meal pool it's eligible for — no rotation past it.
+   inKernville gates anything we present as walkable/local: zones 1–2 only, so
+   Lake Isabella places (Nelda's, Paradise Cove) can still be found in Explore
+   under "The valley" but never get sold as in-town. */
+const HOUSE_FIRST_EAT = "Sequoia Mountain Bakery";
+const inKernville = name => (ZONE_OF[name] || 9) <= 2;
 
 /* ===================== CLOCK & HOURS ENGINE ===================== */
 const DAYS = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
@@ -1051,7 +1096,14 @@ function recordServed(slot, di, name) {
 /* deterministic rotation: sorted pool, rotate by day index, avoid yesterday's pick */
 function rotatePick(pool, slot, di) {
   if (!pool.length) return null;
-  pool.sort((a, b) => fitScore(b.goodFor || b.tags) - fitScore(a.goodFor || a.tags));
+  /* the house favourite outranks the rotation entirely — Ryan wants the bakery
+     first whenever it's open and eligible, not first-on-average */
+  const pinned = pool.find(p => p.name === HOUSE_FIRST_EAT);
+  if (pinned) return pinned;   /* callers (pickMeal/pickActivity) do the recording */
+  /* then Kernville over anything down-valley, then persona fit */
+  pool.sort((a, b) =>
+    (inKernville(b.name) ? 1 : 0) - (inKernville(a.name) ? 1 : 0) ||
+    fitScore(b.goodFor || b.tags) - fitScore(a.goodFor || a.tags));
   const y = servedYesterday(slot, di);
   let idx = (di == null ? 0 : di) % pool.length;
   if (pool.length > 1 && pool[idx].name === y) idx = (idx + 1) % pool.length;
@@ -1242,11 +1294,15 @@ const zoneMap = `
 
   <text x="20" y="34"  font-size="12" font-weight="bold" fill="#34322C" font-family="Georgia,serif">High country</text>
   <text x="20" y="50"  font-size="10" font-style="italic" fill="#6B675A" font-family="Georgia,serif">50 min – 1½ hr</text>
-  <text x="20" y="66"  font-size="10" fill="#34322C" font-family="Georgia,serif">Trail of 100 Giants · Sherman Pass</text>
+  <a href="${mapsQ("Trail of 100 Giants Sequoia National Forest")}" target="_blank" rel="noopener"><text x="20" y="66" font-size="10" fill="#C44F41" text-decoration="underline" font-family="Georgia,serif">Trail of 100 Giants</text></a>
+  <text x="118" y="66" font-size="10" fill="#34322C" font-family="Georgia,serif">·</text>
+  <a href="${mapsQ("Sherman Pass Road Sequoia National Forest")}" target="_blank" rel="noopener"><text x="126" y="66" font-size="10" fill="#C44F41" text-decoration="underline" font-family="Georgia,serif">Sherman Pass</text></a>
 
   <text x="20" y="116" font-size="12" font-weight="bold" fill="#34322C" font-family="Georgia,serif">The canyon</text>
   <text x="20" y="132" font-size="10" font-style="italic" fill="#6B675A" font-family="Georgia,serif">25–45 min</text>
-  <text x="20" y="148" font-size="10" fill="#34322C" font-family="Georgia,serif">Johnsondale Bridge · McNally's · the slides</text>
+  <a href="${mapsQ("Johnsondale Bridge Kernville CA")}" target="_blank" rel="noopener"><text x="20" y="148" font-size="10" fill="#C44F41" text-decoration="underline" font-family="Georgia,serif">Johnsondale Bridge</text></a>
+  <text x="118" y="148" font-size="10" fill="#34322C" font-family="Georgia,serif">·</text>
+  <a href="${mapsQ("Johnny McNally's Fairview Lodge")}" target="_blank" rel="noopener"><text x="126" y="148" font-size="10" fill="#C44F41" text-decoration="underline" font-family="Georgia,serif">McNally's</text></a>
 
   <path d="M78 200 L78 186 L90 178 L102 186 L102 200 Z" stroke="#C44F41" stroke-width="1.7" fill="#FBEFEA"/>
   <text x="112" y="192" font-size="11" font-weight="bold" fill="#C44F41" font-family="Georgia,serif">You are here</text>
@@ -1377,8 +1433,15 @@ function sceneHero(c, txt) {
     ${landingCanopy}`;
 }
 function openNowTick(c) {
-  const open = DATA.eat.map(p => ({ p, st: statusFor(p, c) })).filter(x => x.st.order <= 1)
-    .sort((a, b) => a.st.order - b.st.order || fitScore(b.p.goodFor) - fitScore(a.p.goodFor)).slice(0, 3);
+  /* the heading says "in town", so it has to actually mean in town — this used to
+     pull from every restaurant in the data and surface Nelda's, a 15-minute drive
+     out in Lake Isabella. Zones 1–2 only, bakery pinned to the top. */
+  const open = DATA.eat.filter(p => inKernville(p.name))
+    .map(p => ({ p, st: statusFor(p, c) })).filter(x => x.st.order <= 1)
+    .sort((a, b) =>
+      (b.p.name === HOUSE_FIRST_EAT ? 1 : 0) - (a.p.name === HOUSE_FIRST_EAT ? 1 : 0) ||
+      a.st.order - b.st.order ||
+      fitScore(b.p.goodFor) - fitScore(a.p.goodFor)).slice(0, 3);
   if (!open.length) return "";
   return `<div class="tick"><span class="label" style="color:var(--olive-deep)">Open right now in town</span>
     ${open.map(x => `<div style="margin-top:9px">
@@ -1477,23 +1540,20 @@ function greetLine(c, sc) {
   if (sc.mode === "full") return `Night ${sc.di + 1} of ${sc.nights} · ${dstr}` + (n ? ` · ${esc(n)}` : "");
   return dstr + (n ? ` · ${esc(n)}` : "");
 }
+/* Guests do NOT get to set their own room, name or dates — Ryan: "fuck room number
+   edits - they dont get to choose that - that's chaos!!!" Those come from the QR
+   card on the wall (room) and the ResNexus link (name + dates), both of which are
+   authoritative. What survives is the one thing that would otherwise trap someone:
+   a plain reset, for a phone still holding the previous guest's stay. Who's-here
+   remains because it only re-sorts suggestions and can't contradict the desk. */
 function fixSheetHtml(openIt) {
-  return `<details class="sheet" id="fixsheet" ${openIt ? "open" : ""}><summary>Not you? Fix who's here</summary>
-    <label class="fl" for="guestNameInput">First name</label>
-    <input type="text" id="guestNameInput" value="${esc(guestName)}" autocomplete="given-name">
-    <div class="stayrow">
-      <label><span class="fl">Arrive</span><input type="date" id="stayA" value="${stay && stay.a ? esc(stay.a) : ""}"></label>
-      <label><span class="fl">Leave</span><input type="date" id="stayD" value="${stay && stay.d ? esc(stay.d) : ""}"></label>
-    </div>
+  return `<details class="sheet" id="fixsheet" ${openIt ? "open" : ""}><summary>Not your stay?</summary>
+    <p class="logi" style="margin:2px 0 6px">Your room and dates come from the front desk. If this is showing someone else's stay, clear it and scan the card in your room again.</p>
     <span class="fl">Who's here?</span>
     <div class="chips">${DATA.personas.map(p =>
       `<button class="chip ${p.dog ? "dogchip" : ""} ${picked.has(p.id) ? "on" : ""}" data-p="${p.id}">${p.label}</button>`).join("")}</div>
-    <label class="fl" for="roomNumInput">Room number (it's on your key)</label>
-    <input type="text" id="roomNumInput" inputmode="numeric" maxlength="3" value="${esc(roomNum)}" style="max-width:130px">
-    <span class="fl">Room style (if you know it)</span>
-    <div class="chips" id="roomChips">${Object.entries(ROOM_KEYS).map(([k, v]) =>
-      `<button class="chip ${room === k ? "on" : ""}" data-room="${k}">${v.label}</button>`).join("")}</div>
-    <div class="chips"><button class="chip" data-savewho>Save</button><button class="chip" data-clearall>Start fresh</button></div>
+    <div class="chips" style="margin-top:12px"><button class="chip" data-clearall>Clear and start fresh</button></div>
+    <p class="logi" style="margin-top:10px">Something actually wrong? <a href="${SMS_DESK}">Text the desk</a> — we'll sort it.</p>
   </details>`;
 }
 function seasonLine(m) {
@@ -1836,7 +1896,7 @@ function nowNone(c) {
     : act ? "While the light's good: " + esc(act.name)
     : "All quiet on the river";
   const capGoto = m0 ? "eat" : ad ? "secrets" : "do";
-  return sceneHero(c, { top: hi, skyline: "Welcome to river time." })
+  return sceneHero(c, { top: hi, skyline: "Unwind on river time." })
     + welcomeCard(null)
     + bigActs(cap === "All quiet on the river" ? "Explore the valley →" : (m0 ? (mealKind === "breakfast" ? "Where to eat this morning →" : "Where to eat tonight →") : "Ideas for tonight →"), capGoto)
     + `${openNowTick(c)}
@@ -2155,16 +2215,16 @@ function renderLodge() {
       <a class="cbtn call" href="${telHref(DATA.lodge.phone)}">Call the desk · ${DATA.lodge.phone}</a>
     </div>
     <p class="logi">${esc(DATA.lodge.deskHours)}</p>
+    <!-- map leads the page — Ryan: "map should be at the top on 'lodge' section man!!!" -->
+    <span class="label" style="display:block;margin-top:20px">Find your room</span>
+    ${lodgeMap()}
+    <p class="logi" style="font-style:italic;margin-top:0">Ice: the coral box on the map. Fourteen rooms, most with a balcony of their own — walk-in rate: ask the desk, or <a href="${SMS_DESK}">text us</a>.</p>
+    ${roomCard()}
     ${squiggle()}
     <span class="label">In your room</span>
     ${DATA.roomHelp.map(r => `<details class="row"><summary><h3 style="font-size:16px">${esc(r.q)}</h3></summary><div class="more"><p>${esc(r.a)}</p></div></details>`).join("")}
     <div style="margin-top:26px"><span class="label">Good to know</span>
       <ul style="margin:6px 0 0;padding-left:20px;font-size:14px">${DATA.policies.map(p => `<li style="margin:4px 0">${esc(p)}</li>`).join("")}</ul></div>
-    ${squiggle()}
-    <span class="label">Find your room</span>
-    ${lodgeMap()}
-    <p class="logi" style="font-style:italic;margin-top:0">Ice: the coral box on the map. Fourteen rooms, most with a balcony of their own — walk-in rate: ask the desk, or <a href="${SMS_DESK}">text us</a>.</p>
-    ${roomCard()}
     <details class="row" style="margin-top:14px"><summary><h3 style="font-size:16px">Our story</h3></summary>
       <div class="more"><p>${esc(DATA.story)}</p></div></details>
     <div class="contactrow">
@@ -2214,17 +2274,6 @@ function toast(msg) {
   t.textContent = msg; t.classList.add("show");
   clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("show"), 1800);
 }
-function readWho() { /* pull the sheet's fields into state without repainting */
-  const ni = document.getElementById("guestNameInput");
-  if (ni) { guestName = cleanName(ni.value); saveName(); }
-  const rn = document.getElementById("roomNumInput");
-  if (rn) { roomNum = (rn.value || "").replace(/[^\d]/g, "").slice(0, 3); store("wpl-roomnum", roomNum || null); }
-  const a = (document.getElementById("stayA") || {}).value, d = (document.getElementById("stayD") || {}).value;
-  if (a && d) {
-    const da = new Date(a + "T12:00:00"), dd = new Date(d + "T12:00:00");
-    if (!isNaN(da) && !isNaN(dd) && dd >= da) { stay = { a, d }; fixSheet = false; saveStay(); }
-  } else if (!a && !d) { stay = null; saveStay(); }
-}
 document.addEventListener("click", (e) => {
   const nav = e.target.closest("[data-nav]");
   if (nav) { cur = nav.dataset.nav; paint(true); return; }
@@ -2260,7 +2309,6 @@ document.addEventListener("click", (e) => {
     if (r) { const c = clock(); r.innerHTML = askResults(c, stayCtx(c)); }
     return;
   }
-  if (e.target.closest("[data-savewho]")) { readWho(); paint(true); toast(guestName ? "Pleasure to meet you, " + guestName.split(/\s+/)[0] + "." : "All set."); return; }
   if (e.target.closest("[data-clearall]")) { purgeAll(); fixSheet = false; paint(true); toast("Fresh page."); return; }
   const cp = e.target.closest("[data-copy]");
   if (cp) {
@@ -2270,20 +2318,12 @@ document.addEventListener("click", (e) => {
       .catch(() => toast(v));
   }
 });
-document.addEventListener("change", (e) => {
-  if (e.target.id === "stayA" || e.target.id === "stayD") {
-    /* defer full repaint until both dates set — iOS picker stays open */
-    const a = document.getElementById("stayA").value, d = document.getElementById("stayD").value;
-    if (a && d) { readWho(); paint(); }
-  }
-});
 document.addEventListener("input", (e) => {
   if (e.target.id === "askSearch") {
     askQuery = e.target.value;
     const r = document.getElementById("askResults");
     if (r) { const c = clock(); r.innerHTML = askResults(c, stayCtx(c)); }
   }
-  if (e.target.id === "guestNameInput") { guestName = cleanName(e.target.value); saveName(); }
 });
 /* the jump strip marks whichever zone you're standing in as you scroll */
 let spyTick = 0;
@@ -2320,5 +2360,23 @@ function safePaint() { /* don't clobber typing, half-entered dates, or an open s
 }
 document.addEventListener("visibilitychange", safePaint);
 setInterval(safePaint, 60000);
+/* Reach-the-desk sheet. Text first, call second, and the text is pre-filled with the
+   guest's room so the desk knows who's asking without a round trip. */
+document.getElementById("deskBtn").addEventListener("click", () => {
+  const rm = roomNum ? "Room " + roomNum + ": " : "";
+  const wrap = document.createElement("div");
+  wrap.className = "deskWrap";
+  wrap.innerHTML = `<div class="deskCard">
+    <h3>Need something?</h3>
+    <p>Texting reaches us fastest — we watch it all day.</p>
+    <a href="sms:+17603763733?&body=${encodeURIComponent(rm)}">Text the desk</a>
+    <a class="call" href="${telHref(DATA.lodge.phone)}">Call ${esc(DATA.lodge.phone)}</a>
+    <button class="cancel">Never mind</button>
+  </div>`;
+  wrap.addEventListener("click", (e) => {
+    if (e.target === wrap || e.target.closest(".cancel")) wrap.remove();
+  });
+  document.body.appendChild(wrap);
+});
 paint();
 </script>
