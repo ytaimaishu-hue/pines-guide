@@ -2603,9 +2603,17 @@ paint();
    making them retype a URL. Phones never see this. Dismissible either way. */
 (function () {
   try {
-    var isPhone = window.matchMedia("(max-width: 700px)").matches
-      || ("ontouchstart" in window && window.innerWidth < 900);
-    if (isPhone) return;
+    /* Show this on a computer, hide it on a phone. The old test was
+       "(max-width:700px) OR (ontouchstart AND width<900)" — and every Windows
+       touch laptop has ontouchstart, so a staff laptop with a normal browser
+       window was treated as a phone and never got the QR at all. That's the
+       one screen it exists for.
+       any-pointer:fine means "some pointing device on this machine is precise"
+       — true for a trackpad or mouse even on a touchscreen laptop, false on a
+       phone or tablet. Paired with a width floor, that's the real distinction. */
+    var onAComputer = window.matchMedia("(any-pointer: fine)").matches
+      && window.matchMedia("(min-width: 700px)").matches;
+    if (!onAComputer) return;
     if (sessionStorage.getItem("wpl-qr-dismissed")) return;
 
     var css = document.createElement("style");
