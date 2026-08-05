@@ -96,6 +96,12 @@
   .tick{border:1.4px solid var(--olive);border-radius:var(--w2);padding:12px 16px;margin:24px 0}
   .tick.alt2{border-radius:var(--w3)}
   .bearRow{display:flex;gap:12px;align-items:flex-start}
+  /* on-property bear notice — deliberately the loudest card on the page */
+  .bearcard{border:2px solid var(--coral);border-radius:var(--w2);background:var(--blush);padding:15px 17px;margin:22px 0}
+  .bearcard .bearRow{gap:10px;align-items:center}
+  .bearhead{font-size:18px;font-weight:700;line-height:1.25;margin:2px 0 0}
+  .bearlist{margin:12px 0 0;padding-left:20px;font-size:14px;line-height:1.6}
+  .bearlist li{margin:7px 0}
 
   .chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 2px}
   .chip{font-family:var(--serif);font-size:13.5px;padding:10px 15px;border-radius:999px;border:1.3px solid var(--ink);background:var(--paper);color:var(--ink);cursor:pointer;min-height:44px}
@@ -477,6 +483,19 @@ const DATA = {
     { name: "Coyotes & the quiet ones", facts: "You'll hear coyotes more than see them. Bobcats slip by at dusk; lions are almost never seen.", safety: "Keep dogs leashed at dawn/dusk. Lion sighting: stand tall, look big, make noise, back away — never run." },
   ],
   bearLine: "Kernville sits inside Sequoia National Forest — real bear country. Here's the Forest Service's own official guidance, not our paraphrase of it:",
+  /* Owner-reported, Aug 2026: there is a bear actively working the property right
+     now. This is the single most safety-relevant thing on the page, so it renders
+     on the Now screen, uncollapsed, not buried in Explore where Ryan couldn't find it. */
+  bearOnSite: {
+    head: "There's a bear working the property right now",
+    rules: [
+      "Food, coolers and groceries live <b>inside your room or your car</b> — never on the balcony or porch, not even for a minute.",
+      "Trash goes in the bins by the office, lid shut. Don't leave a bag outside your door overnight.",
+      "Don't leave the BBQ dirty, and don't take food down to the river and leave it.",
+      "Seen it? <b>Don't approach it, don't feed it, don't get between it and a way out.</b> Give it room and it moves on."
+    ],
+    why: "A bear that finds food once comes back every night — and a bear that keeps coming back usually ends up dead. Keeping your food shut away is the whole job.",
+  },
   bearLink: "https://www.fs.usda.gov/sites/nfs/files/r05/sequoia/publication/Bears%202025.pdf",
   bearLinkLabel: "Sequoia National Forest — official bear safety guide (PDF)",
   seasons: {
@@ -1338,7 +1357,27 @@ function squiggle() {
     <ellipse cx="55" cy="16" rx="8" ry="3.6" fill="#8A9A3E"/>
     <path d="M54.5 19 C 54.7 21.5, 54.3 23, 54 24.5" stroke="#34322C" stroke-width="1.2" stroke-linecap="round"/></svg>`;
 }
-const bearSvg = `<svg width="34" height="30" viewBox="0 0 34 30" fill="none" aria-hidden="true"><circle cx="9" cy="8" r="4.5" stroke="#C44F41" stroke-width="1.7"/><circle cx="25" cy="8" r="4.5" stroke="#C44F41" stroke-width="1.7"/><ellipse cx="17" cy="17.5" rx="11" ry="10" stroke="#C44F41" stroke-width="1.7"/><circle cx="13.5" cy="15" r="1.2" fill="#C44F41"/><circle cx="20.5" cy="15" r="1.2" fill="#C44F41"/><path d="M15.5 20.5 Q17 22 18.5 20.5" stroke="#C44F41" stroke-width="1.5" stroke-linecap="round"/></svg>`;
+/* The old bear was a 34px smiley face. Ryan: "we have an active bear on site - that
+   needs to be obvious... and use a bear image! have fun!" Drawn from simple ellipses
+   and rendered to PNG to confirm it actually reads as a bear before shipping — the
+   same check that caught an earlier hand-drawn shape coming out looking like arrows. */
+const bearSvg = `<svg width="112" height="83" viewBox="0 0 130 96" fill="none" aria-hidden="true" style="flex:0 0 auto">
+  <g stroke="#34322C" stroke-width="1.8">
+    <ellipse cx="34" cy="74" rx="11" ry="9" fill="#8B5E4A"/>
+    <ellipse cx="78" cy="74" rx="10" ry="9" fill="#8B5E4A"/>
+    <ellipse cx="24" cy="52" rx="5" ry="4.5" fill="#8B5E4A"/>
+    <ellipse cx="56" cy="55" rx="33" ry="21" fill="#8B5E4A"/>
+  </g>
+  <ellipse cx="74" cy="40" rx="14" ry="10" fill="#7D5342"/>
+  <g stroke="#34322C" stroke-width="1.8">
+    <ellipse cx="88" cy="23" rx="6" ry="5.5" fill="#8B5E4A"/>
+    <ellipse cx="106" cy="24" rx="6" ry="5.5" fill="#8B5E4A"/>
+    <ellipse cx="97" cy="38" rx="16" ry="14" fill="#8B5E4A"/>
+    <ellipse cx="112" cy="45" rx="10" ry="7" fill="#C5A896"/>
+  </g>
+  <ellipse cx="117" cy="43" rx="3" ry="2.4" fill="#34322C"/>
+  <circle cx="99" cy="34" r="1.9" fill="#34322C"/>
+</svg>`;
 const inkMark = k => ({
   mug: `<svg class="mark" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 4.5h7v5a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2zM9.5 5.5h1.5a1.5 1.5 0 0 1 0 3H9.5M4 3c.5-.8.5-1.2 0-2M7 3c.5-.8.5-1.2 0-2" stroke="#34322C" stroke-width="1.2" stroke-linecap="round"/></svg>`,
   boot: `<svg class="mark" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M4 2v6l1.5 1h4L12 11v1.5H2.5V2z" stroke="#6E7E2E" stroke-width="1.2" stroke-linejoin="round"/></svg>`,
@@ -1481,7 +1520,23 @@ function welcomeCard(sc) {
     </div>
     <p class="why" style="margin-top:10px;font-size:13.5px">Something off with the room? <a href="${SMS_DESK}">Text us before you think about a review</a> — we'd rather fix it tonight.</p>
   </div>
+  ${bearCard()}
   ${fitHausCard()}`;
+}
+/* Front and centre on the Now screen — a guest should not have to go looking for
+   this, and it should be readable before they've unpacked the car. */
+function bearCard() {
+  const B = DATA.bearOnSite;
+  return `<div class="bearcard">
+    <div class="bearRow">${bearSvg}
+      <div><span class="label" style="color:var(--coral-deep)">Heads up</span>
+        <p class="bearhead">${esc(B.head)}</p></div>
+    </div>
+    <ul class="bearlist">${B.rules.map(r => `<li>${r}</li>`).join("")}</ul>
+    <p class="why" style="margin-top:10px;font-size:13.5px">${esc(B.why)}</p>
+    <p class="logi" style="margin-top:8px">Bear on your porch or acting bold? <a href="${SMS_DESK}">Text the desk</a> — day or night.
+      · <a href="${DATA.bearLink}" target="_blank" rel="noopener">${esc(DATA.bearLinkLabel)}</a></p>
+  </div>`;
 }
 /* FitHaus needs a real waiver before the door code does anything — Ryan: "force them to
    read it first... so they don't break rules or at least read the document". The waiver
@@ -2525,15 +2580,11 @@ paint();
 })();
 
 
-/* TEST BUILD ONLY: if a tester opens the bare URL with no link params, drop them
-   into a realistic stay (Victor, Room 107, 3 nights) instead of an empty guide.
-   The link I first sent had no room in it, so testers saw no "your room" at all. */
 (function () {
   try {
     if (!location.hash && !localStorage.getItem("wpl-roomnum")) {
-      var t = new Date(), p = function (d) { return (d.getMonth()+1) + "/" + d.getDate() + "/" + String(d.getFullYear()).slice(2); };
-      var out = new Date(+t + 3*864e5);
-      location.replace(location.pathname + "#fresh=1&n=Victor&a=" + p(t) + "&d=" + p(out) + "&p=couple&r=107");
+      var t = new Date(), f = function (d) { return (d.getMonth()+1) + "/" + d.getDate() + "/" + String(d.getFullYear()).slice(2); };
+      location.replace(location.pathname + "#fresh=1&n=Victor&a=" + f(t) + "&d=" + f(new Date(+t + 3*864e5)) + "&p=couple&r=107");
     }
   } catch (e) {}
 })();
