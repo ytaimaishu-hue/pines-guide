@@ -671,22 +671,22 @@ const ZONE_OF = {
   "Sherman Peak": 6, "Wind Wolves Preserve": 6, "Tehachapi Loop & depot town": 6, "Sequoia National Park (the honest truth)": 6,
 };
 /* [full name, the distance line, short name for the jump strip] */
-/* [heading, full description, jump-chip label]
-   Chips carry DIRECTION + TIME, not local nicknames. Ryan, twice: "what if people
-   don't know where these are? i've lived here 5 years - i dont' even know" and
-   "10-25 minutes - canyon 25-45m - what direction? it's so fucking random".
-   "South · 10–25 min" is instantly placeable; "The valley" is not. Kept short on
-   purpose so the strip stays pinned in one or two rows instead of scrolling
-   sideways and hiding half the chips. The evocative names live on in the section
-   headings just below, where there's room for them. */
+/* [heading, description, jump-chip label]
+   Chips keep the evocative names — Ryan: "your original tags were 10x better",
+   and "'south' is meaningless to someone from germany". A bare compass bearing
+   isn't context; it assumes a mental map the guest doesn't have. So the NAME goes
+   on the chip (short, so the pinned bar stays two rows) and the DESCRIPTION does
+   the real work, answering the question he actually started with: "the valley
+   is...where relative to us?" Every one now reads distance + direction + a
+   landmark you can picture, measured from the lodge's front door. */
 const ZONES = [
   null,
-  ["A short walk", "out the door · 0–5 minutes on foot", "On foot"],
-  ["In town", "a 15-minute stroll or a 4-minute drive south", "In town · 4 min"],
-  ["Down the valley — south", "10–25 minutes south by car, toward Lake Isabella", "South · 15 min"],
-  ["Up the canyon — north", "25–45 minutes north, up Sierra Way into the forest", "North · 30 min"],
-  ["The high country — north", "50 minutes to 1½ hours north and up · pack water, fill the tank", "High country · 1 hr"],
-  ["Day trips", "1½ hours and up, either direction — make a day of it", "Day trips"],
+  ["A short walk", "right outside your door — the river, the pool, the lawn · 0–5 minutes on foot", "On foot"],
+  ["In town", "straight down Sierra Way — Kernville's few blocks · a 15-minute stroll or a 4-minute drive", "In town"],
+  ["Down the valley", "south, following the river down to Lake Isabella · 10–25 minutes by car", "The valley"],
+  ["Up the canyon", "north, up the river into the Sequoia forest · 25–45 minutes by car", "The canyon"],
+  ["The high country", "north and climbing — pine country above 7,000 feet · 50 minutes to 1½ hours · fill the tank", "High country"],
+  ["Proper expeditions", "1½ hours and up, either direction — make a day of it", "Expeditions"],
 ];
 /* printed-guide picks — from the house booklet */
 const STAFF_EATS = new Set(["Sequoia Mountain Bakery", "Big Blue Bear Cafe", "Cheryl's Diner", "Something Sweeter", "McNally's Outpost", "The Pizza Barn", "Kern River Brewing Co. — The Pub", "El Rio Mexican & American", "Ewings on the Kern"]);
@@ -2246,12 +2246,18 @@ window.addEventListener("scroll", () => {
   if (cur !== "explore" || spyTick) return;
   spyTick = requestAnimationFrame(() => {
     spyTick = 0;
+    const strip = document.querySelector(".zjump");
     const btns = document.querySelectorAll(".zjump [data-jump]");
     if (!btns.length) return;
+    /* Measure the pinned bar rather than hardcoding a cutoff. It was a fixed 84px,
+       sized for a one-row bar — once the bar wrapped to two rows (~103px) a heading
+       you jumped to landed at ~112px, never satisfied the test, and the chip ABOVE
+       stayed lit. That's the "click north, it highlights south" bug. */
+    const cut = (strip ? strip.getBoundingClientRect().bottom : 84) + 14;
     let active = "";
     btns.forEach(b => {
       const el = document.getElementById("z" + b.dataset.jump);
-      if (el && el.getBoundingClientRect().top <= 84) active = b.dataset.jump;
+      if (el && el.getBoundingClientRect().top <= cut) active = b.dataset.jump;
     });
     btns.forEach(b => b.classList.toggle("on", b.dataset.jump === active));
   });
