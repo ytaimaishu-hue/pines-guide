@@ -1,0 +1,2469 @@
+<meta charset="utf-8">
+<title>TEST BUILD — Whispering Pines Guest Guide</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+  :root {
+    color-scheme: light;
+    --paper:#FFFFFF; --ink:#34322C; --faded:#6B675A;
+    --coral:#E0655A; --coral-deep:#C44F41; --blush:#FBEFEA;
+    --olive:#8A9A3E; --olive-deep:#6E7E2E; --olive-mist:#F3F5E8;
+    --sky:#5B7FB4; --line:#E3E0D6;
+    --script:"Snell Roundhand","Segoe Script","Brush Script MT","Savoye LET",cursive;
+    --serif:Georgia,"Iowan Old Style","Times New Roman",serif;
+    --w1:255px 18px 225px 18px / 18px 225px 18px 255px;
+    --w2:18px 225px 18px 255px / 255px 18px 225px 18px;
+    --w3:225px 15px 245px 20px / 20px 245px 15px 225px;
+    --w4:15px 245px 20px 225px / 225px 20px 245px 15px;
+  }
+  *{box-sizing:border-box} html,body{margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:15.5px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .frame{max-width:480px;margin:0 auto;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+  main{flex:1;padding:0 22px 112px}
+  h1,h2,h3{margin:0;font-weight:700;text-wrap:balance}
+  a{color:var(--coral-deep)}
+  .script{font-family:var(--script);color:var(--coral);font-weight:400}
+  .t-display{font-family:var(--script);color:var(--coral);font-size:38px;line-height:1.1;margin:10px 0 0;font-weight:400}
+  .t-cd{font-family:var(--script);color:var(--coral);font-size:34px;line-height:1.15;font-weight:400}
+  .label{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--faded)}
+  header{padding:calc(14px + env(safe-area-inset-top)) 22px 0;display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+  .wordmark{font-family:var(--script);font-size:20px;color:var(--ink)}
+  .ctx{font-size:13px;color:var(--faded);font-style:italic;white-space:nowrap}
+
+  /* species 1: verdict / beat card */
+  .beat{border:1.4px solid var(--ink);padding:13px 17px 14px;margin:28px 0;background:var(--paper);animation:rise .3s ease both}
+  .beat:nth-of-type(4n+1){border-radius:var(--w1);transform:rotate(-.4deg)}
+  .beat:nth-of-type(4n+2){border-radius:var(--w2);transform:rotate(.3deg);animation-delay:.08s}
+  .beat:nth-of-type(4n+3){border-radius:var(--w3);transform:rotate(-.25deg);animation-delay:.16s}
+  .beat:nth-of-type(4n){border-radius:var(--w4);transform:rotate(.35deg);animation-delay:.16s}
+  @keyframes rise{from{opacity:0;translate:0 4px}to{opacity:1}}
+  .slotlab{display:block;font-family:var(--script);color:var(--coral);font-size:22px;line-height:1.15;font-weight:400}
+  .pickname{font-size:21px;font-weight:700;line-height:1.25;margin-top:1px}
+  .why{font-style:italic;font-size:15px;margin:4px 0 0}
+  .logi{font-size:13px;color:var(--faded);margin:5px 0 0;font-style:normal}
+  .btn{display:inline-flex;align-items:center;background:var(--coral);color:#fff;border:0;border-radius:12px 4px 12px 4px;padding:9px 18px;font-family:var(--serif);font-size:14px;text-decoration:none;margin:10px 8px 0 0;min-height:44px;cursor:pointer}
+  .btn.ghost{background:none;color:var(--coral-deep);border:1.3px solid var(--coral)}
+  .mist{font-size:13px;color:var(--faded);font-style:italic;margin:10px 0}
+  details.alts{margin-top:4px}
+  details.alts summary{cursor:pointer;list-style:none;font-size:12.5px;color:var(--faded);padding:9px 0 3px;min-height:24px}
+  details.alts summary::-webkit-details-marker{display:none}
+  .alt{font-size:14px;padding:6px 0 2px}
+  .alt b{font-size:14.5px}
+  .catlink{font-size:12.5px}
+
+  /* species 2: catalog row */
+  .row{border-bottom:1px solid var(--line)}
+  .row:last-child{border-bottom:0}
+  .row.off{opacity:.55}
+  .row summary{list-style:none;cursor:pointer;padding:12px 0;min-height:44px}
+  .row summary::-webkit-details-marker{display:none}
+  .row summary::after{content:"⌄";float:right;color:var(--faded);font-size:13px;margin-top:-20px}
+  .row[open] summary::after{content:"⌃"}
+  .row h3{font-size:17px;display:inline}
+  .rowtop{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+  .meta{font-size:12.5px;color:var(--faded);margin-top:1px}
+  .desc{font-style:italic;font-size:14px;margin:3px 0 0}
+  .more{padding:0 0 13px}
+  .more p{margin:4px 0 0;font-size:14px}
+  .annot{font-style:italic;color:var(--olive-deep);font-size:12.5px}
+  .safe{color:var(--coral-deep);font-size:13.5px;margin-top:6px;font-style:normal}
+  .st{font-size:12.5px;font-style:italic;white-space:nowrap;color:var(--faded)}
+  .st .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--olive);vertical-align:1px;margin-right:4px}
+  .st.closed .dot{background:var(--coral-deep)}
+  .grp{margin:8px 0}
+  .grp > summary{list-style:none;cursor:pointer;min-height:44px;display:flex;align-items:center;gap:10px;font-weight:700;font-size:16px}
+  .grp > summary::-webkit-details-marker{display:none}
+  .grp > summary .chev{margin-left:auto;color:var(--faded);font-size:13px}
+
+  /* species 3: essentials strip / tiles */
+  .ess-strip{display:flex;justify-content:space-between;gap:4px;border-top:1.2px solid var(--ink);border-bottom:1.2px solid var(--ink);padding:6px 0;margin:26px 0 10px}
+  .ess-strip>*{background:none;border:0;font-family:var(--serif);font-size:13px;color:var(--ink);padding:2px 4px;cursor:default;min-height:44px;display:flex;flex-direction:column;justify-content:center;text-decoration:none;text-align:left;flex:1}
+  .ess-strip .label{font-size:9.5px;letter-spacing:.12em}
+  .ess-strip b{color:var(--coral-deep);font-size:13.5px}
+  .ess-strip button,.ess-strip a{cursor:pointer}
+  .copyhint{font-size:10px;color:var(--faded);font-style:italic}
+  .esscard{border:1.4px solid var(--ink);border-radius:var(--w1);padding:14px 17px;margin:22px 0}
+  .esscard .bigv{font-size:19px;font-weight:700;color:var(--coral-deep)}
+
+  /* species 4: note blocks */
+  .note{background:var(--blush);border-radius:14px;padding:12px 16px;margin:24px 0;font-size:14px}
+  .note .label{color:var(--coral-deep);display:block;margin-bottom:3px}
+  .tick{border:1.4px solid var(--olive);border-radius:var(--w2);padding:12px 16px;margin:24px 0}
+  .tick.alt2{border-radius:var(--w3)}
+  .bearRow{display:flex;gap:12px;align-items:flex-start}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 2px}
+  .chip{font-family:var(--serif);font-size:13.5px;padding:10px 15px;border-radius:999px;border:1.3px solid var(--ink);background:var(--paper);color:var(--ink);cursor:pointer;min-height:44px}
+  .chip.on{border-color:var(--coral);background:var(--coral);color:#fff}
+  .morez{display:block;width:100%;margin:-4px 0 18px;padding:11px;border:1.2px dashed var(--olive-deep);background:none;border-radius:12px;font-family:var(--serif);font-size:13.5px;font-style:italic;color:var(--olive-deep);cursor:pointer;min-height:44px}
+  .chip.dogchip.on{border-color:var(--olive);background:var(--olive)}
+  .acts{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+  .act{font-size:12.5px;border:1.2px solid var(--ink);border-radius:999px;padding:9px 13px;text-decoration:none;color:var(--ink);font-family:var(--serif);min-height:40px;display:inline-flex;align-items:center}
+  .act:active{background:var(--coral);border-color:var(--coral);color:#fff}
+
+  /* day strip shelf */
+  .shelf{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 2px 10px;margin:8px -4px 0}
+  .dcard{flex:0 0 140px;scroll-snap-align:start;border:1.3px solid var(--olive);border-radius:var(--w2);padding:10px 12px;font-size:12.5px}
+  .dcard:nth-child(2n){border-radius:var(--w3)}
+  .dcard.today{transform:scale(1.04);border-width:1.7px}
+  .dcard .dname{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--olive-deep);font-weight:700;display:block;margin-bottom:3px}
+  .dcard div{margin:2px 0;line-height:1.4}
+
+  nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--paper);border-top:1.3px solid var(--ink);display:flex;justify-content:space-around;padding:7px 4px calc(8px + env(safe-area-inset-bottom));z-index:50}
+  nav button{background:none;border:0;cursor:pointer;padding:4px 16px;display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--faded);font-family:var(--serif);min-height:48px}
+  nav button .nlabel{font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+  nav button svg{stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  nav button.on{color:var(--ink)}
+  nav button.on svg{stroke:var(--olive-deep);fill:var(--olive-mist)}
+
+  .screen{display:none;animation:fadein .25s ease}
+  .screen.on{display:block}
+  @keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.screen,.beat{animation:none}.dcard.today{transform:none}}
+  footer{text-align:center;font-size:12.5px;color:var(--faded);font-style:italic;padding:4px 24px 16px}
+  button:focus-visible,.chip:focus-visible,summary:focus-visible{outline:2px solid var(--sky);outline-offset:2px}
+  .toast{position:fixed;bottom:98px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:13px;padding:8px 16px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:60}
+  .toast.show{opacity:1}
+  .askbox{width:100%;font-family:var(--serif);font-size:15px;border:1.4px solid var(--ink);border-radius:var(--w1);padding:12px 14px;background:var(--paper);color:var(--ink);margin:12px 0 6px}
+  .qa{padding:11px 0;border-bottom:1px solid var(--line)}
+  .qa:last-child{border-bottom:0}
+  .qa h3{font-size:16px}
+  .qa p{margin:4px 0 0;font-size:14px}
+  .qa .topic{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--olive-deep);font-weight:700}
+  .tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0 6px}
+  .tile{border:1.4px solid var(--ink);background:var(--paper);font-family:var(--serif);color:var(--ink);padding:13px 12px 11px;cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:2px;min-height:78px}
+  .tile:nth-child(4n+1){border-radius:var(--w1);transform:rotate(-.3deg)}
+  .tile:nth-child(4n+2){border-radius:var(--w2);transform:rotate(.25deg)}
+  .tile:nth-child(4n+3){border-radius:var(--w3);transform:rotate(.2deg)}
+  .tile:nth-child(4n){border-radius:var(--w4);transform:rotate(-.25deg)}
+  .tile .tlabel{font-weight:700;font-size:16px}
+  .tile .tsub{font-size:11.5px;color:var(--faded);font-style:italic;line-height:1.35}
+  .backlink{font-size:13px;color:var(--coral-deep)}
+  /* scroll-margin must clear the pinned .zjump bar (2 rows ≈ 99px) or a jumped-to
+     zone heading lands hidden underneath it */
+  .zonehead{display:flex;gap:12px;align-items:center;margin:34px 0 0;scroll-margin-top:112px}
+  /* PINNED so you can jump between zones without scrolling back up (Ryan: "you click
+     on something and it scrolls down - then you have to scroll back up? it needs to be
+     pinned"), and WRAPPED rather than scrolling sideways, which used to hide half the
+     chips off-screen. Labels are kept short precisely so this stays 1–2 rows tall. */
+  .zjump{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:7px;padding:9px 22px 10px;margin:14px -22px 4px;background:var(--paper);border-bottom:1px solid rgba(52,50,44,.14)}
+  .zjump button{flex:0 0 auto;font-family:var(--serif);font-size:12px;padding:7px 12px;border-radius:999px;border:1.2px solid rgba(52,50,44,.3);background:var(--paper);color:var(--faded);cursor:pointer;white-space:nowrap;min-height:36px}
+  .zjump button.on{border-color:var(--coral);color:var(--coral);font-weight:bold}
+  .bigacts{display:flex;gap:10px;margin:14px 0 0;flex-wrap:wrap}
+  .bigbtn{flex:1 1 100%;text-align:center;font-size:16px;font-weight:700;padding:15px 12px;border:1.6px solid var(--ink);border-radius:var(--w1);background:var(--paper);color:var(--ink);font-family:var(--serif);cursor:pointer;text-decoration:none;display:block}
+  .bigbtn.primary{background:var(--coral);border-color:var(--coral);color:#fff;border-radius:var(--w2)}
+  .bigbtn.half{flex:1 1 40%;font-size:14.5px;padding:13px 10px}
+  .sheet{margin:30px 0 6px}
+  .sheet > summary{list-style:none;cursor:pointer;font-size:12.5px;color:var(--faded);text-align:center;padding:10px;min-height:44px}
+  .sheet > summary::-webkit-details-marker{display:none}
+  .sheet label.fl{display:block;font-size:12px;color:var(--faded);letter-spacing:.1em;text-transform:uppercase;font-weight:700;margin:12px 0 3px}
+  .sheet input[type=date],.sheet input[type=text]{font-family:var(--serif);font-size:14px;border:1.3px solid var(--ink);border-radius:10px 3px 10px 3px;padding:10px;background:var(--paper);color:var(--ink);width:100%}
+  .stayrow{display:flex;gap:8px}
+  .stayrow>label{flex:1;min-width:0}
+  .contactrow{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+  .cbtn{flex:1;min-width:100px;text-align:center;border:1.3px solid var(--ink);color:var(--ink);border-radius:999px;padding:11px 10px;font-size:13.5px;text-decoration:none;font-family:var(--serif);background:none;min-height:44px}
+  .cbtn.call{background:var(--coral);border-color:var(--coral);color:#fff;font-weight:700;font-size:15px}
+  .seas{border-left:2.5px solid var(--olive);padding:2px 0 2px 13px;font-size:14px;margin:8px 0}
+  .seas b{display:block;font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--olive-deep)}
+  .evt{display:flex;gap:13px;padding:10px 0;border-bottom:1px solid var(--line)}
+  .evt:last-child{border-bottom:0}
+  .evt .when{min-width:52px;text-align:center;border:1.2px solid var(--ink);border-radius:10px 3px 10px 3px;padding:5px 4px;height:fit-content}
+  .evt .when .mo{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--coral-deep);font-weight:700;display:block}
+  .evt .when .da{font-size:12.5px;font-weight:700}
+  .evt h3{font-size:16px}
+  .evt p{margin:2px 0 0;font-size:13.5px;color:var(--faded)}
+  .scene{display:block;margin:8px auto 0;max-width:100%}
+  .divid{display:block;margin:26px auto 0}
+  .mark{vertical-align:-2px;margin-right:5px}
+</style>
+
+<div class="frame">
+  <header>
+    <div class="wordmark">Whispering Pines</div>
+    <div class="ctx" id="ctxchip"></div>
+  </header>
+  <main id="main"></main>
+  <nav id="nav" aria-label="Guide sections"></nav>
+  <div class="toast" id="toast" role="status"></div>
+</div>
+
+<script>
+"use strict";
+/* ===================== DATA ===================== */
+const DATA = {
+  lodge: {
+    phone: "(760) 376-3733",
+    email: "frontdesk@pineskernville.com",
+    address: "13745 Sierra Way, Kernville, CA 93238",
+    site: "https://www.pineskernville.com",
+    mapUrl: "https://maps.google.com/?q=Whispering+Pines+Lodge,+13745+Sierra+Way,+Kernville,+CA+93238",
+    reviewUrl: "https://maps.google.com/?q=Whispering+Pines+Lodge+Kernville+reviews",
+    deskHours: "Front desk: Sun–Thu 11–5 · Fri–Sat 10–6",
+  },
+  essentials: {
+    wifiNet: "Whispering Pines", wifiPass: "Kernville",
+    pool: "C1278", poolSub: "towels at the desk",
+    checkout: "11 AM", checkin: "3 PM", keys: "keys in the box",
+    coffee: "Coffee's in your room — no lodge breakfast; town does it better.",
+    gym: {
+      name: "FitHaus HealthClub",
+      note: "sauna, cold plunge, open 24 hours — it's already paid for, go use it",
+      address: "50 Tobias St, Kernville — the black building at Tobias & Scodie",
+      waiver: "First visit: complete FitHaus's one-time liability waiver before the door code will do anything — that's also where your personal passcode comes from.",
+      waiverUrl: "https://www.fithaushealthclub.com/liability-waiver",
+      waiverLinkLabel: "Fill out the liability waiver",
+      door: "Wake the keypad (touch it, or the thumb sensor), then enter your passcode followed by 7463#. You've got 15 seconds to get in and shut the door before it locks — same on the way out. It'll say “locked” once it catches, so wait for that.",
+      etiquette: "Complimentary towels & lockers — soiled towels go in the marked bin. Wipe equipment down after, re-rack your weights, prop the door if you're using the outdoor gym (close it again if no one else is out there). Full house rules are posted at their front desk.",
+      contact: "On-site issue? Call or text Philip at (760) 549-9188.",
+      pdfUrl: "amenity-instructions.pdf",
+    },
+  },
+  personas: [
+    { id: "oneNight", label: "One night" },
+    { id: "couple", label: "A couple" },
+    { id: "family", label: "Family" },
+    { id: "adventure", label: "Adventurer" },
+    { id: "event", label: "Here for an event" },
+    { id: "dog", label: "+ Dog", dog: true },
+  ],
+  eat: [
+    { name: "Sequoia Mountain Bakery", cuisine: "Bakery · pastry case", price: "$", area: "9 Big Blue Rd · downtown", breakfast: true, lunch: true, dogPatio: true,
+      hours: { mon: "7:30 AM - 3:00 PM", tue: "7:30 AM - 3:00 PM", wed: "7:30 AM - 3:00 PM", thu: "7:30 AM - 3:00 PM", fri: "7:30 AM - 5:00 PM", sat: "7:30 AM - 5:00 PM", sun: "7:30 AM - 3:00 PM" },
+      phone: "(760) 961-4885", quote: "A celebrity chef's pastry case, hiding downtown. Empty by mid-morning — go early, don't share.",
+      goodFor: ["oneNight", "couple", "family"] },
+    { name: "Something Sweeter", cuisine: "Ice cream · malts · candy", price: "$", area: "Downtown", breakfast: false, dessert: true, dogPatio: true,
+      hours: { mon: "Closed", tue: "Closed", wed: "Closed", thu: "12:00 PM - 8:00 PM", fri: "12:00 PM - 9:00 PM", sat: "11:00 AM - 9:00 PM", sun: "11:00 AM - 8:00 PM" },
+      phone: "(760) 478-5300", quote: "Scoops, malts, fresh cookies, Italian sodas twenty flavors deep. The after-dinner walk writes itself.",
+      goodFor: ["family", "couple", "oneNight", "event"] },
+    { name: "Kern River Brewing Co. — The Pub", cuisine: "Brewpub · burgers & ale", price: "$$", area: "4-min walk up Sierra Way", breakfast: false, lunch: true, dinner: true, dogPatio: true,
+      hours: { mon: "11:00 AM - 9:00 PM", tue: "11:00 AM - 9:00 PM", wed: "11:00 AM - 9:00 PM", thu: "11:00 AM - 9:00 PM", fri: "11:00 AM - 9:30 PM", sat: "11:00 AM - 9:30 PM", sun: "11:00 AM - 9:00 PM" },
+      phone: "(760) 376-2337", quote: "Where the river crowd lands by evening. Tri-tip sandwich; the dog gets water and a treat.",
+      goodFor: ["oneNight", "couple", "family", "dog", "event"] },
+    { name: "Cheryl's Diner", cuisine: "Classic diner · breakfast all day", price: "$", area: "Downtown · 15-min walk", breakfast: true, lunch: true, dinner: true, dogPatio: true,
+      hours: { mon: "7:00 AM - 7:00 PM", tue: "7:00 AM - 7:00 PM", wed: "7:00 AM - 7:00 PM", thu: "7:00 AM - 7:00 PM", fri: "7:00 AM - 8:00 PM", sat: "7:00 AM - 8:00 PM", sun: "7:00 AM - 8:00 PM" },
+      phone: "(760) 376-6131", quote: "Kernville's kitchen table — biscuits and gravy that mean business.",
+      goodFor: ["oneNight", "family", "dog"] },
+    { name: "Big Blue Bear Cafe", cuisine: "Coffeehouse · breakfast burritos", price: "$", area: "Downtown · 12-min walk", breakfast: true, lunch: true, dogPatio: true,
+      hours: { mon: "7:00 AM - 4:00 PM", tue: "7:00 AM - 2:00 PM", wed: "7:00 AM - 4:00 PM", thu: "7:00 AM - 4:00 PM", fri: "7:00 AM - 4:00 PM", sat: "7:00 AM - 4:00 PM", sun: "7:00 AM - 4:00 PM" },
+      phone: "(760) 376-2327", quote: "The valley's best coffee and cinnamon rolls, in a shady garden patio.",
+      goodFor: ["oneNight", "couple", "family", "dog"] },
+    { name: "The Pizza Barn", cuisine: "Pizza · salad bar · arcade", price: "$$", area: "Downtown · 4-min drive", breakfast: false, lunch: true, dinner: true, dogPatio: true,
+      hours: { mon: "11:00 AM - 9:00 PM", tue: "11:00 AM - 9:00 PM", wed: "11:00 AM - 9:00 PM", thu: "11:00 AM - 9:00 PM", fri: "11:00 AM - 10:00 PM", sat: "11:00 AM - 10:00 PM", sun: "11:00 AM - 9:00 PM" },
+      phone: "(760) 376-1856", quote: "Hand-tossed pies on homemade dough; the arcade corner buys parents twenty quiet minutes.",
+      goodFor: ["oneNight", "family", "dog"] },
+    { name: "Ewings on the Kern", cuisine: "Steaks · river-view deck", price: "$$$", area: "5-min drive", breakfast: false, dinner: true, dogPatio: true, book: true,
+      hours: { mon: "Closed", tue: "Closed", wed: "Closed", thu: "5:00 PM - 9:00 PM", fri: "5:00 PM - 9:00 PM", sat: "5:00 PM - 9:00 PM", sun: "5:00 PM - 9:00 PM" },
+      phone: "(760) 376-2411", quote: "Steaks over the river, the deck at sunset. Book ahead — anniversaries have first claim.",
+      extra: "The Eagle Eye lounge pours most afternoons even when the kitchen's dark.",
+      goodFor: ["couple", "dog"] },
+    { name: "El Rio Mexican & American", cuisine: "Tacos, burritos, combo plates", price: "$", area: "4-min walk, by the brewery", breakfast: false, lunch: true, dinner: true, dogPatio: true,
+      hours: { mon: "11:00 AM - 8:00 PM", tue: "11:00 AM - 8:00 PM", wed: "11:00 AM - 8:00 PM", thu: "11:00 AM - 8:00 PM", fri: "11:00 AM - 8:00 PM", sat: "11:00 AM - 8:00 PM", sun: "11:00 AM - 8:00 PM" },
+      phone: "(760) 376-3246", quote: "Family-run, honest plates, generous portions, easygoing patio tables.",
+      goodFor: ["oneNight", "family", "dog"] },
+    { name: "McNally's Outpost", cuisine: "Burgers & shakes · breakfast till 11", price: "$", area: "Downtown · 4-min drive", breakfast: true, bkTill: 660, lunch: true, dinner: true, dogPatio: true,
+      hours: { mon: "8:00 AM - 7:00 PM", tue: "8:00 AM - 7:00 PM", wed: "8:00 AM - 7:00 PM", thu: "8:00 AM - 7:00 PM", fri: "8:00 AM - 7:00 PM", sat: "8:00 AM - 7:00 PM", sun: "8:00 AM - 7:00 PM" },
+      phone: "(760) 376-2431", quote: "The famous McNally's burger without the drive upriver — thick shakes too.",
+      goodFor: ["oneNight", "family", "dog"] },
+    { name: "Airpark Cafe", cuisine: "Pancakes on the runway", price: "$", area: "5-min drive south", breakfast: true, lunch: true,
+      hours: { mon: "7:00 AM - 3:00 PM", tue: "Closed", wed: "Closed", thu: "7:00 AM - 3:00 PM", fri: "7:00 AM - 3:00 PM", sat: "7:00 AM - 3:00 PM", sun: "7:00 AM - 3:00 PM" },
+      phone: "(661) 500-1588", quote: "Pancakes while little planes taxi past the window — kids and pilots grin.",
+      goodFor: ["family", "oneNight"] },
+    { name: "Johnny McNally's Fairview Lodge", cuisine: "1941 roadhouse steakhouse", price: "$$$", area: "25-min drive upriver", breakfast: false, dinner: true, book: true,
+      hours: { mon: "4:00 PM - 8:00 PM", tue: "Closed", wed: "Closed", thu: "4:00 PM - 8:00 PM", fri: "4:00 PM - 9:00 PM", sat: "4:00 PM - 9:00 PM", sun: "4:00 PM - 8:00 PM" },
+      phone: "(760) 376-2430", quote: "Enormous roadhouse steaks by the water; the canyon drive up is half the occasion.",
+      goodFor: ["couple", "family", "adventure"] },
+    { name: "Nelda's Diner", cuisine: "'50s diner · 100-flavor shakes", price: "$", area: "15-min drive · Lake Isabella", breakfast: true, lunch: true, dinner: true,
+      hours: { mon: "7:00 AM - 8:00 PM", tue: "7:00 AM - 8:00 PM", wed: "7:00 AM - 8:00 PM", thu: "7:00 AM - 8:00 PM", fri: "7:00 AM - 8:00 PM", sat: "7:00 AM - 8:00 PM", sun: "7:00 AM - 8:00 PM" },
+      phone: "(760) 379-8448", quote: "Full country breakfast, milkshake menu two pages deep — the mudslide's the local pick.",
+      goodFor: ["oneNight", "family"] },
+  ],
+  hikes: [
+    { name: "Riverside Park river walk", diff: "Very easy · flat", length: "1–2 mi of riverfront", drive: "In town", dog: true, water: true, shade: true,
+      blurb: "The go-to evening stroll: riverfront lawns, shade trees, picnic tables and BBQs, the stocked fishing stretch in town. Also two free pickleball courts (bring your own net), a basketball court, playground, exercise equipment and restrooms — the whole park was rebuilt after the 2023 flood.",
+      safety: "The north end is a commercial rafting take-out March–July, so watch for boats and buses. No lifeguards — life jackets on kids near the water.",
+      tags: ["oneNight", "family", "couple", "dog"] },
+    { name: "Isabella Peak Trail", diff: "Moderate · short & stout", length: "2.9 mi round trip", drive: "~20 min · above the lake", dog: true, exposed: true,
+      blurb: "A short, honest climb; the whole lake at your feet. Exposed — water, early start.", tags: ["adventure", "couple", "dog"] },
+    { name: "Whiskey Flat Trail", star: true, diff: "Easy start · moderate", length: "Out-and-back, any distance", drive: "2 min · end of Burlando Rd", dog: true, exposed: true,
+      blurb: "The classic river-bank hike, named for the town's gold-rush name. Easy first mile; spring wildflowers.", tags: ["oneNight", "family", "couple", "adventure", "dog"] },
+    { name: "Johnsondale Bridge River Trail", star: true, diff: "Easy–moderate", length: "5.6 mi out-and-back", drive: "35 min upriver", dog: true, exposed: true,
+      blurb: "Cross the footbridge, follow the roaring wild-trout Kern between granite walls. Turn around anytime.", tags: ["couple", "family", "adventure", "dog"] },
+    { name: "Packsaddle Cave Trail", diff: "Moderate–hard", length: "~5 mi round trip", drive: "25 min upriver", dog: true, exposed: true, months: [10,11,12,1,2,3,4,5], closedReason: "heat",
+      blurb: "Climbs to a limestone cave with real stalactites. Headlamp and plenty of water; best October–May.", tags: ["adventure", "dog"] },
+    { name: "Unal Trail", diff: "Easy–moderate loop", length: "3–4.5 mi loop", drive: "40 min up Hwy 155", dog: true, shade: true,
+      blurb: "Shaded interpretive loop in cool pine forest — 'Unal' means bear in Tübatulabal. Relief when the valley bakes.", tags: ["family", "couple", "dog"] },
+    { name: "Sunday Peak", diff: "Moderate", length: "3.4 mi round trip", drive: "45 min", dog: true, shade: true, months: [5,6,7,8,9,10], closedReason: "snow",
+      blurb: "Best summit-per-effort around: shaded climb to boulder-top valley views. Great near sunset; road is seasonal.", tags: ["adventure", "couple", "dog"] },
+    { name: "Trail of 100 Giants", star: true, diff: "Easy · paved", length: "1.3 mi of loops", drive: "1½ hr scenic drive", dog: true, dogNote: "leashed dogs welcome — unlike the parks", shade: true, months: [6,7,8,9,10], closedReason: "snow",
+      blurb: "The famous one: 1,500-year-old giant sequoias without national-park crowds. $12/vehicle; road closed by snow ~Nov–May.", tags: ["family", "couple", "dog"] },
+    { name: "Salmon Creek Falls", diff: "Moderate scramble", length: "~1.5 mi", drive: "~30 min upriver", dog: true, water: true, months: [4,5,6,7], closedReason: "water",
+      blurb: "A 60-foot waterfall in a granite gorge with swimming holes. Best late spring; watch your footing.", tags: ["adventure", "couple", "dog"] },
+    { name: "Cannell Meadow Trail (lower)", diff: "Moderate out-and-back", length: "First 1–3 mi", drive: "5 min north", dog: true, exposed: true,
+      blurb: "Historic stock trail switchbacking above town — big valley panoramas early. Shadeless; go early.", tags: ["adventure", "dog"] },
+    { name: "Sherman Peak", diff: "Moderate · high country", length: "5 mi round trip", drive: "1.5 hr · seasonal road", dog: true, shade: true, months: [6,7,8,9,10], closedReason: "snow",
+      blurb: "Starts near 9,000 ft, looks at Mt. Whitney and the Great Western Divide. Summer–fall only.", tags: ["adventure", "dog"] },
+  ],
+  fishing: [
+    { name: "Right in town — Riverside Park stretch", detail: "The stocked section runs Riverside Park down to Powerhouse #3 — walkable from the Lodge. Spinners, salmon eggs, or PowerBait for planted rainbows." },
+    { name: "The Lodge backyard", detail: "Guests get private access to our own stretch of the Kern. Ask the front desk where fish have been holding this week." },
+    { name: "Upriver pullouts (Mtn 99)", detail: "Twenty road miles of river between town and Johnsondale Bridge, dotted with pullouts. Drive until you find water you like." },
+    { name: "Johnsondale Bridge wild trout water", detail: "Above the bridge: barbless artificials only for native Kern River rainbows — special limits, catch-and-release in winter. The premier fly water.", tags: ["adventure"] },
+    { name: "Lake Isabella", detail: "15 minutes south: bass at Rocky Point and French Gulch, crappie in the South Fork arm, catfish at night, stocked trout in cooler months." },
+  ],
+  fishingNote: "Everyone 16+ needs a California license — buy at the CDFW site or shops in town. Two free fishing Saturdays yearly, usually early July and early September. Rules change above Johnsondale Bridge. The river rules apply with a rod: wade shin-deep, never past your knees in spring flows.",
+  rafting: [
+    { name: "Sierra South", phone: "(760) 376-3745", season: "Roughly Mar–Nov", months: [3,4,5,6,7,8,9,10,11], detail: "Forty years in the middle of town. Family favorite: Lickety Split — a splashy hour through town, kids ~8 up. Trips to Class V, kayak lessons, paddleboards." },
+    { name: "Whitewater Voyages", phone: "(800) 400-7238", season: "Apr–Sep", months: [4,5,6,7,8,9], detail: "Store right on Kernville Rd. Full menu from beginner Lickety Split runs to the legendary Class V Forks of the Kern." },
+    { name: "Kern River Outfitters", phone: "(760) 376-3370", season: "Apr–Labor Day", months: [4,5,6,7,8,9], detail: "Longtime Kern outfitter, now run by Momentum River Expeditions. Signature trip: the two-day Lower Kern safari. Book at kernrafting.com." },
+    { name: "Mountain & River Adventures", phone: "(760) 376-6553", season: "Call to confirm", detail: "Riverside campground plus family rafting, climbing, and mountain biking. Ring first — their schedule moves around." },
+  ],
+  raftingNote: "Spring runoff (roughly April–June) is big-water season — thrilling with a pro outfitter, dangerous without one. Let the folks with the boats pick your line.",
+  deepCuts: [
+    { name: "The Cannell Plunge", cat: "Mountain bike · experts", tags: ["adventure"], dog: false, months: [5,6,7,8,9,10,11], closedReason: "snow",
+      blurb: "The ride folks fly in for: ~25 miles of singletrack from 9,000 feet, ending in the 8-mile, 5,000-foot Plunge. An IMBA Epic.",
+      practical: "Late May–fall · Sierra South shuttles from ~$75, (760) 376-3745 · bring your own bike, plan up to 8 hours",
+      safety: "Black diamond, remote, no bail-outs — genuinely experts only." },
+    { name: "Remington Hot Springs", star: true, cat: "Riverside stone tubs · ~35 min", tags: ["couple", "adventure"], dog: true, mapq: "Remington Hot Springs Trailhead Bodfish CA",
+      blurb: "Hand-built stone tubs on the riverbank, honest hot mineral water, the Kern rolling past. Free and rustic.",
+      practical: "~35 min south via Bodfish and Old Kern Canyon Rd, then a steep quarter-mile trail · the local move is dawn, before the crowd — campers at Hobo Campground walk the river trail in for first light · pack out everything",
+      safety: "Clothing-optional is the long custom — families should know before they go. Never wade from the tubs when the river's high. (Miracle Hot Springs is closed — don't go looking.)" },
+    { name: "The river the locals swim", cat: "Beaches, floats & jump rocks", tags: ["family", "couple"], dog: true, water: true, months: [7,8,9],
+      closedReason: "water", mapq: "Riverside Park Kernville CA", star: true,
+      blurb: "Low water (late July–September) turns the river friendly: the bridge-to-park tube float, sandy flats at Chico Flat and Corral Creek, Goldledge's jump rock — and Alligator Rock at Limestone, genuine local shorthand, late summer only: a Class IV rapid waits just below the old gator.",
+      practical: "Float: tube and life jacket, Riverside Park, moderate summer flows only · Chico Flat 4–5 mi up Sierra Way, Corral Creek 7, Goldledge 10, Limestone/Alligator Rock ~19 · all free · weekday mornings quietest · free life-jacket loaner stations around the valley",
+      safety: "Straight talk: the Kern has taken over 300 lives since 1968 — the sign at the canyon mouth keeps count. The flow, not the look, decides if it's safe. Life jackets on everyone, kids within arm's reach, never near rapids, never at Alligator Rock in spring water." },
+    { name: "Kayak school & SUP", cat: "Learn to paddle", tags: ["adventure", "family", "couple"], dog: false, water: true, months: [3,4,5,6,7,8,9,10,11], closedReason: "season",
+      blurb: "Sierra South has taught paddling 40+ years — SoCal's oldest kayak school. A rank beginner grins in an eddy by lunch.",
+      practical: "11300 Kernville Rd, open daily · (760) 376-3745 · gentle paddleboard days on Lake Isabella too · book ahead in summer" },
+    { name: "Kern Valley Museum & the movie past", cat: "Free · Thu–Sun 10–4", tags: ["family", "couple"], dog: false, wdays: [0,4,5,6], hoursOpen: 600, hoursClose: 960, shade: true,
+      blurb: "Old Kernville had its own Hollywood movie street — John Wayne shot here a dozen times, including Stagecoach's river crossing.",
+      practical: "49 Big Blue Rd, two minutes from anywhere · Thu–Sun 10–4 · free, donations welcome · ask about the old town under the lake" },
+    { name: "Silver City Ghost Town", cat: "Creaky & wonderful", tags: ["family"], dog: true, wkOnlyWinter: true, shade: true,
+      blurb: "Twenty-one genuine old buildings — cabins, a jail, a chapel — stuffed with antiques. They say a few residents never checked out.",
+      practical: "Bodfish, ~20 min · mid-May–mid-Oct daily 10–4, winter weekends only · call ahead (760) 379-5146" },
+    { name: "Gold panning at Keyesville", cat: "BLM recreational mining", tags: ["family", "adventure"], dog: true, water: true,
+      blurb: "The valley's first gold rush started here in the 1850s; 400 acres still open for regular folks to swirl a pan.",
+      practical: "Free, year-round, 15–20 min south · hand pans and small sluices OK, no motors · late summer's low water is prime · grab a pan at the hardware store",
+      safety: "Slick footing, deceptive current — keep little ones shallow. Busy OHV area; mind the trails." },
+    { name: "Stargazing & star parties", cat: "Some of SoCal's darkest skies", tags: ["family", "couple", "adventure"], dog: true, night: true,
+      blurb: "On a moonless night the Milky Way spills across the canyon. The Kern Valley Astronomy Club throws free star parties with the big telescopes.",
+      practical: "Star parties at the Fairview Helispot (~25 min north) the Saturday nearest each new moon · DIY: any pullout north of town, or Sherman Pass Rd in summer · dress warm",
+      safety: "Deer and sharp curves after dark — drive slow." },
+    { name: "The Sporty", cat: "Kernville's real dive bar", tags: ["couple", "adventure", "event"], dog: true, adult: true,
+      hours: { mon: "10:00 AM - 2:00 AM", tue: "10:00 AM - 2:00 AM", wed: "10:00 AM - 2:00 AM", thu: "10:00 AM - 2:00 AM", fri: "10:00 AM - 2:00 AM", sat: "10:00 AM - 2:00 AM", sun: "10:00 AM - 11:00 PM" },
+      blurb: "When the brewery fills with day-trippers, the river guides drift to The Sportsman's Inn — pool, cornhole, free popcorn, karaoke with DJ Kowboy.",
+      practical: "11123 Kernville Rd, walkable · open ~10 AM–2 AM (till 11 Sundays) · Sunday live music 2–5 · dive-bar prices · dog-friendly patio" },
+    { name: "Indian taco Saturdays at Nuui Cunni", cat: "Fry bread & first peoples", tags: ["family", "couple"], dog: false, wdays: [6], hoursOpen: 660, hoursClose: 840, shade: true, mapq: "Nuui Cunni Cultural Center Lake Isabella CA",
+      blurb: "Saturdays 11–2 the Nuui Cunni Inter-Tribal Cultural Center fries Indian tacos — a small free museum of the Tübatulabal, Kawaiisu, and Paiute peoples.",
+      practical: "Hwy 155 at French Gulch, 15 min · center open Wed/Fri/Sat ~10–2 · free admission, taco money keeps the lights on · go before 1 — they sell out · same grounds as the Saturday farmers' market" },
+    { name: "Sunset prime rib at Paradise Cove", cat: "Lakeshore steakhouse", tags: ["couple", "family"], dog: false, wdays: [0,3,4,5,6], hoursOpen: 1020, hoursClose: 1260, dinner: true,
+      blurb: "The old-school lakeshore dinner house — same families, same tables, for decades. Ask for a lake view before sunset.",
+      practical: "10700 Hwy 178, ~15 min · dinner only, roughly Wed–Sun 5–9 · call (760) 379-2719 — hours shorten off-season" },
+    { name: "Old Kernville, rising from the lake", cat: "Our own Atlantis", tags: ["family", "couple"], dog: true, mapq: "Wofford Heights CA",
+      blurb: "The original town — born Whiskey Flat, flooded in 1953 — sleeps under Lake Isabella; in drought years its foundations walk back out.",
+      practical: "North arm near Wofford Heights, 10 min · only visible in low-water years — ask the museum docents to mark your map",
+      safety: "Soft mud near the waterline, and every artifact is protected history — photograph, never pocket." },
+    { name: "South Creek Falls & the Brush Creek slides", cat: "The free waterpark", tags: ["family", "adventure"], dog: true, water: true, months: [5,6,7,8], closedReason: "water",
+      blurb: "A 120-foot roadside waterfall, and a mile of glacier-polished granite chutes valley families just call 'the slides.'",
+      practical: "South Creek Falls: turnout on Mtn 99, ~35 min, zero walking, best May–June · Brush Creek: gravel lot at the Sherman Pass junction, ~40 min, scramble upstream, best mid-June–August",
+      safety: "Never climb the falls face — wet granite has killed scramblers. At the slides, keep kids to the obvious pools and stay out entirely at high water." },
+    { name: "Seven Teacups overlook", cat: "Look, don't slide", tags: ["adventure"], dog: true, months: [4,5,6,9,10], closedReason: "water", mapq: "Johnsondale Bridge Kernville CA",
+      blurb: "A rough 4-mile round trip to a rim view over seven carved granite bowls — the most photogenic water in the drainage.",
+      practical: "Park near Johnsondale Bridge, ~40 min north · use-trail with a creek crossing · best at low flows, spring and fall",
+      safety: "We mean this one: stay on the rim. People have died in those cups — canyoneers exit by rappel. The overlook gives you the postcard without the ropes." },
+    { name: "Just Outstanding — the other legendary descent", cat: "MTB · Greenhorn gold", tags: ["adventure"], dog: false, months: [5,6,7,8,9,10,11], closedReason: "snow",
+      blurb: "The Greenhorns' loamy flow trail — 5,000 vertical feet so beloved the brewery named its flagship IPA after it.",
+      practical: "Above Wofford Heights toward Alta Sierra, ~40 min · Sierra South, (760) 376-3745, arranges shuttles roughly May–Nov · free to ride · late October, when the black oaks go gold, is when locals ride it",
+      safety: "Fast bench-cut with exposure, no cell most of the way — carry a tube and layers; you drop 4,000 feet of climate." },
+    { name: "Bald Mountain Lookout, 9,382 ft", cat: "Climb a real fire tower", tags: ["couple", "family", "adventure"], dog: true, months: [6,7,8,9], wdays: [0,1,4,5,6], shade: true, closedReason: "snow",
+      blurb: "A staffed 1955 fire lookout you can climb, chatting with the lookout over a thousand square miles — Whitney to the Domelands.",
+      practical: "Off Sherman Pass Rd + 2 mi of dirt (fine for most cars, dry weather), ~1¼ hr · staffed Thu–Mon 9:30–6 in summer · free · four visitors at a time",
+      safety: "High altitude, afternoon thunderstorms in monsoon season, no cell — confirm Sherman Pass is open first." },
+    { name: "Kern Slabs climbing", cat: "Granite · 10 min north", tags: ["adventure"], dog: true, exposed: true,
+      blurb: "A friendly granite dome off Sierra Way — slab classics like the Chouinard Special, 5.7–5.9, honest bouldering below.",
+      practical: "Pullout 4.7 mi north on Sierra Way · best fall–spring, or 7–10 AM summer · Sierra South guides if you want instruction",
+      safety: "Rattlesnake country at the base, especially spring. Bring and know your own gear." },
+  ],
+  dayTrips: [
+    { name: "Sherman Pass Scenic Drive", star: true, drive: "1¼ hr to the 9,200-ft pass", tags: ["couple", "adventure"], dog: true, months: [6,7,8,9,10], closedReason: "snow",
+      blurb: "River rock to red fir in an hour. Half the southern Sierra from the 9,200-foot overlook.",
+      practical: "Free · closed by snow ~Nov–May (ranger district (760) 376-3781) · no gas past Kernville · push on to Kennedy Meadows: Grumpy Bear's 'all-you-can-eat' breakfast is one pancake, a foot across (closed Mondays) — and in late May–June the General Store porch applauds every dusty PCT hiker walking in at mile 702",
+      safety: "Winding, no cell service, open-range cattle at dusk — full tank, water, take it slow." },
+    { name: "Dome Rock & The Needles", drive: "~1½ hr, Western Divide Hwy", tags: ["adventure", "couple"], dog: true, months: [6,7,8,9,10], closedReason: "snow",
+      blurb: "A five-minute stroll onto a huge granite bald staring straight at The Needles.",
+      practical: "Free · snow-closed ~Nov–May · a few miles south an unmarked pullout hides Nobe Young Falls — a half-mile scramble stands you behind a 100-foot curtain of water (flows best May–July) · the old Ponderosa Lodge burned in 2023 — NO food or fuel up there, bring everything",
+      safety: "No railings on Dome Rock — keep kids and dogs well back. Needles trail unmaintained past the saddle." },
+    { name: "Lake Isabella on the water", drive: "10–25 min", tags: ["family", "adventure"], dog: true, water: true, months: [4,5,6,7,8,9,10], closedReason: "season",
+      blurb: "Eleven miles of blue water — pontoons, kayaks, and jet skis from the marinas; kiters off the Auxiliary Dam are the free show.",
+      practical: "French Gulch Marina or Dean's North Fork in Wofford Heights · rentals roughly Apr–Oct · every craft needs a Kern County lake permit (sold at the marinas) · reserve pontoons ahead",
+      safety: "Afternoon winds are famous — mornings are calmest." },
+    { name: "Walker Pass — walk the PCT", drive: "50 min east", tags: ["adventure", "couple"], dog: true, months: [10,11,12,1,2,3,4,5], exposed: true, closedReason: "heat",
+      blurb: "Step onto the Mexico-to-Canada trail where the Sierra meets the desert — pinyons, Joshua trees, empty ridgelines.",
+      practical: "Free · best Oct–May · trailhead at the BLM campground off Hwy 178 · hike north toward Owens Peak as far as legs allow · spring brings the desert bloom",
+      safety: "No water on trail, fierce afternoon winds, rattlesnakes in warm months." },
+    { name: "Red Rock Canyon State Park", drive: "~1¼ hr via Hwy 178 & 14", tags: ["family", "everyone"], dog: false, months: [10,11,12,1,2,3,4], exposed: true, closedReason: "heat",
+      blurb: "Painted desert cliffs that starred in half the Westerns ever filmed — best an hour before sunset.",
+      practical: "$6/vehicle, cash or check · sunrise–sunset · blazing in summer, best Oct–Apr · loops beautifully with Walker Pass: mountains out, desert home",
+      safety: "Carry water; stay out of washes when storms threaten." },
+    { name: "Audubon Kern River Preserve", drive: "25 min · Weldon", tags: ["couple", "family"], dog: false, shade: true,
+      blurb: "Cottonwood forest ringing with birdsong in spring; staging ground for the great turkey vulture flights each fall.",
+      practical: "Hwy 178 in Weldon · free, dawn to dusk · spring and fall are prime · the September vulture festival is the valley's quirkiest party",
+      safety: "Bird early in summer — midday heat is stout." },
+    { name: "Tehachapi Loop & depot town", drive: "~1½ hr", tags: ["family", "everyone"], dog: true, shade: true,
+      blurb: "Mile-long freights corkscrew over their own tails on the 1876 Loop — three dozen trains a day. Apple farms in fall.",
+      practical: "Free overlook near Keene · depot museum Thu–Mon 11–4, free · afternoons run busiest for trains",
+      safety: "View from the marked overlook only — stay off railroad property." },
+    { name: "Bakersfield Basque dinner houses", drive: "~1 hr 10 min down the canyon", tags: ["couple", "everyone"], dog: false, shade: true,
+      blurb: "Long tables at Wool Growers or the revived Noriega's: soup, beans, pickled tongue, and lamb before you've ordered — the old sheepherder's welcome.",
+      practical: "Wool Growers (661) 327-9584, traditionally closed Sundays · Noriega's books on OpenTable · pour a Picon punch for Buck Owens — the Crystal Palace closed in 2025",
+      safety: "The canyon highway is narrow — drive it in daylight for the pretty version." },
+    { name: "Bodfish–Caliente backroad", drive: "30–75 min", tags: ["couple", "adventure"], dog: true,
+      blurb: "The old stage route through Havilah, the county's original 1866 seat. The 2024 fire took most of the old town; the country is greening.",
+      practical: "Free, year-round · no services between Bodfish and Caliente · pairs with the Tehachapi Loop",
+      safety: "Narrow curves; be gentle around residents still rebuilding." },
+    { name: "Wind Wolves Preserve", drive: "~1¾ hr", tags: ["family", "adventure"], dog: false, months: [2,3,4], exposed: true, closedReason: "season",
+      blurb: "Ninety-three thousand free acres where Sierra, Coast Range, and Mojave meet — wildflower hillsides, condors, tule elk.",
+      practical: "Free · daily 7–4 · best Feb–Apr for flowers · picnic areas and easy trails",
+      safety: "Hot and exposed May–Oct — go at opening." },
+    { name: "Freeman Creek Grove — the connoisseurs' sequoias", drive: "~1¼ hr via Lloyd Meadows Rd", tags: ["couple", "adventure", "family"], dog: true, months: [6,7,8,9,10], shade: true, closedReason: "snow",
+      blurb: "The largest unlogged sequoia grove outside any national park — 800 monarchs, likely all to yourself.",
+      practical: "Free, no permits · summer–fall · dirt roads fine for cars when dry, snowed out in winter · a short accessible path reaches the Bush Tree, where a president signed the sequoias' protection in 1992",
+      safety: "Remote — full tank, water for the 6,000-ft climb out, and don't linger under fire-killed snags on windy days." },
+    { name: "Sequoia National Park (the honest truth)", drive: "~2¾ hr each way", tags: ["adventure"], dog: false, dogNote: "dogs not allowed on park trails",
+      blurb: "Six hours of driving for the Sherman Tree. Honest truth: the Trail of 100 Giants scratches the itch in half the time — save the park for its own trip.",
+      practical: "$35/vehicle · if you must: leave before dawn, Sherman Tree parking fills by late morning",
+      safety: "A long mountain-driving day — share the wheel." },
+  ],
+  shops: {
+    intro: "Retail therapy? Say less. Mosey on down — western wear to that one-of-a-kind thrifted item.",
+    groups: [
+      { title: "Gifts, clothing & more", list: ["The Westerner", "Dress Your Soul", "Tuttles Emporium", "Kern Valley Jewelry"] },
+      { title: "Thrift & antiques", list: ["La De Dah", "Revibe", "Buzzard Gulch", "The Motherlode"] },
+    ],
+  },
+  anglerNotes: [
+    { t: "Match the hatch", d: "Flip rocks, watch what bugs flutter at the shore — that's what the trout eat this week. Mimic those critters." },
+    { t: "Foam is home", d: "That carpet of foam between two rocks? Cast there. Foam collects in calm seams — a conveyor belt of snacks with a roof." },
+    { t: "Beat the lake wind", d: "Isabella's afternoon winds are famous — 'blown off the lake' is a real phrase. Go early; from the bank, work rocky coves." },
+    { t: "The town under the lake", d: "The lake bottom was once old Kernville itself, moved when the dam went in. In drought years, remnants surface. The museum tells it best." },
+  ],
+  wildlife: [
+    { name: "Black bear", facts: "California's only bear — often cinnamon-colored. Shy, after your cooler, not you.", safety: "The official Forest Service guidance is just above, in the callout — that's their call, not ours." },
+    { name: "Mule deer", facts: "Big ears, calm faces, out at dawn and dusk by the river.", safety: "Never feed. Drive slow at dusk — where there's one deer, there's a second." },
+    { name: "Western rattlesnake", facts: "The valley's only venomous snake, sunning April–October. The rattle is a courtesy, not a threat.", safety: "Closed shoes, watch where you step and reach, give any snake six feet. Bites are rare — stay calm, keep still, get to an ER." },
+    { name: "Bald & golden eagles", facts: "Bald eagles fish the river November–March; goldens ride the ridges year-round.", safety: "Binoculars, distance, and never toss food to a raptor. That big dark circler is usually a turkey vulture." },
+    { name: "Wild turkeys", facts: "Flocks strut the oak woodlands; spring toms gobble like they own the place.", safety: "Harmless if unfed. Give displaying toms space; they can get pushy." },
+    { name: "Coyotes & the quiet ones", facts: "You'll hear coyotes more than see them. Bobcats slip by at dusk; lions are almost never seen.", safety: "Keep dogs leashed at dawn/dusk. Lion sighting: stand tall, look big, make noise, back away — never run." },
+  ],
+  bearLine: "Kernville sits inside Sequoia National Forest — real bear country. Here's the Forest Service's own official guidance, not our paraphrase of it:",
+  bearLink: "https://www.fs.usda.gov/sites/nfs/files/r05/sequoia/publication/Bears%202025.pdf",
+  bearLinkLabel: "Sequoia National Forest — official bear safety guide (PDF)",
+  seasons: {
+    winter: "Mild and quiet — sunny 50° days, frosty nights, snow dustings gone by lunch. Bald eagles fish the river. For real snow, Alta Sierra is 40 minutes up Hwy 155 — but it's snow-dependent and has sat closed some winters, so call before you drive up.",
+    spring: "Wildflowers, green hills, a roaring river. April–June snowmelt is big-water season — raft with the pros, admire from shore otherwise.",
+    summer: "Hot and sunny — valley afternoons flirt with 100°. Hike at sunrise, swim smart mid-day (life jackets, always), pool at golden hour, brewery after.",
+    fall: "The local's favorite: warm days, crisp nights, golden cottonwoods, thin crowds — and thousands of vultures streaming overhead.",
+  },
+  snowAnswer: "A little, occasionally — we're at 2,670 ft, so dustings melt by lunch. The nearest real snow is 40 minutes up Hwy 155 at Alta Sierra, but it only runs in good snow years and has been closed for whole winters — check before you commit to the drive. Carry chains after storms.",
+  events: [
+    { id: "wfd", name: "Whiskey Flat Days", typicalMonth: 2, dateShort: "Pres. Day wknd", cadence: "annual", presidents: true,
+      blurb: "Kernville turns back into a Gold Rush boomtown — parade, gunfights, carnival, costumed locals. Four days, Friday–Monday." },
+    { id: "rodeo", name: "Wild West Daze Rodeo", typicalMonth: 2, dateShort: "same wknd", cadence: "annual", presidents: true,
+      blurb: "Bull riding, barrel racing, and team roping at McNally Arena — the rowdy heart of Whiskey Flat weekend." },
+    { id: "derby", name: "Isabella Lake Fishing Derby", typicalMonth: 3, dateShort: "late Mar", cadence: "annual", approx: [3, 20, 3, 31],
+      blurb: "The world's biggest amateur trout derby — tagged fish worth serious prize money." },
+    { id: "trout", name: "Kern River Trout Fest", typicalMonth: 4, dateShort: "mid-Apr", cadence: "annual", approx: [4, 10, 4, 20],
+      blurb: "Casting clinics, fly tying, and kids' activities at Riverside Park." },
+    { id: "krf", name: "Kern River Festival", typicalMonth: 4, dateShort: "April", cadence: "annual", approx: [4, 1, 4, 30],
+      blurb: "Kayakers race the rapids — slalom, SUP, extreme racing. On-again-off-again; ask the desk if it's on." },
+    { id: "sumfest", name: "Kernville Summer Festival", months: [6, 7, 8, 9], typicalMonth: 7, dateShort: "2nd Sat", cadence: "seasonal", nth: [6, 2],
+      blurb: "Once a month all summer, downtown turns into a small-town street festival." },
+    { id: "july4", name: "Fourth of July Fireworks", typicalMonth: 7, dateShort: "Jul 4", cadence: "annual", fixed: [7, 4],
+      blurb: "Fireworks off Engineer's Point light the whole lake — watch from shore or a boat." },
+    { id: "vulture", name: "Autumn Nature & Vulture Festival", typicalMonth: 9, dateShort: "late Sep", cadence: "annual", approx: [9, 20, 9, 30],
+      blurb: "Tens of thousands of turkey vultures funnel through — one of North America's great migrations." },
+    { id: "cars", name: "Kernville River Run Car Show", typicalMonth: 10, dateShort: "early Oct", cadence: "annual", approx: [10, 1, 10, 10],
+      blurb: "Fifty-plus years of classic cars filling Riverside Park — chrome by the river." },
+    { id: "xmas", name: "Christmas in Kernville", months: [11, 12], typicalMonth: 11, dateShort: "late Nov on", cadence: "seasonal", approx: [11, 25, 12, 31],
+      blurb: "Tree lighting, toy-drive hot rods, Santa, and a candlelight stroll at Circle Park." },
+    { id: "market", name: "Saturday Farmers' Market", cadence: "weekly", weekday: 6, start: 540, end: 840, dateShort: "9–2",
+      blurb: "Local honey, produce, beans, and seeds at the Nuui Cunni cultural center." },
+    { id: "music", name: "Live music at the brewery", cadence: "weekly", weekday: 5, start: 1080, end: 1290, dateShort: "eve",
+      blurb: "Most Friday nights the Pub pairs its beer with live tunes — arrive before the porch fills." },
+    { id: "sporty-sun", name: "Sunday live music at The Sporty", cadence: "weekly", weekday: 0, start: 840, end: 1020, dateShort: "2–5", adult: true,
+      blurb: "The local church of choice — Sunday afternoon live music at the Sportsman's Inn." },
+  ],
+  rooms: [
+    { name: "River View Room", features: "King bed, fireplace, and a rear balcony hanging right over the Kern." },
+    { name: "Mountain View King", features: "King bed and fireplace facing the Greenhorns." },
+    { name: "Mountain View King + Single", features: "King plus a single — the small-family favorite." },
+    { name: "Creekview Kitchenette", features: "King bed, fireplace, and a little kitchen of your own." },
+    { name: "King Studio", features: "Cozy king with electric fireplace and smart TV; up a flight of stairs." },
+    { name: "King & Couch Suite", features: "King bed with a leather couch. Room 118 is the one with the jacuzzi tub." },
+    { name: "Two-Unit Shared Balcony", features: "Two adjoining rooms, one private balcony — book both, bring everyone." },
+  ],
+  roomHelp: [
+    { q: "Heat & A/C", a: "Each room has its own unit — set it how you like. If it argues with you, call the desk: (760) 376-3733." },
+    { q: "Fireplace", a: "Most rooms have one — the desk will walk you through yours (and swap in a space heater if yours is feeling stubborn)." },
+    { q: "Coffee", a: "Maker and fixings are in your room; the desk has refills. For the fancy stuff, Big Blue Bear opens at 7." },
+    { q: "Anything else acting up?", a: "Call or stop by the desk — (760) 376-3733. We'd rather fix it now than have it bug you all night." },
+  ],
+  story: "A lodge under these pines since the 1950s, in the same family's care since 2003. Eight quiet acres, our own stretch of the Kern, the only pool in Kernville with a river view. Old-timers say celebrities hid out here. Everybody deserves to.",
+  policies: [
+    "Check-in 3 PM · checkout 11 AM — keys in the box by the front office",
+    "Front desk: Sun–Thu 11–5, Fri–Sat 10–6 — call anytime",
+    "Dogs welcome in select rooms — $15/night, declare when booking",
+    "No smoking anywhere on property",
+    "Cancel 7+ days ahead to avoid charges",
+    "Walk-in rate today? Ask the desk or check pineskernville.com",
+  ],
+  practical: {
+    ranger: "Kern River Ranger District, 11380 Kernville Rd — (760) 376-3781 (Mon–Fri 8–4:30; daily in summer). The truth about trails and roads.",
+    roads: "Highway & chain conditions, Hwys 155/178: 1-800-427-7623",
+    er: "Kern Valley Hospital, 6412 Laurel Ave, Lake Isabella — (760) 379-2681. 24-hour ER, ~10 minutes south.",
+    lateFood: "After 9 PM the valley's honest answer is Taco Bell, Lake Isabella (till 1 AM, 2 AM Fri–Sat) or the Vons hot deli till 11. Kernville itself turns in early.",
+    gas: "No verified 24-hour pump in the valley — fuel up before evening. Vons (6 AM–11 PM) covers late supplies.",
+    pharmacy: "Mesa Clinical Pharmacy by the hospital, weekday hours — the Rite Aid closed in 2025. Plan refills ahead.",
+    grocery: "Vons, 5610 Lake Isabella Blvd — 6 AM–11 PM daily.",
+  },
+  ask: [
+    { topic: "Food & drink", q: "Where should we eat breakfast?", k: "morning eggs pancakes coffee cafe diner breakfast",
+      a: "Cheryl's serves it all day from 7. Big Blue Bear: best coffee and burritos from 7. Airpark does runway pancakes; McNally's Outpost flips breakfast till 11." },
+    { topic: "Food & drink", q: "What are you hungry for?", k: "dinner tonight eat food restaurant hungry lunch",
+      a: "Burgers and a local ale: the brewery, 4 minutes up the road. Pizza: Pizza Barn. Tacos: El Rio. A steak over the river: Ewings (Thu–Sun) — book ahead. Now knows what's open this minute." },
+    { topic: "Food & drink", q: "Best spot for a date night?", k: "romantic anniversary couple fancy sunset dinner date",
+      a: "Ewings on the Kern at sunset — ask for the deck, call ahead. Or the 25-minute canyon drive to Johnny McNally's, the 1941 roadhouse." , dateNight: true },
+    { topic: "Food & drink", q: "Where's the local beer?", k: "brewery beer ale ipa drinks bar",
+      a: "Kern River Brewing Co. — four minutes' walk, dogs welcome, and the IPA has medals behind the bar. The Backyard across the way has the lawn and flatbreads." },
+    { topic: "Food & drink", q: "Quick dinner with kids?", k: "children family fast casual kids eat",
+      a: "Pizza Barn — pies, salad bar, arcade corner. McNally's Outpost does burgers and thick shakes with outdoor tables." },
+    { topic: "The river", q: "Is the river safe to swim?", k: "swim swimming water safe kids float tube",
+      a: "Respect it — snowmelt: fast, cold, stronger than it looks, worst April–June. Late summer has mellow stretches; ask the desk which. Life jackets on everyone. The pool has the river view and no current." },
+    { topic: "The river", q: "Who takes us rafting?", k: "raft rafting whitewater guide trips kayak",
+      a: "Sierra South, Whitewater Voyages, Kern River Outfitters. Lickety Split is the family run — splashy, an hour, kids ~8 up. Experts ask about the Forks. Details in Explore." },
+    { topic: "The river", q: "Do we need a fishing license?", k: "fishing license permit legal fish",
+      a: "Anyone 16+, yes — minutes online at the CDFW site or shops in town. Two free fishing Saturdays yearly, usually early July and early September. Special rules above Johnsondale Bridge." },
+    { topic: "The river", q: "Where are the fish biting?", k: "fish fishing trout spots where bite",
+      a: "The stocked stretch, Riverside Park to Powerhouse #3 — walkable. Guests also get our private backyard stretch; ask the desk. Fly folks: above Johnsondale Bridge." },
+    { topic: "Trails & views", q: "An easy walk before dinner?", k: "easy walk stroll flat short evening",
+      a: "Riverside Park's riverfront paths, or the first flat mile of Whiskey Flat Trail from Burlando Road. Both fine in sandals." },
+    { topic: "Trails & views", q: "Best hike with a big view?", k: "view summit peak sunset vista best hike",
+      a: "Sunday Peak — short shaded climb, boulder-top views, gorgeous near sunset. Serious legs and a summer road can have Sherman Peak and see Mt. Whitney." },
+    { topic: "Trails & views", q: "Can we see giant sequoias?", k: "sequoia redwood big trees giants 100",
+      a: "Trail of 100 Giants — about 33 miles north, but mountain road, so give it an hour and a half. Paved, easy, 1,500-year-old trees, leashed dogs welcome. $12 a car. Road snow-closed roughly Nov–May." },
+    { topic: "Trails & views", q: "A waterfall? A cave?", k: "waterfall falls cave packsaddle salmon creek",
+      a: "Both. Salmon Creek Falls drops 60 feet into a granite gorge (late spring prime). Packsaddle Cave has real stalactites — headlamps, water, best Oct–May." },
+    { topic: "Critters", q: "Are the bears dangerous?", k: "bear bears black safety scared attack",
+      a: "Shy, and after your cooler, not you. Don't feed, don't run, no food on the balcony. See one? Make noise, look big, back away — tell the desk." },
+    { topic: "Critters", q: "What about rattlesnakes?", k: "snake rattlesnake bite venomous",
+      a: "Around in warm months, sunning on rocks. Closed shoes, watch where you step and reach, give six feet. The rattle is a courtesy — thank them and walk around." },
+    { topic: "Critters", q: "What birds are those?", k: "birds eagle vulture hawk turkey watching",
+      a: "Bald eagles fish the river November–March. Big dark circlers are usually turkey vultures — late September brings thousands on migration. Wild turkeys strut the roadsides." },
+    { topic: "Weather & seasons", q: "Does it snow here?", k: "snow winter cold sled chains ski",
+      a: "A dusting now and then at 2,670 feet — gone by lunch. The real stuff is up Hwy 155 at Alta Sierra, 40 minutes — but it's snow-dependent and some winters it never opens, so call ahead. Carry chains after storms." },
+    { topic: "Weather & seasons", q: "How hot does summer get?", k: "hot heat summer temperature 100",
+      a: "Valley afternoons flirt with 100°. The playbook: hike at sunrise, river or pool mid-day (life jackets on the river, always), brewery when shadows get long." },
+    { topic: "Weather & seasons", q: "Best time of year to visit?", k: "best month season visit when fall spring",
+      a: "Locals say fall — warm days, crisp nights, golden cottonwoods, thin crowds. Spring: wildflowers and big water. Summer: festivals. Winter: the quiet secret." },
+    { topic: "The Lodge", q: "What's the Wi-Fi? The pool code?", k: "wifi wi-fi password internet pool code gate",
+      a: "Network: Whispering Pines. Password: Kernville. Pool gate: C1278 — towels at the desk. Tap-to-copy lives on Now and The Lodge." },
+    { topic: "The Lodge", q: "How does the fireplace work?", k: "fireplace fire heat ac air conditioning thermostat room",
+      a: "Most rooms have one, and they vary — the desk will walk you through yours. Same for A/C: each room has its own unit; call if it argues with you." },
+    { topic: "The Lodge", q: "Do you serve breakfast?", k: "breakfast included continental morning food lodge",
+      a: "No — on purpose. Coffee's in your room, and Kernville's breakfast spots are minutes away doing it better. Cheryl's is the classic." },
+    { topic: "The Lodge", q: "Checkout time? Late checkout?", k: "checkout check out leave keys late time",
+      a: "Checkout's 11 — keys in the box. Loved it? A kind word online keeps a small place alive. Need more time? Ask the desk; if the calendar's kind, they'll try." },
+    { topic: "The Lodge", q: "What's tonight's walk-in rate?", k: "price rate cost room walk-in tonight book",
+      a: "The desk quotes the day's rate — call (760) 376-3733 or check pineskernville.com. Fourteen rooms, seven styles, most with balconies." },
+    { topic: "The Lodge", q: "What's the story of this place?", k: "history lodge old story built when",
+      a: "A lodge under these pines since the 1950s, the same family's care since 2003. Old-timers say celebrities used to hide out here. We say everybody deserves to." },
+    { topic: "The Lodge", q: "Can my dog come along?", k: "dog pet pets fee friendly bring",
+      a: "Select rooms welcome dogs — $15 a night, declare when you book. Most town patios are dog-friendly; the brewery brings water bowls and treats." },
+    { topic: "Town & history", q: "What's Kernville's story?", k: "town history whiskey flat gold rush old kernville",
+      a: "Born in the 1860s gold rush as rowdy Whiskey Flat. When Isabella Dam filled the valley in the 1950s, the town moved here, upriver. Every February the old name roars back." },
+    { topic: "Town & history", q: "Anything happening this week?", k: "events tonight weekend happening calendar festival",
+      a: "Now flags what's on during your stay; Explore → Events has the whole year. The front desk keeps the current flyers." },
+    { topic: "Deep cuts", q: "Where do the locals actually swim?", k: "swim beach locals tube float jump rock alligator",
+      a: "Late summer, low water: the bridge-to-park tube float, Chico Flat and Corral Creek's sandy flats, Goldledge's jump rock, Alligator Rock at Limestone (late summer only). Life jackets always; the flow decides if it's safe. Map in Explore → Local secrets." },
+    { topic: "Deep cuts", q: "Where do the locals drink?", k: "bar dive drinks nightlife karaoke locals",
+      a: "The Sporty — the Sportsman's Inn on Kernville Road. Pool, cornhole, free popcorn, karaoke, Sunday music 2–5. A real dive bar; love it for it. More in Explore → Local secrets." },
+    { topic: "Deep cuts", q: "Are there hot springs?", k: "hot springs soak tubs remington miracle",
+      a: "Remington Hot Springs — stone tubs on the riverbank, ~35 minutes south, free. Clothing-optional is the custom; never wade when the river's high. Miracle is closed. Details in Explore → Local secrets." },
+    { topic: "Deep cuts", q: "Can we pan for gold?", k: "gold panning mining keyesville pan",
+      a: "Keyesville sets aside 400 acres of the original 1850s goldfields for hand panning. Free, 15–20 minutes south; late summer's low water is prime. More in Explore → Local secrets." },
+    { topic: "Deep cuts", q: "How are the stars out here?", k: "stars stargazing milky way telescope dark night sky",
+      a: "Some of SoCal's darkest skies. The Kern Valley Astronomy Club throws free star parties at the Fairview Helispot the Saturday nearest each new moon — or any pullout north of town. More in Explore → Local secrets." },
+    { topic: "Deep cuts", q: "Did they really make movies here?", k: "movies john wayne western hollywood film stagecoach museum",
+      a: "A dozen John Wayne pictures, including Stagecoach's river crossing. The free Kern Valley Museum (Thu–Sun 10–4) keeps the props and stories. More in Explore → Local secrets." },
+    { topic: "Deep cuts", q: "That famous mountain bike ride?", k: "mountain bike cannell plunge mtb cycling ride",
+      a: "The Cannell Plunge — ~25 miles from 9,000 feet, ending in an 8-mile, 5,000-foot drop. Experts only, truly. Shuttles from ~$75. Full beta in Explore → Local secrets." },
+    { topic: "Practical", q: "Where's the ice machine?", k: "ice machine cubes cooler",
+      a: "The coral ICE box on the room map under The Lodge — or text the desk at (760) 376-3733 and we'll point you from wherever you're standing." },
+    { topic: "Practical", q: "Is there cell service up the canyon?", k: "cell service signal phone reception maps",
+      a: "It thins fast north of town. Screenshot your maps and tell someone your plan — the canyon is quiet and so will your phone be." },
+    { topic: "Practical", q: "Gas? Groceries? An ATM?", k: "gas station groceries store market atm cash pharmacy",
+      a: "Town covers the basics; Lake Isabella, 15 minutes south, has bigger stores. The desk knows the closest everything." },
+    { topic: "Practical", q: "Where do we go if we have a problem?", k: "help emergency problem broken issue complaint maintenance",
+      a: "Straight to us: (760) 376-3733, or the desk (Sun–Thu 11–5, Fri–Sat 10–6). Emergencies are always 911." },
+  ],
+};
+
+const LINKS = {
+  "Kern River Brewing Co. — The Pub": ["https://www.kernriverbrewing.com", "Menu & beer"],
+  "Ewings on the Kern": ["https://www.ewingsco.com", "Menu & book"],
+  "Johnny McNally's Fairview Lodge": ["https://www.johnnymcnallys.com", "Menu"],
+  "McNally's Outpost": ["https://www.johnnymcnallys.com/mcnallys-outpost", "Menu"],
+  "Whiskey Flat Trail": ["https://www.alltrails.com/trail/us/california/whiskey-flat-trail--3", "Trail guide"],
+  "Johnsondale Bridge River Trail": ["https://www.alltrails.com/trail/us/california/johnsondale-bridge-river-trail", "Trail guide"],
+  "Packsaddle Cave Trail": ["https://www.theoutbound.com/california/hiking/packsaddle-cave-trail", "Trail guide"],
+  "Unal Trail": ["https://kernriversierra.com/hike/Unal_Trail.html", "Trail guide"],
+  "Sunday Peak": ["https://kernriversierra.com/hike/Sunday_Peak_Trail.html", "Trail guide"],
+  "Trail of 100 Giants": ["https://www.alltrails.com/trail/us/california/trail-of-100-giants", "Trail guide"],
+  "Sierra South": ["https://www.sierrasouth.com", "Book trips"],
+  "Whitewater Voyages": ["https://www.whitewatervoyages.com", "Book trips"],
+  "Kern River Outfitters": ["https://kernrafting.com", "Book trips"],
+  "The Cannell Plunge": ["https://www.mtbproject.com/trail/5746950/cannell-trail-imba-epic", "Trail beta"],
+  "Remington Hot Springs": ["https://www.ultimatehotspringsguide.com/remington-hot-springs.html", "Guide"],
+  "Kayak school & SUP": ["https://www.sierrasouth.com/kayaking/", "Classes"],
+  "Kern Valley Museum & the movie past": ["https://krvhs.org/museum/", "Museum info"],
+  "Silver City Ghost Town": ["https://www.facebook.com/silvercityghosttown/", "Hours & news"],
+  "Stargazing & star parties": ["https://kern-river-valley-astronomy.weebly.com/star-parties.html", "Star party dates"],
+  "Old Kernville, rising from the lake": ["https://krvhs.org/museum/", "Ask the museum"],
+  "The river the locals swim": ["https://www.hiddenswimmingholes.com/swimming-holes/kern-river-swimming-destinations", "Swim-spot guide"],
+  "Gold panning at Keyesville": ["https://www.blm.gov/visit/keysville-special-recreation-management-area", "BLM info"],
+  "Kern Slabs climbing": ["https://www.mountainproject.com/area/106278927/kernville-rock-aka-kern-slabs", "Routes"],
+  "Sherman Pass Scenic Drive": ["https://sierramountainpasses.com/listings/sherman-pass/", "Road guide"],
+  "Lake Isabella on the water": ["https://frenchgulchmarina.com/", "Marina"],
+  "Walker Pass — walk the PCT": ["https://www.blm.gov/visit/walker-pass-campground", "BLM info"],
+  "Red Rock Canyon State Park": ["https://www.parks.ca.gov/?page_id=631", "Park info"],
+  "Audubon Kern River Preserve": ["https://kern.audubon.org/", "Preserve"],
+  "Tehachapi Loop & depot town": ["https://tehachapidepot.com/", "Depot museum"],
+  "Wind Wolves Preserve": ["https://wildlandsconservancy.org/preserves/windwolves", "Preserve"],
+  "Sequoia National Park (the honest truth)": ["https://www.nps.gov/seki/planyourvisit/conditions.htm", "Park conditions"],
+  "The Sporty": ["https://thesporty.bar/", "The Sporty"],
+  "Indian taco Saturdays at Nuui Cunni": ["https://www.facebook.com/NuuiCunniCenter/", "Hours & news"],
+  "Sunset prime rib at Paradise Cove": ["https://www.paradisecovelodge.com/", "Menu"],
+  "Just Outstanding — the other legendary descent": ["https://www.singletracks.com/bike-trails/just-outstanding/", "Trail beta"],
+  "Seven Teacups overlook": ["https://modernhiker.com/hike/canyoneering-the-seven-teacups/", "The full story"],
+  "Bald Mountain Lookout, 9,382 ft": ["https://www.fs.usda.gov/r05/sequoia/recreation/bald-mountain-lookout", "Lookout info"],
+  "Freeman Creek Grove — the connoisseurs' sequoias": ["https://www.redwoodhikes.com/SequoiaNM/Freeman.html", "Grove guide"],
+  "South Creek Falls & the Brush Creek slides": ["https://www.world-of-waterfalls.com/waterfalls/california-south-creek-falls/", "Falls guide"],
+};
+const LICENSE_LINKS = ["https://wildlife.ca.gov/Licensing", "https://nrm.dfg.ca.gov/FishPlants/Default.aspx?county=Kern%2CTulare&time=All"];
+/* the valley by distance from the front door: 1 walk · 2 town · 3 valley · 4 canyon · 5 high country · 6 expedition */
+const ZONE_OF = {
+  "Kern River Brewing Co. — The Pub": 1, "El Rio Mexican & American": 1, "The Lodge backyard": 1,
+  "Cheryl's Diner": 2, "Big Blue Bear Cafe": 2, "Sequoia Mountain Bakery": 2, "Something Sweeter": 2,
+  "The Pizza Barn": 2, "McNally's Outpost": 2, "Ewings on the Kern": 2,
+  /* Airpark Cafe moved up from "Down the valley" (3): its own listing says
+     "5-min drive south", which is an in-town drive, not a 10–25 min valley run. */
+  "Airpark Cafe": 2,
+  "Riverside Park river walk": 2, "Whiskey Flat Trail": 2, "Cannell Meadow Trail (lower)": 2,
+  "The Sporty": 2, "Kern Valley Museum & the movie past": 2, "Kayak school & SUP": 2,
+  "Right in town — Riverside Park stretch": 2, "Sierra South": 2, "Whitewater Voyages": 2, "Kern River Outfitters": 2, "Mountain & River Adventures": 2,
+  "Nelda's Diner": 3, "Isabella Peak Trail": 3, "Kern Slabs climbing": 3,
+  "The river the locals swim": 3, "Indian taco Saturdays at Nuui Cunni": 3, "Sunset prime rib at Paradise Cove": 3,
+  "Old Kernville, rising from the lake": 3, "Gold panning at Keyesville": 3, "Stargazing & star parties": 3,
+  "Silver City Ghost Town": 3, "Lake Isabella on the water": 3, "Audubon Kern River Preserve": 3, "Lake Isabella": 3,
+  "Johnny McNally's Fairview Lodge": 4, "Johnsondale Bridge River Trail": 4, "Packsaddle Cave Trail": 4,
+  "Salmon Creek Falls": 4, "Unal Trail": 4, "Remington Hot Springs": 4, "South Creek Falls & the Brush Creek slides": 4,
+  "Seven Teacups overlook": 4, "Just Outstanding — the other legendary descent": 4,
+  "Upriver pullouts (Mtn 99)": 4, "Johnsondale Bridge wild trout water": 4,
+  "Sunday Peak": 5, "Trail of 100 Giants": 5, "The Cannell Plunge": 5, "Bald Mountain Lookout, 9,382 ft": 5,
+  "Sherman Pass Scenic Drive": 5, "Dome Rock & The Needles": 5, "Freeman Creek Grove — the connoisseurs' sequoias": 5,
+  "Walker Pass — walk the PCT": 5,
+  /* Moved out of "The high country" (5) — Ryan: "bakersfield basque dinner houses is
+     in high country - ??? uh - audit these". Bakersfield is a city on the valley
+     floor ~400 ft, 1hr10 southwest; Red Rock is Mojave desert, 1¼ hr east. Neither
+     is high country at any drive time. Both are genuine make-a-day-of-it trips. */
+  "Red Rock Canyon State Park": 6, "Bakersfield Basque dinner houses": 6,
+  /* Bodfish–Caliente is a "30–75 min" desert backroad that pairs with the Tehachapi
+     Loop (also 6) — it overran "Up the canyon" (4) by half an hour and isn't canyon. */
+  "Bodfish–Caliente backroad": 6,
+  "Sherman Peak": 6, "Wind Wolves Preserve": 6, "Tehachapi Loop & depot town": 6, "Sequoia National Park (the honest truth)": 6,
+};
+/* [full name, the distance line, short name for the jump strip] */
+/* [heading, description, jump-chip label]
+   Chips keep the evocative names — Ryan: "your original tags were 10x better",
+   and "'south' is meaningless to someone from germany". A bare compass bearing
+   isn't context; it assumes a mental map the guest doesn't have. So the NAME goes
+   on the chip (short, so the pinned bar stays two rows) and the DESCRIPTION does
+   the real work, answering the question he actually started with: "the valley
+   is...where relative to us?" Every one now reads distance + direction + a
+   landmark you can picture, measured from the lodge's front door. */
+/* Zones are DISTANCE buckets — "the valley, laid out by how far it is from your
+   door" — so a description may name a dominant direction but must never claim a
+   single one. Writing them as hard compass bearings turned several entries into
+   lies (Remington is south inside "up the canyon"; Unal and Just Outstanding are
+   west; Kern Slabs is north inside "down the valley"). Each line below leads with
+   distance, then names every direction that bucket actually contains. */
+const ZONES = [
+  null,
+  ["A short walk", "right outside your door — the river, the pool, the lawn · 0–5 minutes on foot", "On foot"],
+  ["In town", "straight down Sierra Way — Kernville's few blocks · a 15-minute stroll or a 4-minute drive", "In town"],
+  ["Down the valley", "10–25 minutes by car, mostly south — following the river down toward Lake Isabella", "The valley"],
+  ["Up the canyon", "25–45 minutes — north up the river into the forest, west over Hwy 155, or south to the hot springs", "The canyon"],
+  ["The high country", "50 minutes to 1½ hours, climbing the whole way — big trees, pine ridges and high passes · fill the tank", "High country"],
+  ["Proper expeditions", "an hour-plus each way, any direction — the desert, the city, the big parks · make a day of it", "Expeditions"],
+];
+/* printed-guide picks — from the house booklet */
+const STAFF_EATS = new Set(["Sequoia Mountain Bakery", "Big Blue Bear Cafe", "Cheryl's Diner", "Something Sweeter", "McNally's Outpost", "The Pizza Barn", "Kern River Brewing Co. — The Pub", "El Rio Mexican & American", "Ewings on the Kern"]);
+const HOUSE_TRAILS = new Set(["Cannell Meadow Trail (lower)", "Whiskey Flat Trail", "Isabella Peak Trail", "Salmon Creek Falls", "Trail of 100 Giants", "Unal Trail"]);
+
+/* ===================== CLOCK & HOURS ENGINE ===================== */
+const DAYS = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+const DAY_FULL = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const DAY_ABBR = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+function clock() {
+  const n = new Date();
+  return { n, day: n.getDay(), min: n.getHours() * 60 + n.getMinutes(), month: n.getMonth() + 1,
+    mid: new Date(n.getFullYear(), n.getMonth(), n.getDate()) };
+}
+function parseHours(str) {
+  if (!str || /closed/i.test(str)) return null;
+  if (/unknown/i.test(str)) return "unknown";
+  const m = str.match(/(\d{1,2}):?(\d{2})?\s*(AM|PM)\s*-\s*(\d{1,2}):?(\d{2})?\s*(AM|PM)/i);
+  if (!m) return null;
+  const toMin = (h, mm, ap) => { h = parseInt(h, 10) % 12; if (/pm/i.test(ap)) h += 12; return h * 60 + (mm ? parseInt(mm, 10) : 0); };
+  let open = toMin(m[1], m[2], m[3]), close = toMin(m[4], m[5], m[6]);
+  if (close <= open) close += 1440; /* past-midnight close */
+  return { open, close };
+}
+function shortTime(min) {
+  min = Math.round(min) % 1440; if (min < 0) min += 1440;
+  let h = Math.floor(min / 60), m = min % 60;
+  const ap = h >= 12 ? "PM" : "AM"; h = h % 12 || 12;
+  return m ? `${h}:${String(m).padStart(2, "0")} ${ap}` : `${h} ${ap}`;
+}
+/* is `place` open at minute on weekday dayIdx (handles overnight rows) */
+function openAt(place, dayIdx, minute) {
+  if (!place.hours) return true;
+  const t = parseHours(place.hours[DAYS[dayIdx]]);
+  if (t && t !== "unknown" && minute >= t.open && minute < t.close) return true;
+  if (minute < 180) { /* small hours: yesterday's row may still be pouring */
+    const y = parseHours(place.hours[DAYS[(dayIdx + 6) % 7]]);
+    if (y && y !== "unknown" && minute + 1440 >= y.open && minute + 1440 < y.close) return true;
+  }
+  return false;
+}
+function statusFor(place, c) {
+  c = c || clock();
+  const raw = place.hours && place.hours[DAYS[c.day]];
+  const t = parseHours(raw);
+  if (t === "unknown") return { cls: "closed", text: "hours vary — call", order: 2 };
+  if (openAt(place, c.day, c.min)) {
+    let closeAt;
+    if (t && c.min >= t.open) closeAt = t.close;
+    else { const y = parseHours(place.hours[DAYS[(c.day + 6) % 7]]); closeAt = y && y !== "unknown" ? y.close - 1440 : null; }
+    if (closeAt != null && ((closeAt - c.min + 1440) % 1440) <= 60) return { cls: "soon", text: "closing " + shortTime(closeAt), order: 1, closeAt };
+    return { cls: "open", text: "till " + shortTime(closeAt == null ? 0 : closeAt), order: 0, closeAt };
+  }
+  if (!t) return { cls: "closed", text: "closed today", order: 3 };
+  if (c.min < t.open) return { cls: "closed", text: "opens " + shortTime(t.open), order: 2, opensAt: t.open };
+  return { cls: "closed", text: "closed for tonight", order: 3 };
+}
+function esc(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;"); }
+const telHref = p => "tel:" + String(p).replace(/[^\d]/g, "");
+const mapsQ = (q, place) => "https://maps.google.com/?q=" + encodeURIComponent(q + " " + (place || "Kernville CA"));
+
+/* Kernville: 35.755 N, 118.426 W — NOAA-style, UTC-hour fractional year, acos clamped */
+function sunTimes(d) {
+  const rad = Math.PI / 180;
+  const doy = Math.floor((d - new Date(d.getFullYear(), 0, 0)) / 864e5);
+  const g = 2 * Math.PI / 365 * (doy - 1 + (d.getUTCHours() - 12) / 24);
+  const eq = 229.18 * (0.000075 + 0.001868 * Math.cos(g) - 0.032077 * Math.sin(g) - 0.014615 * Math.cos(2 * g) - 0.040849 * Math.sin(2 * g));
+  const dec = 0.006918 - 0.399912 * Math.cos(g) + 0.070257 * Math.sin(g) - 0.006758 * Math.cos(2 * g) + 0.000907 * Math.sin(2 * g) - 0.002697 * Math.cos(3 * g) + 0.00148 * Math.sin(3 * g);
+  const lat = 35.755 * rad, lon = -118.4256;
+  let x = Math.cos(90.833 * rad) / (Math.cos(lat) * Math.cos(dec)) - Math.tan(lat) * Math.tan(dec);
+  x = Math.max(-1, Math.min(1, x));
+  const ha = Math.acos(x) / rad;
+  const off = -d.getTimezoneOffset();
+  return { rise: 720 - 4 * (lon + ha) - eq + off, set: 720 - 4 * (lon - ha) - eq + off };
+}
+function moonAge(d) { let a = ((d - new Date(Date.UTC(2000, 0, 6, 18, 14))) / 864e5) % 29.53058867; return a < 0 ? a + 29.53058867 : a; }
+function moonInfo(d) {
+  const a = moonAge(d);
+  return { age: a, newish: a < 1.5 || a > 28.03, fullish: a > 13.27 && a < 16.27 };
+}
+const seasonOf = m => (m === 12 || m <= 2 ? "winter" : m <= 6 ? "spring" : m <= 8 ? "summer" : "fall");
+const heatMonth = m => m >= 6 && m <= 9;
+
+/* ===================== STATE: name, personas, stay ===================== */
+const PERSONA_IDS = new Set(DATA.personas.map(p => p.id));
+const ROOM_KEYS = {
+  river: { label: "River View", type: "River View Room" },
+  mtn: { label: "Mtn View King", type: "Mountain View King" },
+  mtnfam: { label: "King + Single", type: "Mountain View King + Single" },
+  creek: { label: "Creekview", type: "Creekview Kitchenette" },
+  studio: { label: "Studio", type: "King Studio" },
+  suite: { label: "Suite", type: "King & Couch Suite" },
+  shared: { label: "Shared balcony", type: "Two-Unit Shared Balcony" },
+};
+/* room number -> ROOM_KEYS code, so a bare #r=107 (the permanent room QR cards) also
+   resolves a room TYPE, not just a number. Source: confirmed room/type mapping mined
+   from 6 months of ResNexus confirmations (see project memory). */
+const NUM_TO_ROOMKEY = {
+  101: "creek", 102: "creek", 103: "creek", 104: "creek",
+  105: "river", 106: "river", 107: "river", 108: "river",
+  109: "mtnfam", 110: "mtnfam", 111: "mtnfam",
+  112: "mtn",
+  117: "studio",
+  118: "suite",
+};
+const cleanName = s => String(s || "").replace(/[^\p{L}\p{M}\s'\-]/gu, "").trim().slice(0, 40);
+let guestName = "", picked = new Set(), stay = null, fixSheet = false, room = "", roomNum = "";
+try { room = ROOM_KEYS[localStorage.getItem("wpl-room")] ? localStorage.getItem("wpl-room") : ""; } catch (e) {}
+try { roomNum = (localStorage.getItem("wpl-roomnum") || "").replace(/[^\d]/g, "").slice(0, 3); } catch (e) {}
+try { guestName = cleanName(localStorage.getItem("wpl-name") || ""); } catch (e) {}
+try { picked = new Set(JSON.parse(localStorage.getItem("wpl-personas") || "[]").filter(p => PERSONA_IDS.has(p))); } catch (e) {}
+try { stay = JSON.parse(localStorage.getItem("wpl-stay") || "null"); } catch (e) {}
+let served = {};
+try { served = JSON.parse(localStorage.getItem("wpl-served") || "{}"); } catch (e) {}
+const store = (k, v) => { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch (e) {} };
+const saveName = () => store("wpl-name", guestName || null);
+const savePicked = () => store("wpl-personas", JSON.stringify([...picked]));
+const saveStay = () => { store("wpl-stay", stay ? JSON.stringify(stay) : null); store("wpl-saved-at", String(Date.now())); };
+const saveServed = () => store("wpl-served", JSON.stringify(served));
+const dogOn = () => picked.has("dog");
+function fitScore(tags) {
+  if (!picked.size) return 0;
+  let s = 0; picked.forEach(p => { if (tags && tags.includes(p)) s++; });
+  if (!s && tags && tags.includes("everyone")) s = 1;
+  return s;
+}
+function purgeAll() {
+  ["wpl-name", "wpl-stay", "wpl-personas", "wpl-served", "wpl-saved-at", "wpl-room", "wpl-roomnum"].forEach(k => store(k, null));
+  guestName = ""; picked = new Set(); stay = null; served = {}; room = ""; roomNum = "";
+}
+/* stale-guest purge: expired stay, or 30 idle days with no stay */
+(function expiry() {
+  const c = clock();
+  try {
+    if (stay && stay.d) {
+      const dEnd = new Date(stay.d + "T00:00:00");
+      if (!isNaN(dEnd) && c.mid - dEnd > 864e5) purgeAll();
+    } else {
+      const at = parseInt(localStorage.getItem("wpl-saved-at") || "0", 10);
+      if (at && Date.now() - at > 30 * 864e5) purgeAll();
+    }
+  } catch (e) {}
+})();
+/* hash / query ingest — desk links: #n=Name&a=YYYY-MM-DD&d=YYYY-MM-DD&p=couple,dog (M/D/YYYY tolerated) */
+function ingestParams() {
+  fixSheet = false;
+  try {
+    const qp = new URLSearchParams(location.search || "");
+    const hp = new URLSearchParams((location.hash || "").replace(/^#/, ""));
+    const gv = k => hp.get(k) || qp.get(k);
+    /* #fresh=1 wipes whatever this phone remembered first — an escape hatch for a
+       device stuck showing a stale countdown from an old link. Safe to combine:
+       #fresh=1&n=...&a=... clears, then applies the new stay. */
+    if (gv("fresh") != null || gv("reset") != null) purgeAll();
+    /* Accept every date shape a booking system might hand us, so a ResNexus
+       [Arrival] merge tag works whatever it renders. VERIFIED against a real
+       ResNexus template preview (Aug 2026): it emits "Fri 12/26/25" — a weekday
+       prefix AND a two-digit year — so both must be handled. Also covers:
+         2026-08-15                     (what we generate ourselves)
+         8/15/2026  08-15-2026          (US numeric, 4-digit year)
+         Mon, Aug 15, 2026 / Aug 15, 2026 / August 15, 2026 / 15 Aug 2026
+       Anything unparseable is passed through untouched and rejected downstream,
+       which surfaces the "fix your dates" sheet rather than showing a wrong stay. */
+    const MON = { jan:1, feb:2, mar:3, apr:4, may:5, jun:6, jul:7, aug:8, sep:9, oct:10, nov:11, dec:12 };
+    const pad = n => String(n).padStart(2, "0");
+    /* two-digit years: 25 -> 2025. Lodge bookings are never last century. */
+    const yr = y => (String(y).length === 2 ? 2000 + Number(y) : Number(y));
+    const normDate = s => {
+      const raw0 = String(s || "").trim();
+      if (!raw0) return "";
+      if (/^\d{4}-\d{2}-\d{2}$/.test(raw0)) return raw0;
+      /* Strip a leading weekday first — ResNexus prefixes one. Strip ONLY real
+         weekday names; a generic [A-Za-z]+ strip would eat "Aug" out of
+         "Aug 4, 2026" and silently break it. */
+      const raw = raw0.replace(/^(?:sun|mon|tue[s]?|wed[nes]*|thu[rs]*|fri|sat[ur]*)(?:day)?\.?,?\s+/i, "");
+      const num = raw.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2}|\d{4})$/);
+      if (num) return `${yr(num[3])}-${pad(num[1])}-${pad(num[2])}`;
+      let m = raw.match(/^([A-Za-z]{3,9})\.?\s+(\d{1,2})(?:st|nd|rd|th)?,?\s+(\d{2}|\d{4})$/);
+      if (m && MON[m[1].slice(0, 3).toLowerCase()]) return `${yr(m[3])}-${pad(MON[m[1].slice(0, 3).toLowerCase()])}-${pad(m[2])}`;
+      m = raw.match(/^(\d{1,2})\s+([A-Za-z]{3,9})\.?,?\s+(\d{2}|\d{4})$/);
+      if (m && MON[m[2].slice(0, 3).toLowerCase()]) return `${yr(m[3])}-${pad(MON[m[2].slice(0, 3).toLowerCase()])}-${pad(m[1])}`;
+      return raw0;
+    };
+    const newName = gv("n") != null ? cleanName(gv("n")) : null;
+    let a = gv("a"), d = gv("d");
+    if (a && !d) { /* one-night link with only arrival: depart = next day */
+      const t = new Date(normDate(a) + "T12:00:00");
+      if (!isNaN(t)) { t.setDate(t.getDate() + 1); d = `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, "0")}-${String(t.getDate()).padStart(2, "0")}`; }
+      else d = a;
+    }
+    let newStay = null, bad = false;
+    if (a && d) {
+      a = normDate(a); d = normDate(d);
+      const da = new Date(a + "T12:00:00"), dd = new Date(d + "T12:00:00");
+      if (isNaN(da) || isNaN(dd) || dd < da) { bad = true; }
+      else newStay = { a, d };
+    }
+    const differentGuest = (newName != null && newName !== guestName) ||
+      (newStay && (!stay || stay.a !== newStay.a || stay.d !== newStay.d));
+    if (differentGuest) { purgeAll(); }
+    if (newName != null) { guestName = newName; saveName(); }
+    if (newStay) { stay = newStay; saveStay(); }
+    if (bad) { fixSheet = true; stay = null; }
+    if (gv("p") != null) {
+      const ids = gv("p").split(",").map(s => s.trim()).filter(x => PERSONA_IDS.has(x));
+      picked = new Set(ids); savePicked();
+    }
+    if (gv("r") != null) {
+      const rv = gv("r").trim();
+      if (ROOM_KEYS[rv]) { room = rv; store("wpl-room", room); }
+      else if (/^\d{3}$/.test(rv)) {
+        roomNum = rv; store("wpl-roomnum", roomNum);
+        const rk = NUM_TO_ROOMKEY[Number(rv)];
+        if (rk) { room = rk; store("wpl-room", room); }
+      }
+    }
+  } catch (e) {}
+}
+ingestParams();
+
+/* ===================== WEATHER — guest's own phone fetches it, no key, no server ===================== */
+let wx = null;
+function loadWeather() {
+  fetch("https://api.open-meteo.com/v1/forecast?latitude=35.754&longitude=-118.425&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min,weather_code&temperature_unit=fahrenheit&timezone=America%2FLos_Angeles&forecast_days=10")
+    .then(r => r.ok ? r.json() : null)
+    .then(j => { if (j && j.current && j.daily) { wx = j; safePaint(); } })
+    .catch(() => {});
+}
+loadWeather();
+function wxTxt(code) {
+  if (code === 0) return "clear";
+  if (code <= 2) return "partly cloudy";
+  if (code === 3) return "overcast";
+  if (code === 45 || code === 48) return "foggy";
+  if (code >= 51 && code <= 67) return "rain";
+  if (code >= 71 && code <= 77) return "snow";
+  if (code >= 80 && code <= 82) return "showers";
+  if (code >= 95) return "thunderstorms";
+  return "mild";
+}
+function ymd(d) { return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; }
+function wxNow() {
+  if (!wx || !wx.current) return "";
+  return `${Math.round(wx.current.temperature_2m)}° and ${wxTxt(wx.current.weather_code)} right now`;
+}
+function wxCurrentCode() { return wx && wx.current ? wx.current.weather_code : null; }
+
+/* ===================== STAY STATE MACHINE ===================== */
+function stayDays() {
+  if (!stay || !stay.a || !stay.d) return [];
+  const out = [];
+  const a = new Date(stay.a + "T12:00:00"), d = new Date(stay.d + "T12:00:00");
+  if (isNaN(a) || isNaN(d) || d < a) return [];
+  for (let t = new Date(a); t <= d && out.length < 400; t.setDate(t.getDate() + 1)) out.push(new Date(t));
+  return out;
+}
+const midOf = d => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+function stayCtx(c) {
+  const days = stayDays();
+  if (fixSheet) return { mode: "fix", days: [] };
+  if (!days.length) return { mode: "none", days: [] };
+  const a0 = midOf(days[0]), dEnd = midOf(days[days.length - 1]);
+  const t0 = c.mid, nights = days.length - 1;
+  if (t0 < a0) return { mode: "pre", cd: Math.floor((a0 - t0) / 864e5), days, nights };
+  if (t0 > dEnd) return { mode: "past", days, nights };
+  const di = Math.round((t0 - a0) / 864e5);
+  if (days.length === 1) return c.min < 900 ? { mode: "pre", cd: 0, arrivingToday: true, days, nights: 1 } : { mode: "arrival", di: 0, days, nights: 1 };
+  if (+t0 === +a0) return c.min < 900 ? { mode: "pre", cd: 0, arrivingToday: true, days, nights } : { mode: "arrival", di: 0, days, nights };
+  if (+t0 === +dEnd) return c.min < 660 ? { mode: "checkout", di, days, nights } : { mode: "past", days, nights };
+  return { mode: "full", di, days, nights };
+}
+
+/* ===================== EVENTS — day-accurate ===================== */
+function nthWeekdayOf(y, m, wd, n) {
+  const d = new Date(y, m - 1, 1); let c2 = 0;
+  while (d.getMonth() === m - 1) { if (d.getDay() === wd && ++c2 === n) return new Date(d); d.setDate(d.getDate() + 1); }
+  return null;
+}
+function presidentsRange(y) {
+  const mon = nthWeekdayOf(y, 2, 1, 3);
+  const fri = new Date(mon); fri.setDate(mon.getDate() - 3);
+  return [fri, mon];
+}
+/* concrete date ranges for an annual/seasonal event in year y */
+function eventRanges(e, y) {
+  if (e.presidents) return [presidentsRange(y)];
+  if (e.fixed) { const d = new Date(y, e.fixed[0] - 1, e.fixed[1]); return [[d, d]]; }
+  if (e.nth) return (e.months || []).map(m => { const d = nthWeekdayOf(y, m, e.nth[0], e.nth[1]); return d ? [d, d] : null; }).filter(Boolean);
+  if (e.approx) return [[new Date(y, e.approx[0] - 1, e.approx[1]), new Date(y, e.approx[2] - 1, e.approx[3])]];
+  return [];
+}
+/* events truly inside the remaining stay window; arrival day from 3 PM, checkout day till 11 AM */
+function eventsDuringStay(c, sc) {
+  const out = [];
+  const days = sc.days.filter(d => midOf(d) >= c.mid);
+  const lastMid = sc.days.length ? +midOf(sc.days[sc.days.length - 1]) : 0;
+  const firstMid = sc.days.length ? +midOf(sc.days[0]) : 0;
+  days.forEach(d => {
+    const dm = +midOf(d);
+    const dayStartMin = dm === firstMid && sc.mode !== "checkout" ? 900 : 0;
+    const dayEndMin = dm === lastMid && sc.days.length > 1 ? 660 : 1440;
+    const isToday = dm === +c.mid;
+    DATA.events.forEach(e => {
+      if (e.adult && picked.has("family") && !picked.has("couple") && !picked.has("adventure") && !picked.has("event")) return;
+      if (e.cadence === "weekly") {
+        if (e.weekday !== d.getDay()) return;
+        const s = e.start == null ? 0 : e.start, en = e.end == null ? 1440 : e.end;
+        if (en <= dayStartMin || s >= dayEndMin) return;
+        if (isToday && c.min > en) return;
+        out.push({ e, d: new Date(d) });
+      } else {
+        const yrs = new Set([d.getFullYear()]);
+        yrs.forEach(y => eventRanges(e, y).forEach(([s, en]) => {
+          if (midOf(d) >= midOf(s) && midOf(d) <= midOf(en)) out.push({ e, d: new Date(d) });
+        }));
+      }
+    });
+  });
+  const seen = new Set();
+  return out.filter(x => { if (seen.has(x.e.name)) return false; seen.add(x.e.name); return true; });
+}
+/* distance in months to nearest occurrence (0 while ongoing) */
+function eventDistance(e, curMonth) {
+  const ms = e.months || (e.typicalMonth ? [e.typicalMonth] : []);
+  if (e.cadence === "weekly") return 0;
+  if (!ms.length) return 12;
+  return Math.min(...ms.map(m => (m - curMonth + 12) % 12));
+}
+function eventNearestLabel(e, curMonth) {
+  if (e.cadence === "weekly") return { mo: "every", da: DAY_ABBR[e.weekday] };
+  const ms = e.months || (e.typicalMonth ? [e.typicalMonth] : []);
+  const m = ms.slice().sort((a, b) => ((a - curMonth + 12) % 12) - ((b - curMonth + 12) % 12))[0] || curMonth;
+  const ongoing = ms.includes(curMonth);
+  return { mo: MONTHS[m - 1] + (ongoing && ms.length > 1 ? " · on now" : ""), da: e.dateShort || "" };
+}
+
+/* ===================== THE PICKER ENGINE — one pick per slot ===================== */
+function servedYesterday(slot, di) { return (served[di - 1] || {})[slot] || null; }
+function recordServed(slot, di, name) {
+  if (di == null || di < 0) return;
+  (served[di] = served[di] || {})[slot] = name; saveServed();
+}
+/* deterministic rotation: sorted pool, rotate by day index, avoid yesterday's pick */
+function rotatePick(pool, slot, di) {
+  if (!pool.length) return null;
+  pool.sort((a, b) => fitScore(b.goodFor || b.tags) - fitScore(a.goodFor || a.tags));
+  const y = servedYesterday(slot, di);
+  let idx = (di == null ? 0 : di) % pool.length;
+  if (pool.length > 1 && pool[idx].name === y) idx = (idx + 1) % pool.length;
+  return pool[idx];
+}
+function inSeason(item, m) { return !item.months || item.months.includes(m); }
+function onWeekday(item, wd, m) {
+  if (item.wkOnlyWinter && !(m >= 5 && m <= 10)) return wd === 0 || wd === 6;
+  return !item.wdays || item.wdays.includes(wd);
+}
+function dogLegal(item) { return !dogOn() || item.dog !== false; }
+/* meal picks probe the venue at that day's meal hour */
+function mealPool(kind, dayIdx, probeMin, m) {
+  return DATA.eat.filter(p => {
+    if (kind === "breakfast" && !p.breakfast) return false;
+    if (kind === "dinner" && !p.dinner) return false;
+    if (kind === "dessert" && !p.dessert) return false;
+    if (kind !== "dessert" && p.dessert) return false;
+    if (dogOn() && !p.dogPatio) return false;
+    const t = parseHours(p.hours[DAYS[dayIdx]]);
+    if (!t || t === "unknown") return false;
+    if (kind === "breakfast") { if (t.open > 660) return false; if (p.bkTill && probeMin >= p.bkTill) return false; return true; }
+    return probeMin >= t.open && probeMin < t.close;
+  });
+}
+function pickMeal(kind, dayIdx, probeMin, m, slot, di) {
+  let pool = mealPool(kind, dayIdx, probeMin, m);
+  /* same-day dedup: dinner shouldn't repeat this morning's breakfast pick */
+  if (kind === "dinner" && di != null && served[di] && served[di].breakfast && pool.length > 1) {
+    const f = pool.filter(p => p.name !== served[di].breakfast);
+    if (f.length) pool = f;
+  }
+  const p = rotatePick(pool, slot, di);
+  if (p && slot) recordServed(slot, di, p.name);
+  return p;
+}
+/* activity pool: hikes + secrets (+ day trips for ≥3 nights or adventurers), fully gated */
+function actPool(dayDate, opts) {
+  opts = opts || {};
+  const m = dayDate.getMonth() + 1, wd = dayDate.getDay();
+  const summerMidday = heatMonth(m) && opts.midday;
+  let pool = DATA.hikes.map(h => ({ ...h, kind: "hike" }))
+    .concat(DATA.deepCuts.map(d => ({ ...d, kind: "secret" })));
+  if (opts.tripsOK) pool = pool.concat(DATA.dayTrips.map(d => ({ ...d, kind: "trip" })));
+  return pool.filter(it => {
+    if (!inSeason(it, m) || !onWeekday(it, wd, m)) return false;
+    if (!dogLegal(it)) return false;
+    if (it.adult && picked.has("family")) return false;
+    if (it.night && !opts.nightOK) return false;
+    if (it.dinner) return false;
+    if (opts.nowMin != null && it.hoursClose != null && opts.nowMin >= it.hoursClose - 45) return false;
+    if (opts.nowMin != null && it.hours && !openAt(it, wd, opts.nowMin)) return false;
+    if (summerMidday && !(it.water || it.shade)) return false;
+    if (picked.has("family") && it.kind === "secret" && it.tags && !it.tags.includes("family")) return false;
+    return true;
+  });
+}
+function pickActivity(dayDate, di, opts) {
+  const pool = actPool(dayDate, opts);
+  const p = rotatePick(pool, "main", di);
+  if (p) recordServed("main", di, p.name);
+  return p;
+}
+/* why-line: tied to a concrete fact the engine used */
+function whyFor(it, c, dayDate) {
+  const m = dayDate.getMonth() + 1;
+  const bits = [];
+  if (dogOn() && it.dog !== false) bits.push(it.dogNote || "dogs OK on this one");
+  if (heatMonth(m) && (it.water || it.shade)) bits.push(it.water ? "water beats a 100° valley afternoon" : "shade up high while the valley bakes");
+  else if (it.months && it.months.includes(m)) {
+    const opens = it.months[0];
+    if (m === opens || m === opens + 1) {
+      const r = it.closedReason;
+      bits.push(r === "water" ? "the water just came right" : r === "heat" ? "the heat finally broke" : r === "season" ? "the season just opened" : "the season just opened — snow kept it shut till " + MONTHS[opens - 1]);
+    } else bits.push("in season right now");
+  }
+  if (it.wdays && it.wdays.includes(dayDate.getDay())) bits.push("open " + DAY_FULL[dayDate.getDay()] + "s — not every day");
+  if (!bits.length) bits.push("a front-desk standby");
+  return bits.slice(0, 2).join("; ");
+}
+function gateLabel(it) {
+  const first = MONTHS[it.months[0] - 1];
+  const r = it.closedReason;
+  if (r === "heat") return "summer-hot — back " + first;
+  if (r === "water") return "waiting on the water — " + first + " on";
+  if (r === "season") return "off-season till " + first;
+  return "closed by snow till " + first;
+}
+function altsFor(pool, chosen, slot) {
+  return pool.filter(p => p.name !== (chosen && chosen.name)).slice(0, 2);
+}
+
+/* ===================== ILLUSTRATION VOCABULARY (ellipse canopies, ink lines) ===================== */
+const heroScene = `
+<svg class="scene" width="360" height="104" viewBox="0 0 360 104" fill="none" aria-hidden="true">
+  <g fill="#8A9A3E">
+    <ellipse cx="52" cy="26" rx="34" ry="13"/><ellipse cx="30" cy="34" rx="22" ry="10" opacity=".85"/>
+    <ellipse cx="76" cy="35" rx="24" ry="10" opacity=".9"/>
+    <ellipse cx="300" cy="24" rx="36" ry="13"/><ellipse cx="326" cy="33" rx="24" ry="10" opacity=".85"/>
+    <ellipse cx="276" cy="34" rx="22" ry="9" opacity=".9"/>
+  </g>
+  <g stroke="#34322C" stroke-width="1.7" stroke-linecap="round">
+    <path d="M46 40 C 47 58, 44 76, 40 92 M60 42 C 60 60, 62 78, 66 92 M46 56 L 38 50 M60 62 L 68 56"/>
+    <path d="M294 38 C 295 56, 292 76, 288 92 M308 40 C 308 58, 310 78, 314 92 M294 56 L 286 50 M308 60 L 316 54"/>
+    <path d="M120 66 L134 66 L134 52 L150 52 L150 60 L166 60 L166 48 L184 48 L184 62 L200 62 L200 54 L214 54 L214 66 L232 66" opacity=".75"/>
+    <path d="M12 93 C 90 89, 260 89, 350 93"/>
+    <path d="M96 84 C 130 80, 220 80, 262 84" opacity=".5"/>
+  </g>
+  <path d="M168 84 q 8 -5 18 0 l -2 4 q -7 -3 -14 0 Z" fill="#E8E4D4" stroke="#34322C" stroke-width="1"/>
+  <circle cx="172" cy="74" r="2.6" fill="none" stroke="#34322C" stroke-width="1.3"/>
+  <path d="M172 77 q -3 5 -1 7" stroke="#34322C" stroke-width="1.3" fill="none"/>
+  <path d="M171 78 l 4 4" stroke="#5B7FB4" stroke-width="2.6"/>
+  <circle cx="180" cy="73" r="2.6" fill="none" stroke="#34322C" stroke-width="1.3"/>
+  <path d="M180 76 q 3 5 1 8" stroke="#34322C" stroke-width="1.3" fill="none"/>
+  <path d="M179 77 l 3 4" stroke="#E0655A" stroke-width="2.6"/>
+  <circle cx="242" cy="70" r="2.6" fill="none" stroke="#34322C" stroke-width="1.3"/>
+  <path d="M242 73 l 0 10 M242 78 l -4 6 M242 78 l 4 6 M242 75 l -4 3 M242 75 l 4 2" stroke="#34322C" stroke-width="1.2" fill="none"/>
+  <path d="M241 74 l 2 5" stroke="#D98A3C" stroke-width="2.4"/>
+</svg>`;
+const roadScene = `
+<svg class="scene" width="360" height="90" viewBox="0 0 360 90" fill="none" aria-hidden="true">
+  <g fill="#8A9A3E"><ellipse cx="60" cy="24" rx="30" ry="12"/><ellipse cx="88" cy="32" rx="20" ry="9" opacity=".85"/>
+  <ellipse cx="296" cy="22" rx="32" ry="12"/><ellipse cx="270" cy="31" rx="20" ry="9" opacity=".85"/></g>
+  <g stroke="#34322C" stroke-width="1.6" stroke-linecap="round" fill="none">
+    <path d="M58 36 C 58 54, 55 68, 52 80 M78 38 C 78 54, 80 68, 84 80"/>
+    <path d="M292 34 C 292 52, 289 66, 286 80 M308 36 C 308 52, 310 66, 314 80"/>
+    <path d="M150 82 C 168 60, 176 42, 179 26 M210 82 C 194 60, 186 42, 183 26"/>
+    <path d="M180 76 l 0 -5 M180 62 l 0 -5 M180 48 l 0 -5 M180 36 l 0 -4" opacity=".6"/>
+    <path d="M10 84 C 100 80, 260 80, 350 84"/>
+  </g></svg>`;
+const trailScene = `
+<svg class="scene" width="360" height="72" viewBox="0 0 360 72" fill="none" aria-hidden="true">
+  <g fill="#8A9A3E"><ellipse cx="40" cy="20" rx="26" ry="10"/><ellipse cx="330" cy="18" rx="24" ry="10"/></g>
+  <g stroke="#34322C" stroke-width="1.6" stroke-linecap="round" fill="none">
+    <path d="M40 28 C 40 42, 38 52, 36 62 M330 26 C 330 40, 328 52, 326 62"/>
+    <path d="M8 62 C 80 54, 140 66, 200 58 S 320 60, 352 56"/>
+    <path d="M60 50 l 4 -12 l 4 12 M64 38 l 0 20" opacity=".8"/>
+    <path d="M120 44 C 150 36, 210 52, 250 42" stroke="#5B7FB4" stroke-width="2" opacity=".8"/>
+  </g></svg>`;
+const cabinScene = `
+<svg class="scene" width="360" height="84" viewBox="0 0 360 84" fill="none" aria-hidden="true">
+  <g fill="#8A9A3E"><ellipse cx="56" cy="24" rx="30" ry="12"/><ellipse cx="84" cy="32" rx="20" ry="9" opacity=".85"/>
+  <ellipse cx="300" cy="22" rx="30" ry="12"/><ellipse cx="274" cy="31" rx="20" ry="9" opacity=".85"/></g>
+  <g stroke="#34322C" stroke-width="1.6" stroke-linecap="round" fill="none">
+    <path d="M56 36 C 56 52, 53 64, 50 76 M74 38 C 74 52, 76 64, 80 76"/>
+    <path d="M296 34 C 296 50, 293 62, 290 76 M312 36 C 312 50, 314 62, 318 76"/>
+    <path d="M150 74 L150 48 L180 32 L210 48 L210 74 Z M168 74 L168 58 L192 58 L192 74 M198 40 L198 30 L204 30 L204 44"/>
+    <path d="M10 78 C 100 74, 260 74, 350 78"/>
+  </g></svg>`;
+const keyScene = `
+<svg class="scene" width="200" height="66" viewBox="0 0 200 66" fill="none" aria-hidden="true">
+  <g stroke="#34322C" stroke-width="1.6" stroke-linecap="round" fill="none">
+    <rect x="70" y="18" width="60" height="40" rx="4"/>
+    <path d="M70 30 L130 30 M96 30 L96 18"/>
+    <circle cx="100" cy="42" r="5"/>
+    <path d="M104 44 l 12 8 M112 49 l -3 4 M116 51 l -3 4" stroke="#C44F41"/>
+  </g>
+  <g fill="#8A9A3E"><ellipse cx="30" cy="30" rx="16" ry="7"/><ellipse cx="172" cy="28" rx="16" ry="7"/></g>
+  <g stroke="#34322C" stroke-width="1.4" stroke-linecap="round"><path d="M30 36 C 30 46, 29 52, 28 58 M172 34 C 172 44, 171 52, 170 58"/></g>
+</svg>`;
+/* THE CORRIDOR MAP — Ryan: "as a guest I have to read so much! would be great if
+   there was a map - to compare where we are to these 'sections'".
+   A real Forest Service map is public domain but wrong for this: dense contours and
+   road numbers, unreadable on a phone, MORE reading not less. Kernville's geography
+   is genuinely one-dimensional — the lodge sits on a river corridor and everything
+   is either up-river (north) or down-river (south). So the map IS that: you in the
+   middle, bands stepping away by drive time, real landmarks in each band. Answers
+   "where is this stuff relative to me" at a glance instead of in a paragraph.
+   Every label measured against the 380 canvas before drawing. */
+const zoneMap = `
+<svg class="scene" width="380" height="452" viewBox="0 0 380 452" fill="none" aria-hidden="true" style="margin-top:10px">
+  <rect x="0" y="16"  width="380" height="78" fill="#8A9A3E" opacity=".05"/>
+  <rect x="0" y="170" width="380" height="56" fill="#E0655A" opacity=".07"/>
+  <rect x="0" y="282" width="380" height="76" fill="#8A9A3E" opacity=".05"/>
+  <g stroke="#E3E0D6" stroke-width="1"><path d="M0 94 H380 M0 170 H380 M0 226 H380 M0 282 H380 M0 358 H380"/></g>
+
+  <path d="M150 16 C 140 70, 158 120, 146 172 C 136 220, 152 270, 142 320 C 134 366, 146 410, 138 448"
+        stroke="#5B7FB4" stroke-width="13" opacity=".26" stroke-linecap="round"/>
+  <path d="M150 16 C 140 70, 158 120, 146 172 C 136 220, 152 270, 142 320 C 134 366, 146 410, 138 448"
+        stroke="#5B7FB4" stroke-width="1.6" opacity=".5"/>
+  <text x="120" y="120" font-size="9.5" font-style="italic" fill="#5B7FB4" font-family="Georgia,serif" text-anchor="middle" transform="rotate(-90 120 120)">Kern River</text>
+
+  <g stroke="#34322C" stroke-width="1.3" stroke-dasharray="5 4" opacity=".55"><path d="M176 16 C 170 90, 182 150, 174 226 C 168 300, 180 370, 172 448"/></g>
+  <text x="196" y="404" font-size="9.5" font-style="italic" fill="#6B675A" font-family="Georgia,serif" transform="rotate(-90 196 404)">Sierra Way</text>
+
+  <g stroke="#6B675A" stroke-width="1.3" stroke-linecap="round"><path d="M352 44 V14 M346 20 L352 12 L358 20"/></g>
+  <text x="352" y="58" font-size="9.5" fill="#6B675A" font-family="Georgia,serif" text-anchor="middle">N</text>
+
+  <text x="20" y="34"  font-size="12" font-weight="bold" fill="#34322C" font-family="Georgia,serif">High country</text>
+  <text x="20" y="50"  font-size="10" font-style="italic" fill="#6B675A" font-family="Georgia,serif">50 min – 1½ hr</text>
+  <text x="20" y="66"  font-size="10" fill="#34322C" font-family="Georgia,serif">Trail of 100 Giants · Sherman Pass</text>
+
+  <text x="20" y="116" font-size="12" font-weight="bold" fill="#34322C" font-family="Georgia,serif">The canyon</text>
+  <text x="20" y="132" font-size="10" font-style="italic" fill="#6B675A" font-family="Georgia,serif">25–45 min</text>
+  <text x="20" y="148" font-size="10" fill="#34322C" font-family="Georgia,serif">Johnsondale Bridge · McNally's · the slides</text>
+
+  <path d="M78 200 L78 186 L90 178 L102 186 L102 200 Z" stroke="#C44F41" stroke-width="1.7" fill="#FBEFEA"/>
+  <text x="112" y="192" font-size="11" font-weight="bold" fill="#C44F41" font-family="Georgia,serif">You are here</text>
+  <text x="20" y="216" font-size="10" fill="#34322C" font-family="Georgia,serif">On foot: the river, the pool, the lawn</text>
+
+  <text x="20" y="248" font-size="12" font-weight="bold" fill="#34322C" font-family="Georgia,serif">In town</text>
+  <text x="88" y="248" font-size="10" font-style="italic" fill="#6B675A" font-family="Georgia,serif">4 min</text>
+  <text x="20" y="266" font-size="10" fill="#34322C" font-family="Georgia,serif">Cheryl's · brewery · bakery · Riverside Park</text>
+
+  <text x="20" y="304" font-size="12" font-weight="bold" fill="#34322C" font-family="Georgia,serif">The valley</text>
+  <text x="20" y="320" font-size="10" font-style="italic" fill="#6B675A" font-family="Georgia,serif">10–25 min</text>
+  <text x="20" y="336" font-size="10" fill="#34322C" font-family="Georgia,serif">Lake Isabella · Silver City · hot springs</text>
+
+  <text x="20" y="382" font-size="10" font-style="italic" fill="#6B675A" font-family="Georgia,serif">Day trips · 1 hr+ · either direction</text>
+  <text x="20" y="398" font-size="10" fill="#34322C" font-family="Georgia,serif">Bakersfield · Red Rock · Sequoia NP</text>
+
+  <text x="20" y="432" font-size="9.5" font-style="italic" fill="#6B675A" font-family="Georgia,serif">Upriver is north, into the forest. Downriver is south, toward the lake.</text>
+</svg>`;
+const sprig = `<svg width="30" height="26" viewBox="0 0 30 26" fill="none" aria-hidden="true">
+  <ellipse cx="15" cy="8" rx="11" ry="5" fill="#8A9A3E"/>
+  <ellipse cx="8" cy="11" rx="6" ry="3" fill="#8A9A3E" opacity=".85"/>
+  <path d="M14 12 C 14.5 17, 13.5 21, 12.5 24 M14.5 15 L 10.5 12.5 M14 17.5 L 17.5 15.5" stroke="#34322C" stroke-width="1.4" stroke-linecap="round"/>
+</svg>`;
+let squigN = 0;
+function squiggle() {
+  squigN++;
+  const flip = squigN % 2 ? "" : "transform:scaleX(-1);";
+  const p = squigN % 3 === 0
+    ? "M2 5 C 16 9, 26 1, 40 6 S 66 9, 78 4 S 100 2, 108 6"
+    : "M2 6 C 14 1, 22 9, 34 5 S 56 2, 68 6 S 96 9, 108 4";
+  return `<svg class="divid" width="110" height="26" viewBox="0 0 110 26" fill="none" aria-hidden="true" style="${flip}">
+    <path d="${p}" stroke="#E0655A" stroke-width="2" stroke-linecap="round"/>
+    <ellipse cx="55" cy="16" rx="8" ry="3.6" fill="#8A9A3E"/>
+    <path d="M54.5 19 C 54.7 21.5, 54.3 23, 54 24.5" stroke="#34322C" stroke-width="1.2" stroke-linecap="round"/></svg>`;
+}
+const bearSvg = `<svg width="34" height="30" viewBox="0 0 34 30" fill="none" aria-hidden="true"><circle cx="9" cy="8" r="4.5" stroke="#C44F41" stroke-width="1.7"/><circle cx="25" cy="8" r="4.5" stroke="#C44F41" stroke-width="1.7"/><ellipse cx="17" cy="17.5" rx="11" ry="10" stroke="#C44F41" stroke-width="1.7"/><circle cx="13.5" cy="15" r="1.2" fill="#C44F41"/><circle cx="20.5" cy="15" r="1.2" fill="#C44F41"/><path d="M15.5 20.5 Q17 22 18.5 20.5" stroke="#C44F41" stroke-width="1.5" stroke-linecap="round"/></svg>`;
+const inkMark = k => ({
+  mug: `<svg class="mark" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 4.5h7v5a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2zM9.5 5.5h1.5a1.5 1.5 0 0 1 0 3H9.5M4 3c.5-.8.5-1.2 0-2M7 3c.5-.8.5-1.2 0-2" stroke="#34322C" stroke-width="1.2" stroke-linecap="round"/></svg>`,
+  boot: `<svg class="mark" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M4 2v6l1.5 1h4L12 11v1.5H2.5V2z" stroke="#6E7E2E" stroke-width="1.2" stroke-linejoin="round"/></svg>`,
+  fork: `<svg class="mark" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M4 1.5v4M6 1.5v4M5 5.5v7M5 1.5v4M9.5 1.5c-1.2 0-1.8 1.8-1.8 3.6 0 1.2.7 1.7 1.8 1.7v5.7M9.5 1.5v11" stroke="#34322C" stroke-width="1.1" stroke-linecap="round"/></svg>`,
+  moon: `<svg class="mark" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M10.5 8.8A5 5 0 0 1 5.2 3.5 5 5 0 1 0 10.5 8.8z" stroke="#34322C" stroke-width="1.2"/></svg>`,
+  sun: `<svg class="mark" width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="2.6" stroke="#E0655A" stroke-width="1.2"/><path d="M7 1.4v1.4M7 11.2v1.4M1.4 7h1.4M11.2 7h1.4M3 3l1 1M10 10l1 1M11 3l-1 1M4 10l-1 1" stroke="#E0655A" stroke-width="1.1" stroke-linecap="round"/></svg>`,
+  paw: `<svg class="mark" width="14" height="14" viewBox="0 0 14 14" fill="none"><ellipse cx="7" cy="9" rx="3" ry="2.4" stroke="#6E7E2E" stroke-width="1.2"/><circle cx="3.4" cy="5.5" r="1" stroke="#6E7E2E" stroke-width="1"/><circle cx="6" cy="4" r="1" stroke="#6E7E2E" stroke-width="1"/><circle cx="8.6" cy="4" r="1" stroke="#6E7E2E" stroke-width="1"/><circle cx="10.9" cy="5.5" r="1" stroke="#6E7E2E" stroke-width="1"/></svg>`,
+  fish: `<svg class="mark" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7c2-2.6 5-3.6 7.5-2.2L12.5 3v8l-3-1.8C7 10.6 4 9.6 2 7z" stroke="#5B7FB4" stroke-width="1.2" stroke-linejoin="round"/><circle cx="4.6" cy="6.6" r=".5" fill="#5B7FB4"/></svg>`,
+  weight: `<svg class="mark" width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="4.4" width="2.3" height="5.2" rx=".7" stroke="#34322C" stroke-width="1.1"/><rect x="10.7" y="4.4" width="2.3" height="5.2" rx=".7" stroke="#34322C" stroke-width="1.1"/><path d="M3.3 7h7.4" stroke="#34322C" stroke-width="1.4" stroke-linecap="round"/></svg>`,
+  wifi: `<svg class="mark" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.3 5.8a6.6 6.6 0 0 1 9.4 0M4.1 7.9a4 4 0 0 1 5.8 0" stroke="#34322C" stroke-width="1.2" stroke-linecap="round"/><circle cx="7" cy="10.4" r=".9" fill="#34322C"/></svg>`,
+  wave: `<svg class="mark" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1.3 5.8c1.1-1.1 2.3-1.1 3.4 0s2.3 1.1 3.4 0 2.3-1.1 3.4 0M1.3 9.3c1.1-1.1 2.3-1.1 3.4 0s2.3 1.1 3.4 0 2.3-1.1 3.4 0" stroke="#5B7FB4" stroke-width="1.2" stroke-linecap="round"/></svg>`,
+  cloud: `<svg class="mark" width="18" height="13" viewBox="0 0 20 14" fill="none"><ellipse cx="7" cy="8" rx="5" ry="3.6" fill="#6B675A" opacity=".4"/><ellipse cx="13" cy="7" rx="4.5" ry="3.3" fill="#6B675A" opacity=".3"/><ellipse cx="10" cy="10" rx="6.5" ry="3" fill="#6B675A" opacity=".45"/></svg>`,
+}[k] || "");
+/* clear/partly-cloudy uses the sun mark already proven in the codebase; everything
+   else (overcast/rain/snow/fog/storms) gets the one cloud mark — two states, not
+   eight, on purpose. Both were rendered to PNG and eyeballed before shipping. */
+const weatherIcon = code => inkMark(code != null && code <= 2 ? "sun" : "cloud");
+const WEATHER_LINK = "https://www.google.com/search?q=weather+kernville+ca";
+function moonDisc(d) {
+  const info = moonInfo(d);
+  const frac = info.age / 29.53;
+  const sweep = frac < .5 ? 1 : 0;
+  const rx = Math.abs(Math.cos(frac * 2 * Math.PI)) * 6;
+  return `<svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true" style="vertical-align:-3px">
+    <circle cx="9" cy="9" r="7" fill="none" stroke="#34322C" stroke-width="1.3"/>
+    ${info.newish ? "" : info.fullish ? `<circle cx="9" cy="9" r="5.4" fill="#8A9A3E" opacity=".7"/>`
+      : `<path d="M9 3.2 A5.8 5.8 0 0 ${sweep} 9 14.8 A${rx} 5.8 0 0 ${frac < .5 ? 0 : 1} 9 3.2z" fill="#8A9A3E" opacity=".7"/>`}
+  </svg>`;
+}
+const sunHorizon = `<svg width="20" height="14" viewBox="0 0 20 14" aria-hidden="true" style="vertical-align:-2px"><path d="M2 11h16" stroke="#34322C" stroke-width="1.3" stroke-linecap="round"/><path d="M6 11a4 4 0 0 1 8 0" fill="none" stroke="#E0655A" stroke-width="1.4"/><path d="M10 2v2.4M4.5 4.5l1.6 1.6M15.5 4.5l-1.6 1.6" stroke="#E0655A" stroke-width="1.2" stroke-linecap="round"/></svg>`;
+
+/* THE LIVING SCENE — the landing is a painting of this exact moment on the river */
+function sceneHero(c, txt) {
+  const sun = sunTimes(c.n);
+  const night = c.min < sun.rise - 30 || c.min > sun.set + 45;
+  const golden = !night && c.min > sun.set - 80;
+  const dawn = !night && c.min < sun.rise + 40;
+  const sky = night ? "#243243" : golden ? "#FBEFEA" : dawn ? "#F7EFE4" : "#FFFFFF";
+  const ink = night ? "#E8E4D4" : "#34322C";
+  const frac = Math.max(0.04, Math.min(0.96, (c.min - sun.rise) / Math.max(1, sun.set - sun.rise)));
+  const sx = 36 + 288 * frac, sy = 128 - 96 * Math.sin(Math.PI * frac);
+  const mi = moonInfo(c.n);
+  const stars = night ? [[38,26],[86,52],[142,22],[204,58],[252,30],[306,50],[332,18],[64,78],[184,40],[286,84],[120,64],[226,20]]
+    .map(p => `<circle cx="${p[0]}" cy="${p[1]}" r="1.2" fill="#F7F4EC" opacity=".9"/>`).join("") : "";
+  const orb = night
+    ? `<g transform="translate(292,40)"><circle r="13" fill="none" stroke="${ink}" stroke-width="1.4"/>${mi.newish ? "" : mi.fullish ? `<circle r="10" fill="#8A9A3E" opacity=".55"/>` : `<path d="M0 -10 A10 10 0 0 ${mi.age < 14.8 ? 1 : 0} 0 10 A${Math.abs(Math.cos(mi.age / 29.53 * 2 * Math.PI)) * 10} 10 0 0 ${mi.age < 14.8 ? 0 : 1} 0 -10z" fill="#8A9A3E" opacity=".55"/>`}</g>`
+    : `<g transform="translate(${sx},${sy})"><circle r="11" fill="${golden || dawn ? "#E0655A" : "none"}" stroke="#E0655A" stroke-width="1.6"/><path d="M0 -17v-5M0 17v5M-17 0h-5M17 0h5M-12 -12l-4 -4M12 12l4 4M12 -12l4 -4M-12 12l-4 4" stroke="#E0655A" stroke-width="1.3" stroke-linecap="round" opacity=".8"/></g>`;
+  return `
+<svg class="scene" width="360" height="252" viewBox="0 0 360 252" aria-hidden="true" style="margin-top:2px">
+  <rect x="0" y="0" width="360" height="188" fill="${sky}"/>
+  ${stars}${orb}
+  <path d="M0 152 L58 112 L106 142 L168 98 L228 136 L288 106 L360 146 L360 188 L0 188 Z" fill="none" stroke="${ink}" stroke-width="1.5" stroke-linejoin="round" opacity=".85"/>
+  <g fill="#8A9A3E"><ellipse cx="38" cy="128" rx="26" ry="10"/><ellipse cx="60" cy="138" rx="18" ry="8" opacity=".85"/><ellipse cx="322" cy="126" rx="26" ry="10"/><ellipse cx="300" cy="136" rx="18" ry="8" opacity=".85"/></g>
+  <g stroke="${ink}" stroke-width="1.5" stroke-linecap="round"><path d="M38 136 C38 152,37 160,36 170 M322 134 C322 150,321 158,320 168"/></g>
+  <g>
+    <path d="M150 172 L150 146 L180 128 L210 146 L210 172 Z" fill="${night ? "#2E3B4E" : "#FFFFFF"}" stroke="${ink}" stroke-width="1.6"/>
+    <rect x="169" y="152" width="11" height="10" fill="${night ? "#E8A33C" : "none"}" stroke="${ink}" stroke-width="1.2"/>
+    <rect x="186" y="152" width="11" height="20" fill="none" stroke="${ink}" stroke-width="1.2"/>
+    <path d="M198 136 L198 124 L205 124 L205 141" fill="none" stroke="${ink}" stroke-width="1.4"/>
+    ${night ? "" : `<path d="M201 118 c2 -4 6 -3 6 1" fill="none" stroke="${ink}" stroke-width="1.1" opacity=".6"/>`}
+  </g>
+  <path d="M0 188 L360 188 L360 214 L0 214 Z" fill="#5B7FB4" opacity="${night ? ".45" : ".3"}"/>
+  <path d="M10 200 C 60 196, 120 204, 180 199 S 300 196, 350 202" stroke="#5B7FB4" stroke-width="1.6" fill="none" opacity=".8"/>
+  <text x="20" y="42" font-family="Snell Roundhand, Segoe Script, Brush Script MT, cursive" font-size="27" fill="#E0655A">${txt.top}</text>
+  ${txt.skyline ? `<text x="20" y="72" font-family="Georgia,serif" font-size="12" font-style="italic" fill="${night ? "#B9C2CE" : "#6B675A"}">${txt.skyline}</text>` : ""}
+  <rect x="0" y="214" width="360" height="38" fill="${night ? "#243243" : "#FFFFFF"}"/>
+  <path d="M0 214 L360 214" stroke="${ink}" stroke-width="1.2"/>
+  <text x="20" y="231" font-family="Georgia,serif" font-size="14.5" font-weight="bold" fill="${ink}">${txt.cap}</text>
+  ${txt.sub ? `<text x="20" y="246" font-family="Georgia,serif" font-size="11" font-style="italic" fill="${night ? "#B9C2CE" : "#6B675A"}">${txt.sub}</text>` : ""}
+</svg>`;
+}
+/* a small quiet canopy for the landing greeting — the EXACT tree() formula already
+   live on the property map (same two ellipses + trunk curve), not a new invention.
+   Rendered and eyeballed as a PNG before wiring this in — reads as a real soft
+   pine canopy, unlike the first attempt (a hand-drawn "bough" that came out
+   looking like arrows, caught the same way and reverted). */
+const landingCanopy = `<svg width="42" height="36" viewBox="0 0 34 38" fill="none" aria-hidden="true" style="margin-top:8px">
+  <ellipse cx="16" cy="16" rx="14" ry="6.16" fill="#8A9A3E" opacity=".92"/>
+  <ellipse cx="22.72" cy="20.76" rx="8.4" ry="3.92" fill="#8A9A3E" opacity=".68"/>
+  <path d="M16 22.16 C16 27.2, 15.4 30, 15 34.2" stroke="#34322C" stroke-width="1.2" stroke-linecap="round"/>
+</svg>`;
+/* content-first override — the landing leads with words, not paint.
+   cap/sub (the single "do this" pick) are deliberately NOT rendered here —
+   the facts card goes first (welcomeCard), the pick is demoted to bigActs below it. */
+function sceneHero(c, txt) {
+  const wNow = wxNow();
+  return `<div class="t-display">${txt.top}</div>
+    ${txt.skyline ? `<p class="logi">${txt.skyline}</p>` : ""}
+    ${wNow ? `<a href="${WEATHER_LINK}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px">
+      ${weatherIcon(wxCurrentCode())}<span style="color:var(--coral-deep);font-weight:700;font-size:15px">${esc(wNow)}</span>
+    </a>` : ""}
+    ${landingCanopy}`;
+}
+function openNowTick(c) {
+  const open = DATA.eat.map(p => ({ p, st: statusFor(p, c) })).filter(x => x.st.order <= 1)
+    .sort((a, b) => a.st.order - b.st.order || fitScore(b.p.goodFor) - fitScore(a.p.goodFor)).slice(0, 3);
+  if (!open.length) return "";
+  return `<div class="tick"><span class="label" style="color:var(--olive-deep)">Open right now in town</span>
+    ${open.map(x => `<div style="margin-top:9px">
+      <div style="display:flex;justify-content:space-between;gap:8px;font-size:14px"><span><b>${esc(x.p.name)}</b> <span class="logi">· ${esc(x.p.area)}</span></span><span class="st"><span class="dot"></span>${x.st.text}</span></div>
+      <div class="acts" style="margin-top:5px">${x.p.phone ? `<a class="act" href="${telHref(x.p.phone)}">Call</a>` : ""}<a class="act" href="${mapsQ(x.p.name)}" target="_blank" rel="noopener">Directions</a></div>
+    </div>`).join("")}
+  </div>`;
+}
+function bigActs(primaryLabel, primaryGoto, primaryHref) {
+  const primary = primaryLabel
+    ? (primaryHref
+      ? `<a class="bigbtn primary" href="${primaryHref}">${primaryLabel}</a>`
+      : `<button class="bigbtn primary" data-goto="${primaryGoto || "eat"}">${primaryLabel}</button>`)
+    : "";
+  return `<div class="bigacts">${primary}
+    <button class="bigbtn half" data-nav="explore">Explore the valley</button>
+    <a class="bigbtn half" href="${SMS_DESK}">Text the desk</a>
+  </div>`;
+}
+/* THE FIRST THING ON THE PAGE — impossible-to-get-wrong facts, before any suggestion.
+   Ryan: "why do we have to tell them what to do on the first page... give them
+   something that is literally impossible to get wrong." Room, wifi, pool code,
+   check-in/out, weather, how to reach us, and the gym perk — nothing here is a guess. */
+function welcomeCard(sc) {
+  const E = DATA.essentials;
+  const rt = room ? ROOM_KEYS[room] : null;
+  const roomBit = (roomNum || rt)
+    ? `Room <b>${esc(roomNum || (rt ? rt.label : ""))}</b>${rt ? " · " + esc(rt.type) : ""} — it's lit up on the map under The Lodge.`
+    : `The desk will hand you your room number at check-in.`;
+  return `<div class="esscard"><span class="label">The essentials</span>
+    <div style="margin-top:6px;font-size:14.5px;line-height:1.95">
+      ${roomBit}<br>
+      Check-in <b>${esc(E.checkin)}</b> · check-out <b>${esc(E.checkout)}</b> — ${esc(E.keys)}<br>
+      ${inkMark("wifi")}Wi-Fi <b>${esc(E.wifiNet)}</b> — password <button class="act" data-copy="${esc(E.wifiPass)}" style="padding:2px 8px;min-height:30px"><b style="color:var(--coral-deep)">${esc(E.wifiPass)}</b></button> (tap to copy)<br>
+      ${inkMark("wave")}Pool gate <button class="act" data-copy="${esc(E.pool)}" style="padding:2px 8px;min-height:30px"><b style="color:var(--coral-deep)">${esc(E.pool)}</b></button> — towels at the desk<br>
+      ${esc(E.coffee)}
+    </div>
+    <p class="why" style="margin-top:10px;font-size:13.5px">Something off with the room? <a href="${SMS_DESK}">Text us before you think about a review</a> — we'd rather fix it tonight.</p>
+  </div>
+  ${fitHausCard()}`;
+}
+/* FitHaus needs a real waiver before the door code does anything — Ryan: "force them to
+   read it first... so they don't break rules or at least read the document". The waiver
+   requirement is always visible; the code/rules/real PDF sit behind one deliberate tap,
+   which is the strongest a static page with no login can actually enforce. */
+function fitHausCard() {
+  const G = DATA.essentials.gym;
+  return `<div class="tick alt2"><span class="label" style="color:var(--olive-deep)">On us this stay</span>
+    <p style="margin:3px 0 0;font-size:14px">${inkMark("weight")}A free day pass to <b>${esc(G.name)}</b> — ${esc(G.note)}. ${esc(G.address)}.</p>
+    <p class="why" style="margin:8px 0 0;font-size:13.5px">${esc(G.waiver)}<br><a href="${G.waiverUrl}" target="_blank" rel="noopener">${esc(G.waiverLinkLabel)}</a></p>
+    <details class="row" style="margin-top:6px"><summary><h3 style="font-size:14px">Door code &amp; house rules</h3></summary>
+      <div class="more">
+        <p style="font-size:13.5px">${esc(G.door)}</p>
+        <p style="font-size:13.5px;margin-top:6px">${esc(G.etiquette)}</p>
+        <p style="font-size:13.5px;margin-top:6px">${esc(G.contact)}</p>
+        <p style="margin-top:8px"><a href="${G.pdfUrl}" target="_blank" rel="noopener">Read FitHaus's full instructions (PDF)</a></p>
+      </div>
+    </details>
+  </div>`;
+}
+
+/* ===================== SHARED FRAGMENTS ===================== */
+function verdict(slotLabel, name, why, logi, btns, alts, catSection) {
+  const altHtml = (alts && alts.length) || catSection ? `
+    <details class="alts"><summary>Not it? ${alts && alts.length ? "Two more ideas · " : ""}everything</summary>
+      <svg width="60" height="8" viewBox="0 0 60 8" aria-hidden="true"><path d="M2 5 C 12 1, 20 7, 30 4 S 50 2, 58 5" stroke="#E0655A" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
+      ${(alts || []).map(a => `<div class="alt"><b>${esc(a.name)}</b> — ${esc(a.line || a.area || a.cat || a.diff || "")}</div>`).join("")}
+      ${catSection ? `<div class="alt catlink"><a href="#" data-goto="${catSection}">Everything, in Explore</a></div>` : ""}
+    </details>` : "";
+  return `<div class="beat">
+    <span class="slotlab">${slotLabel}</span>
+    <div class="pickname">${name}</div>
+    ${why ? `<p class="why">${why}</p>` : ""}
+    ${logi ? `<p class="logi">${logi}</p>` : ""}
+    ${btns || ""}
+    ${altHtml}
+  </div>`;
+}
+function btn(label, href, ghost) {
+  return href ? `<a class="btn ${ghost ? "ghost" : ""}" href="${href}" ${/^http/.test(href) ? 'target="_blank" rel="noopener"' : ""}>${label}</a>` : "";
+}
+const SMS_DESK = "sms:+17603763733";
+function essStrip() {
+  const E = DATA.essentials;
+  return `<div class="ess-strip">
+    <button data-copy="${esc(E.wifiPass)}"><span class="label">Wi-Fi</span><b>${esc(E.wifiPass)}</b><span class="copyhint">tap to copy</span></button>
+    <button data-copy="${esc(E.pool)}"><span class="label">Pool</span><b>${esc(E.pool)}</b><span class="copyhint">tap to copy</span></button>
+    <span class="essv"><span class="label">Out</span><b>11 AM</b></span>
+    <a href="${SMS_DESK}"><span class="label">Desk</span><b>Text us</b></a>
+  </div>`;
+}
+function greetLine(c, sc) {
+  const n = guestName ? guestName.split(/\s+/)[0] : "";
+  const dstr = DAY_ABBR[c.day] + " " + MONTHS[c.n.getMonth()] + " " + c.n.getDate();
+  if (sc.mode === "arrival") return `Night 1 of ${sc.nights} · ${dstr}` + (n ? ` · ${esc(n)}` : "");
+  if (sc.mode === "full") return `Night ${sc.di + 1} of ${sc.nights} · ${dstr}` + (n ? ` · ${esc(n)}` : "");
+  return dstr + (n ? ` · ${esc(n)}` : "");
+}
+function fixSheetHtml(openIt) {
+  return `<details class="sheet" id="fixsheet" ${openIt ? "open" : ""}><summary>Not you? Fix who's here</summary>
+    <label class="fl" for="guestNameInput">First name</label>
+    <input type="text" id="guestNameInput" value="${esc(guestName)}" autocomplete="given-name">
+    <div class="stayrow">
+      <label><span class="fl">Arrive</span><input type="date" id="stayA" value="${stay && stay.a ? esc(stay.a) : ""}"></label>
+      <label><span class="fl">Leave</span><input type="date" id="stayD" value="${stay && stay.d ? esc(stay.d) : ""}"></label>
+    </div>
+    <span class="fl">Who's here?</span>
+    <div class="chips">${DATA.personas.map(p =>
+      `<button class="chip ${p.dog ? "dogchip" : ""} ${picked.has(p.id) ? "on" : ""}" data-p="${p.id}">${p.label}</button>`).join("")}</div>
+    <label class="fl" for="roomNumInput">Room number (it's on your key)</label>
+    <input type="text" id="roomNumInput" inputmode="numeric" maxlength="3" value="${esc(roomNum)}" style="max-width:130px">
+    <span class="fl">Room style (if you know it)</span>
+    <div class="chips" id="roomChips">${Object.entries(ROOM_KEYS).map(([k, v]) =>
+      `<button class="chip ${room === k ? "on" : ""}" data-room="${k}">${v.label}</button>`).join("")}</div>
+    <div class="chips"><button class="chip" data-savewho>Save</button><button class="chip" data-clearall>Start fresh</button></div>
+  </details>`;
+}
+function seasonLine(m) {
+  return `<p class="logi" style="font-style:italic">${esc(DATA.seasons[seasonOf(m)].split(" — ")[0].split(". ")[0])}.</p>`;
+}
+
+/* ===================== DAY STRIP (scroll-snap shelf) ===================== */
+function dayStrip(c, sc) {
+  if (picked.has("oneNight") || sc.days.length < 2) return "";
+  const days = sc.days.slice(0, 8);
+  const lastMid = +midOf(sc.days[sc.days.length - 1]);
+  const firstMid = +midOf(sc.days[0]);
+  const cards = days.map((d, i) => {
+    const dm = +midOf(d);
+    if (dm < +c.mid) return "";
+    const wd = d.getDay(), m = d.getMonth() + 1;
+    const isArr = dm === firstMid, isOut = dm === lastMid && sc.days.length > 1;
+    const isToday = dm === +c.mid;
+    const pastBk = isToday && c.min >= 660;    /* breakfast is over for today */
+    const pastAct = isToday && c.min >= 1020;  /* day activity window closed */
+    const bits = [];
+    if (!isArr && !isOut && !pastBk) {
+      const b = rotatePick(mealPool("breakfast", wd, 510, m), null, i);
+      if (b) bits.push(inkMark("mug") + esc(b.name));
+    }
+    if (!isOut) {
+      const act = rotatePick(actPool(d, { midday: heatMonth(m), tripsOK: sc.nights >= 3 || picked.has("adventure") }), null, i);
+      if (act && !isArr && !pastAct) bits.push(inkMark("boot") + esc(act.name));
+      const dprobe = isToday ? Math.max(c.min, 1110) : 1110;
+      const din = rotatePick(mealPool("dinner", wd, dprobe, m), null, i);
+      if (din) bits.push(inkMark("fork") + esc(din.name));
+    } else {
+      const b = rotatePick(mealPool("breakfast", wd, 510, m), null, i);
+      bits.push(inkMark("mug") + (b ? esc(b.name) : "an easy morning"));
+      bits.push("keys in the box by 11");
+    }
+    const evs = DATA.events.filter(e => e.cadence === "weekly" && e.weekday === wd && !(e.adult && picked.has("family")))
+      .filter(e => !(isArr && (e.end == null ? 1440 : e.end) <= 900) && !(isOut && (e.start == null ? 0 : e.start) >= 660));
+    if (evs.length) bits.push(`<span style="color:var(--coral-deep)">${esc(evs[0].name)}</span>`);
+    return `<div class="dcard ${isToday ? "today" : ""}">
+      <span class="dname">${isToday ? "Today" : DAY_ABBR[wd] + " " + d.getDate()}</span>
+      ${bits.slice(0, 3).map(b => `<div>${b}</div>`).join("")}
+    </div>`;
+  }).join("");
+  if (!cards.trim()) return "";
+  const wds2 = new Set(sc.days.map(d => d.getDay()));
+  const warns = [];
+  if ([1, 2, 3].some(x => wds2.has(x))) warns.push("Ewings runs Thu–Sun only");
+  if ([2, 3].some(x => wds2.has(x))) warns.push("Airpark Cafe rests Tue & Wed");
+  return `<div class="shelf" id="shelf">${cards}</div>
+    ${warns.length ? `<p class="logi" style="font-style:italic;margin-top:2px">Worth knowing: ${warns.join(" · ")}.</p>` : ""}`;
+}
+
+/* ===================== NOW — per temporal state ===================== */
+function eventsTick(c, sc, limit) {
+  const evs = eventsDuringStay(c, sc).slice(0, limit || 2);
+  if (!evs.length) return "";
+  return `<div class="tick"><span class="label" style="color:var(--olive-deep)">While you're here</span>
+    ${evs.map(x => `<div style="font-size:14px;margin-top:4px"><b>${esc(x.e.name)}</b> · ${DAY_ABBR[x.d.getDay()]} ${MONTHS[x.d.getMonth()]} ${x.d.getDate()}${x.e.cadence === "weekly" && x.e.start != null ? " · " + shortTime(x.e.start) + "–" + shortTime(x.e.end) : ""}</div>`).join("")}
+  </div>`;
+}
+function nowPre(c, sc) {
+  const arr = sc.days[0];
+  const m = arr.getMonth() + 1;
+  const n = guestName ? ", " + esc(guestName.split(/\s+/)[0]) : "";
+  const arrivingToday = sc.arrivingToday || sc.cd === 0;
+  const prep = picked.has("family") ? "Pack life jackets and water shoes."
+    : picked.has("adventure") ? "Pack layers — you'll cross 5,000 feet of climate."
+    : dogOn() ? "Pack the leash and a towel for river paws."
+    : "Pack for " + seasonOf(m) + " — layers do it.";
+  const topTxt = arrivingToday ? `Today's the day${n}.` : `${sc.cd} day${sc.cd === 1 ? "" : "s"} till river time${n}`;
+  return sceneHero(c, {
+      top: topTxt,
+      skyline: arrivingToday ? "Room's ready at 3 — the porch light will be on." : seasonOf(m) + " on the Kern",
+    })
+    + welcomeCard(sc)
+    + (arrivingToday
+      ? `<p class="why" style="margin-top:10px"><b>See you this afternoon.</b> <span class="logi" style="font-weight:400">Running late or need anything on the road? <a href="${SMS_DESK}">Text us</a> — we'll leave your keys in the box by the office door.</span></p>`
+      : `<p class="why" style="margin-top:10px"><b>Arriving ${DAY_FULL[arr.getDay()]}, ${MONTHS[arr.getMonth()]} ${arr.getDate()}.</b> <span class="logi" style="font-weight:400">check-in from 3 — the porch light will be on</span></p>
+         <button data-clearall style="background:none;border:0;padding:4px 0;font-family:var(--serif);font-size:12.5px;color:var(--faded);text-decoration:underline;cursor:pointer;min-height:32px">Not your stay? Start fresh</button>`)
+    + bigActs("", null)
+    + `<p class="why" style="margin-top:14px">${prep}</p>
+    ${eventsTick(c, sc, 2)}
+    ${dayStrip(c, sc)}
+    ${fixSheetHtml(false)}`;
+}
+function goldenSlot(c) {
+  const sun = sunTimes(c.n);
+  const gold = sun.set - 40;
+  if (c.min > gold) return null;
+  return { gold, sun };
+}
+function afterDarkLine(c) {
+  const mi = moonInfo(c.n);
+  if (picked.has("family")) {
+    const sweet = openAt(DATA.eat[1], c.day, Math.max(c.min, 1170)) ? DATA.eat[1] : null;
+    if (sweet) return { name: "Something Sweeter", why: "scoops after dinner — the walk writes itself", logi: statusFor(sweet, c).text };
+    return { name: "Fireplace on, feet up", why: "the little ones earned it — so did you", logi: "" };
+  }
+  if (mi.newish) return { name: "The Milky Way, one pullout north", why: "near-new moon — kill the headlights and let it show off", logi: "deer and curves after dark; drive slow", moon: true };
+  if (mi.fullish) return { name: "The river running silver", why: "big moon tonight — your balcony has the show", logi: "", moon: true };
+  const sporty = DATA.deepCuts.find(d => d.name === "The Sporty");
+  const brewery = DATA.eat[2];
+  if (openAt(brewery, c.day, Math.max(c.min, 1230))) return { name: "Nightcap at the brewery", why: "where the river crowd lands by evening", logi: statusFor(brewery, c).text };
+  if (!picked.has("family") && openAt(sporty, c.day, Math.max(c.min, 1230))) return { name: "The Sporty", why: "the river guides' late room — pool, popcorn, karaoke", logi: statusFor(sporty, c).text };
+  return { name: "Fireplace on, feet up", why: "that's the whole plan", logi: "" };
+}
+function roomCard() {
+  if (!room && !roomNum) return "";
+  const rt = room ? ROOM_KEYS[room] : null;
+  const r = rt ? DATA.rooms.find(x => x.name === rt.type) : null;
+  const head = "Your room" + (roomNum ? " · " + esc(roomNum) : "") + (rt ? " · " + esc(rt.type) : "");
+  const body = (r ? esc(r.features) + " " : (roomNum ? "It's lit up on the map under The Lodge. " : ""));
+  return `<div class="tick alt2"><span class="label" style="color:var(--olive-deep)">${head}</span>
+    <p style="margin:3px 0 0;font-size:14px">${body}Anything acting up — fireplace, A/C, anything? The desk sorts it tonight: <a href="${telHref(DATA.lodge.phone)}">${DATA.lodge.phone}</a>.</p></div>`;
+}
+function lodgeMap() {
+  /* a room block: soft cast shadow under it so the buildings read as buildings, not boxes */
+  const rm = (x, y, w, h, n) => {
+    const yours = roomNum === n;
+    return `<g><rect x="${x + 2.5}" y="${y + 3}" width="${w}" height="${h}" rx="2.5" fill="#34322C" opacity=".13"/>` +
+      `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="2.5" fill="${yours ? "#FBEFEA" : "#C3CE9E"}" stroke="${yours ? "#C44F41" : "#34322C"}" stroke-width="${yours ? "2.4" : "1.2"}"/>` +
+      `<path d="M${x + 5} ${y + 6} H${x + w - 5}" stroke="${yours ? "#C44F41" : "#5E6B33"}" stroke-width=".9" opacity=".55"/>` +
+      `<text x="${x + w / 2}" y="${y + h / 2 + (yours ? 0 : 5.5)}" text-anchor="middle" font-size="12" font-family="Georgia,serif" font-weight="${yours ? "bold" : "normal"}" fill="${yours ? "#C44F41" : "#34322C"}">${n}</text>` +
+      /* the tag goes INSIDE the guest's own block — outside it lands on the neighbour and mislabels their room */
+      (yours ? `<text x="${x + w / 2}" y="${y + h - 5}" text-anchor="middle" font-size="8.5" font-style="italic" fill="#C44F41" font-family="Georgia,serif">yours</text>` : "") + `</g>`;
+  };
+  /* pine canopy + trunk */
+  const tree = (x, y, r) => `<g><ellipse cx="${x}" cy="${y}" rx="${r}" ry="${r * .44}" fill="#8A9A3E" opacity=".92"/>` +
+    `<ellipse cx="${x + r * .48}" cy="${y + r * .34}" rx="${r * .6}" ry="${r * .28}" fill="#8A9A3E" opacity=".68"/>` +
+    `<path d="M${x} ${y + r * .44} C${x} ${y + r * .8}, ${x - .6} ${y + r} , ${x - 1} ${y + r * 1.3}" stroke="#34322C" stroke-width="1.2" stroke-linecap="round"/></g>`;
+  /* stair run */
+  const stairs = (x, y, w, h) => `<g><rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#FFFDF8" stroke="#34322C" stroke-width="1.1"/>` +
+    `<path d="${Array.from({ length: 5 }, (_, i) => `M${x} ${y + h * (i + 1) / 6} H${x + w}`).join("")}" stroke="#34322C" stroke-width=".8" opacity=".6"/></g>`;
+  return `
+<svg class="scene" width="360" height="600" viewBox="0 0 360 600" fill="none" aria-hidden="true">
+  <rect x="30" y="4" width="300" height="592" rx="10" fill="#8A9A3E" opacity=".07"/>
+  <path d="M346 2 C 338 90, 354 190, 344 282 C 336 370, 354 480, 344 598" stroke="#5B7FB4" stroke-width="26" opacity=".2" stroke-linecap="round"/>
+  <path d="M346 2 C 338 90, 354 190, 344 282 C 336 370, 354 480, 344 598" stroke="#5B7FB4" stroke-width="1.6" opacity=".5"/>
+  <g stroke="#5B7FB4" stroke-width="1.1" opacity=".45" stroke-linecap="round"><path d="M342 196 c7 5, 11 -4, 18 2M346 366 c7 5, 11 -4, 18 2M344 552 c7 5, 11 -4, 18 2"/></g>
+  <text x="354" y="270" font-size="10.5" font-style="italic" fill="#5B7FB4" font-family="Georgia,serif" text-anchor="middle" transform="rotate(90 354 270)">Kern River</text>
+  <rect x="2" y="0" width="24" height="600" fill="#E9E6DE"/>
+  <path d="M2 0 V600 M26 0 V600" stroke="#34322C" stroke-width="1.2" opacity=".6"/>
+  <path d="M14 6 V594" stroke="#FFFDF8" stroke-width="1.8" stroke-dasharray="13 13" opacity=".95"/>
+  <text x="14" y="300" font-size="10.5" font-style="italic" fill="#6B675A" font-family="Georgia,serif" text-anchor="middle" transform="rotate(-90 14 300)">Sierra Way</text>
+  <g><rect x="26" y="420" width="180" height="36" rx="14" fill="#D9D6CE" stroke="#34322C" stroke-width="1" stroke-opacity=".4"/>
+    <rect x="194" y="206" width="76" height="290" rx="18" fill="#D9D6CE" stroke="#34322C" stroke-width="1" stroke-opacity=".4"/>
+    <rect x="196" y="418" width="34" height="40" fill="#D9D6CE"/>
+    <text x="232" y="348" font-size="10" font-style="italic" fill="#4A473E" font-family="Georgia,serif" text-anchor="middle">park by</text>
+    <text x="232" y="361" font-size="10" font-style="italic" fill="#4A473E" font-family="Georgia,serif" text-anchor="middle">your door</text></g>
+  <g><rect x="102" y="152.5" width="56" height="54" rx="2" fill="#34322C" opacity=".13"/>
+    <rect x="100" y="150" width="56" height="54" rx="2" fill="#C3CE9E" stroke="#34322C" stroke-width="1.3"/>
+    <path d="M134 150 V204" stroke="#34322C" stroke-width="1.2"/>
+    <rect x="134" y="150" width="22" height="54" fill="#FFFDF8" stroke="#C44F41" stroke-width="1.5"/>
+    <text x="117" y="177" text-anchor="middle" font-size="10" font-family="Georgia,serif" fill="#34322C" transform="rotate(-90 117 177)">storage</text>
+    <path d="M139.5 161 h11 v11 h-11 z M139.5 166.5 h11 M145 161 v11" stroke="#C44F41" stroke-width="1.1" fill="none"/>
+    <text x="145" y="193" text-anchor="middle" font-size="11.5" font-weight="bold" font-family="Georgia,serif" fill="#C44F41">ice</text></g>
+  ${rm(166, 152, 26, 44, "112")}${rm(192, 152, 26, 44, "111")}${rm(218, 152, 26, 44, "110")}${rm(244, 152, 26, 44, "109")}
+  ${stairs(272, 134, 52, 14)}
+  <text x="264" y="124" text-anchor="end" font-size="10" font-style="italic" fill="#6B675A" font-family="Georgia,serif">stairs down</text>
+  ${rm(272, 152, 52, 36, "108")}${rm(272, 188, 52, 36, "107")}${rm(272, 224, 52, 36, "106")}${rm(272, 260, 52, 36, "105")}
+  <g><rect x="272" y="302" width="52" height="72" rx="3" fill="#E9E6DE" stroke="#8B5E4A" stroke-width="1.4"/>
+    <rect x="280" y="310" width="36" height="56" rx="2" fill="#5B7FB4" opacity=".38"/>
+    <rect x="280" y="310" width="36" height="56" rx="2" stroke="#5B7FB4" stroke-width="1.4"/>
+    <g stroke="#FFFDF8" stroke-width="1.3" opacity=".8" stroke-linecap="round"><path d="M285 324 c5 -4, 10 4, 15 0 s8 -3, 11 -1M285 354 c5 -4, 10 4, 15 0 s8 -3, 11 -1"/></g>
+    <g stroke="#34322C" stroke-width="1.2" stroke-linecap="round"><path d="M292 310 v-4 M299 310 v-4"/></g>
+    <text x="298" y="342" text-anchor="middle" font-size="11" font-style="italic" font-family="Georgia,serif" fill="#34322C">pool</text></g>
+  ${rm(272, 386, 52, 36, "104")}${rm(272, 422, 52, 36, "103")}
+  <g><rect x="102" y="296" width="74" height="72" rx="18" fill="#E4E0D6" stroke="#34322C" stroke-width="1.1"/>
+    <text x="126" y="314" text-anchor="middle" font-size="11" font-style="italic" font-family="Georgia,serif" fill="#4A473E">patio</text>
+    <g fill="none" stroke="#4E6B52" stroke-width="1.2"><circle cx="118" cy="336" r="6.5"/><circle cx="138" cy="354" r="6.5"/></g>
+    <g><rect x="148" y="326" width="11" height="9" rx="1.5" fill="#4A473E" stroke="#34322C" stroke-width=".9"/>
+      <path d="M150.5 327 V334 M153.5 327 V334 M156.5 327 V334" stroke="#C3CE9E" stroke-width=".6" opacity=".85"/>
+      <rect x="161" y="326" width="11" height="9" rx="1.5" fill="#4A473E" stroke="#34322C" stroke-width=".9"/>
+      <path d="M163.5 327 V334 M166.5 327 V334 M169.5 327 V334" stroke="#C3CE9E" stroke-width=".6" opacity=".85"/>
+      <path d="M153 322 c-1.6 -2.4, 1.6 -3.2, 0 -5.6M166 322 c-1.6 -2.4, 1.6 -3.2, 0 -5.6" stroke="#C44F41" stroke-width="1" stroke-linecap="round" opacity=".7"/></g>
+    <text x="160" y="350" text-anchor="middle" font-size="9.5" font-family="Georgia,serif" fill="#34322C">BBQ</text></g>
+  <g><rect x="42.5" y="243" width="56" height="92" rx="4" fill="#34322C" opacity=".13"/>
+    <rect x="40" y="240" width="56" height="92" rx="4" fill="#AFBC83" stroke="#34322C" stroke-width="1.5"/>
+    <text x="68" y="322" text-anchor="middle" font-size="12" font-family="Georgia,serif" fill="#34322C">office</text>
+    <path d="M60 332 h16 v6 h-16 z" fill="#C44F41" opacity=".9"/></g>
+  <rect x="96" y="248" width="6" height="34" rx="2" fill="#8A9A3E" opacity=".5" stroke="#34322C" stroke-width=".9"/>
+  ${rm(42, 248, 26, 34, "117")}${rm(68, 248, 26, 34, "118")}
+  ${stairs(104, 250, 12, 34)}
+  <text x="68" y="302" text-anchor="middle" font-size="10" font-style="italic" fill="#4A473E" font-family="Georgia,serif">upstairs</text>
+  ${rm(180, 516, 40, 38, "101")}${rm(222, 516, 40, 38, "102")}
+  ${tree(54, 108, 20)}${tree(88, 86, 14)}${tree(222, 90, 15)}${tree(180, 118, 11)}
+  ${tree(52, 486, 20)}${tree(92, 520, 15)}${tree(140, 480, 13)}${tree(150, 560, 14)}
+  ${tree(300, 500, 15)}${tree(296, 560, 14)}${tree(66, 560, 15)}${tree(240, 566, 12)}
+</svg>`;
+}
+function nowArrival(c, sc) {
+  const late = c.min >= 1260;
+  const dinProbe = Math.max(c.min, 1110);
+  const din = pickMeal("dinner", c.day, late ? c.min : dinProbe, c.month, "dinner", 0);
+  const evs = picked.has("event") ? eventsTick(c, sc, 2) : "";
+  const n2 = guestName ? ", " + esc(guestName.split(/\s+/)[0]) : "";
+  return sceneHero(c, { top: "Evenin'" + n2 + ".", skyline: "You made it. Night 1 of " + sc.nights + "." })
+    + welcomeCard(sc)
+    + bigActs(din ? "Where to eat tonight →" : "Plan tomorrow →", din ? "eat" : "do")
+    + openNowTick(c)
+    + evs
+    + fixSheetHtml(false);
+}
+
+function nowFull(c, sc) {
+  const beats = [];
+  let primary = null;
+  const setPrim = (lab, name, gotoK, sub) => { if (!primary) primary = { lab, name, gotoK, sub: sub || "" }; };
+  const oneNight = picked.has("oneNight");
+  const tripsOK = sc.nights >= 3 || picked.has("adventure");
+  const midday = c.min >= 600 && c.min < 1020;
+  /* breakfast beat — only before 11 AM */
+  if (c.min < 660) {
+    const probe = Math.max(c.min, 480);
+    const b = pickMeal("breakfast", c.day, probe, c.month, "breakfast", sc.di);
+    if (b) {
+      const st = statusFor(b, c);
+      beats.push(verdict("First thing " + inkMark("mug"), esc(b.name),
+        "no breakfast at the lodge — town does it better; coffee's in your room" + (dogOn() && b.dogPatio ? "; patio seats the dog" : ""),
+        (st.cls === "closed" && st.opensAt ? "opens " + shortTime(st.opensAt) : st.text) + " · " + esc(b.area),
+        "", altsFor(mealPool("breakfast", c.day, probe, c.month), b), "eat"));
+      setPrim("First thing", b.name, "eat", (st.cls === "closed" && st.opensAt ? "opens " + shortTime(st.opensAt) : st.text) + " · " + b.area);
+    }
+  }
+  /* main event beat — heat-gated, hours-gated */
+  if (c.min < 1080) {
+    const actOpts = { midday: midday && heatMonth(c.month), tripsOK, nowMin: c.min };
+    const act = pickActivity(c.n, sc.di, actOpts);
+    if (act) {
+      const why = whyFor(act, c, c.n);
+      const heat = heatMonth(c.month) && midday;
+      beats.push(verdict("Today " + inkMark("boot"), esc(act.name),
+        heat ? "valley hits ~100° today — " + (act.water ? "water till 5" : "shade till 5") : why,
+        [act.diff, act.length, act.drive || act.cat].filter(Boolean).join(" · "),
+        btn("Directions", mapsQ(act.name), true),
+        altsFor(actPool(c.n, actOpts), act), "do"));
+      setPrim("Today", act.name, "do", [act.drive || act.cat, act.length].filter(Boolean).join(" · "));
+    }
+  }
+  /* dinner beat — probe at 18:30 so 5 PM openers count */
+  if (c.min < 1290) {
+    const probe = Math.max(c.min, 1110);
+    const din = pickMeal("dinner", c.day, probe, c.month, "dinner", sc.di);
+    if (din) {
+      const st = statusFor(din, c);
+      beats.push(verdict("Dinner " + inkMark("fork"), esc(din.name),
+        dogOn() && din.dogPatio ? "patio seats the dog too" : din.quote.split(/[.—]/)[0].trim().toLowerCase(),
+        (st.cls === "closed" && st.opensAt ? "opens " + shortTime(st.opensAt) : st.text) + (din.book ? " · book ahead" : "") + " · " + esc(din.area),
+        btn("Call", telHref(din.phone)),
+        altsFor(mealPool("dinner", c.day, probe, c.month), din), "eat"));
+      setPrim("Dinner", din.name, "eat", (st.cls === "closed" && st.opensAt ? "opens " + shortTime(st.opensAt) : st.text) + " · " + din.area);
+    }
+  }
+  /* evening / late-night */
+  if (c.min >= 1080 || c.min < 300) {
+    const ad = afterDarkLine(c);
+    if (ad) { beats.push(verdict("After dark " + moonDisc(c.n), esc(ad.name), ad.why, ad.logi, "", null, "secrets")); setPrim("After dark", ad.name, "secrets", ad.logi); }
+    if (c.min >= 1320 || c.min < 300) {
+      const off = c.min < 300 ? 0 : 1;
+      const isCheckoutTomorrow = sc.di + off >= sc.days.length - 1 && sc.days.length > 1;
+      if (!isCheckoutTomorrow) {
+        const nd = (c.day + off) % 7;
+        const tm = mealPool("breakfast", nd, 480, c.month)
+          .map(p => ({ p, t: parseHours(p.hours[DAYS[nd]]) })).filter(x => x.t && x.t !== "unknown").sort((a, b) => a.t.open - b.t.open)[0];
+        if (tm) beats.push(verdict("Tomorrow " + inkMark("mug"), esc(tm.p.name),
+          c.min < 300 ? "first one up later this morning" : "first one up tomorrow",
+          "opens " + shortTime(tm.t.open), ""));
+      }
+    }
+  } else if (c.min >= 900 && c.min < 1080) {
+    const g = goldenSlot(c);
+    if (g) beats.push(verdict("Golden hour " + sunHorizon, shortTime(g.gold),
+      picked.has("couple") ? "balcony or the pool — river view included" : "pool at golden hour; the light does the work",
+      "sunset " + shortTime(g.sun.set), "", null, "do"));
+  }
+  const evs = eventsTick(c, sc, 2);
+  const [hi] = greetingWords(c);
+  return sceneHero(c, { top: hi, skyline: greetLine(c, sc) })
+    + welcomeCard(sc)
+    + bigActs(primary ? "Ideas for " + primary.lab.toLowerCase() + " →" : "Explore the valley →", primary ? primary.gotoK : "do")
+    + `${openNowTick(c)}
+    ${oneNight ? "" : `<span class="label" style="display:block;margin-top:18px">Your days, sketched</span>${dayStrip(c, sc)}`}
+    ${evs}
+    ${fixSheetHtml(false)}`;
+}
+function greetingWords(c) {
+  const n = guestName ? guestName.split(/\s+/)[0] : "";
+  const h = Math.floor(c.min / 60);
+  if (h < 5 || h >= 22) return [n ? `Up late, ${esc(n)}?` : "Up late, night owl?"];
+  if (h < 11) return [n ? `Mornin', ${esc(n)}.` : "Mornin', sunshine."];
+  if (h < 17) return [n ? `Well, hello, ${esc(n)}.` : "Well, hello there."];
+  return [n ? `Evenin', ${esc(n)}.` : "Evenin', traveler."];
+}
+function nowCheckout(c, sc) {
+  const sun = sunTimes(c.n);
+  const nextSeason = { winter: "Spring brings wildflowers and the big water.", spring: "Summer brings festivals and river days.", summer: "Fall brings golden cottonwoods and thin crowds.", fall: "Winter is the quiet secret." }[seasonOf(c.month)];
+  const n3 = guestName ? ", " + esc(guestName.split(/\s+/)[0]) : "";
+  return sceneHero(c, {
+      top: "Last mornin'" + n3 + ".",
+      skyline: "Out by 11 — keys go in the lockbox by the office door.",
+    })
+    + welcomeCard(sc)
+    + `<p class="why" style="margin-top:10px"><b>One more good hour before the canyon.</b> <span class="logi" style="font-weight:400">sunrise ${shortTime(sun.rise)} · the desk answers texts from the road</span></p>`
+    + bigActs("", null)
+    + `<p class="why">${nextSeason} Come on back.</p>
+    <p class="logi">Loved it? <a href="${DATA.lodge.reviewUrl}" target="_blank" rel="noopener">A kind word online</a> keeps a small place alive.</p>
+    ${fixSheetHtml(false)}`;
+}
+function nowPast(c) {
+  const nextSeason = { winter: "come back for spring's wildflowers and big water", spring: "come back for summer festivals and river days", summer: "come back for fall's golden cottonwoods", fall: "come back for the quiet winter secret" }[seasonOf(c.month)];
+  return sceneHero(c, {
+      top: "Thanks for staying" + (guestName ? ", " + esc(guestName.split(/\s+/)[0]) : "") + ".",
+      skyline: "The pines already miss you.",
+    })
+    + `<p class="why" style="margin-top:10px"><b>The river will keep your spot.</b> <span class="logi" style="font-weight:400">${esc(nextSeason)}</span></p>
+    <div class="bigacts"><a class="bigbtn primary" href="${DATA.lodge.site}" target="_blank" rel="noopener">Book your next stay</a></div>
+    <p class="logi" style="margin-top:12px">Loved it? <a href="${DATA.lodge.reviewUrl}" target="_blank" rel="noopener">A kind word online</a> keeps a small place alive.</p>`;
+}
+function nowNone(c) {
+  const [hi] = greetingWords(c);
+  const sun = sunTimes(c.n);
+  const act = c.min < 1080 ? pickActivity(c.n, null, { midday: c.min >= 600 && c.min < 1020 && heatMonth(c.month), tripsOK: false, nowMin: c.min }) : null;
+  const mealKind = c.min < 660 ? "breakfast" : "dinner";
+  const probe = c.min < 660 ? Math.max(c.min, 480) : Math.max(c.min, 1110);
+  const meal = mealPool(mealKind, c.day, probe, c.month);
+  meal.sort((a, b) => fitScore(b.goodFor) - fitScore(a.goodFor));
+  const m0 = meal[0];
+  const dayN = Math.floor(+c.mid / 864e5);
+  const eligible = DATA.deepCuts.filter(d => inSeason(d, c.month));
+  const feat = eligible.length ? eligible[dayN % eligible.length] : null;
+  const evs = DATA.events.filter(e => e.cadence === "weekly" && e.weekday === c.day && !(e.end != null && c.min > e.end));
+  const nightMode = !m0 && c.min >= 1020;
+  const ad = nightMode ? afterDarkLine(c) : null;
+  const nd = (c.day + (c.min < 300 ? 0 : 1)) % 7;
+  const tm = nightMode ? mealPool("breakfast", nd, 480, c.month)
+    .map(p => ({ p, t: parseHours(p.hours[DAYS[nd]]) })).filter(x => x.t && x.t !== "unknown").sort((a, b) => a.t.open - b.t.open)[0] : null;
+  const cap = m0 ? (mealKind === "breakfast" ? "First thing: " : "Dinner: ") + esc(m0.name)
+    : ad ? "After dark: " + esc(ad.name)
+    : act ? "While the light's good: " + esc(act.name)
+    : "All quiet on the river";
+  const capGoto = m0 ? "eat" : ad ? "secrets" : "do";
+  return sceneHero(c, { top: hi, skyline: "Welcome to river time." })
+    + welcomeCard(null)
+    + bigActs(cap === "All quiet on the river" ? "Explore the valley →" : (m0 ? (mealKind === "breakfast" ? "Where to eat this morning →" : "Where to eat tonight →") : "Ideas for tonight →"), capGoto)
+    + `${openNowTick(c)}
+    ${tm ? `<p class="why" style="margin-top:12px">First one up tomorrow: <b>${esc(tm.p.name)}</b>, opens ${shortTime(tm.t.open)}.</p>` : ""}
+    ${evs.length ? `<div class="tick"><span class="label" style="color:var(--olive-deep)">Tonight in town</span><div style="font-size:14px;margin-top:3px"><b>${esc(evs[0].name)}</b> — ${esc(evs[0].blurb)}</div></div>` : ""}
+    ${feat ? `<div class="tick alt2"><span class="label" style="color:var(--coral-deep)">Today's house secret</span><div style="font-size:14px;margin-top:3px"><b>${esc(feat.name)}</b> — ${esc(feat.blurb)}</div></div>` : ""}
+    <p class="why" style="margin-top:12px">Staying with us? Tell the guide your dates and it starts planning your days.</p>
+    ${fixSheetHtml(true)}`;
+}
+function renderNow() {
+  const c = clock();
+  const sc = stayCtx(c);
+  if (sc.mode === "fix") return `<div class="t-display">Hmm — those dates.</div>
+    <p class="why">They didn't add up. Set them below and we're off.</p>${fixSheetHtml(true)}`;
+  if (sc.mode === "none") return nowNone(c);
+  if (sc.mode === "pre") return nowPre(c, sc);
+  if (sc.mode === "arrival") return nowArrival(c, sc);
+  if (sc.mode === "checkout") return nowCheckout(c, sc);
+  if (sc.mode === "past") return nowPast(c);
+  return nowFull(c, sc);
+}
+
+/* ===================== EXPLORE — the appendix ===================== */
+let exFilter = "all", askQuery = "";
+/* zones start showing only their best few; exOpen holds the ones the guest asked to see in full */
+let exOpen = new Set();
+function actsRow(name, opts) {
+  opts = opts || {};
+  const L = LINKS[name], a = [];
+  if (opts.maps !== false) a.push(`<a class="act" href="${mapsQ(opts.mapsQ || name)}" target="_blank" rel="noopener">Directions</a>`);
+  if (opts.tel) a.push(`<a class="act" href="${telHref(opts.tel)}">Call</a>`);
+  if (L) a.push(`<a class="act" href="${L[0]}" target="_blank" rel="noopener">${L[1]}</a>`);
+  return `<div class="acts">${a.join("")}</div>`;
+}
+function hoursTable(p, c) {
+  if (!p.hours) return "";
+  const rows = DAYS.slice(1).concat("sun").map(d =>
+    `<tr${d === DAYS[c.day] ? ' style="font-weight:700;color:var(--olive-deep)"' : ""}><td style="color:var(--faded);width:46px;padding:1px 0">${d[0].toUpperCase() + d.slice(1)}</td><td>${esc(p.hours[d])}</td></tr>`).join("");
+  return `<p class="meta" style="margin-top:7px">All hours</p><table style="font-size:13px;border-collapse:collapse">${rows}</table>`;
+}
+function eatRow(p, c, dim) {
+  const st = statusFor(p, c);
+  const fav = STAFF_EATS.has(p.name) ? `<span style="color:var(--coral)" title="house favorite"> ♥</span>` : "";
+  const today = p.hours ? p.hours[DAYS[c.day]] : "";
+  return `<div class="row ${dim ? "off" : ""}" style="padding:12px 0">
+    <div class="rowtop"><h3>${esc(p.name)}${fav}</h3><span class="st ${st.cls === "open" || st.cls === "soon" ? "" : "closed"}"><span class="dot"></span>${st.text}</span></div>
+    <div class="meta"><b>${esc(p.area)}</b> · ${esc(p.cuisine)} · ${p.price} · today ${esc(today === "Closed" ? "closed" : today.replace(/:00/g, "").replace(/ AM/g, "am").replace(/ PM/g, "pm"))}</div>
+    <p class="desc">${esc(p.quote)}</p>
+    ${p.extra ? `<p class="meta" style="margin-top:4px">${esc(p.extra)}</p>` : ""}
+    ${p.dogPatio && dogOn() ? `<p class="annot">dogs welcome on the patio</p>` : ""}
+    ${actsRow(p.name, { tel: p.phone })}
+    <details class="alts"><summary>The week's hours</summary>${hoursTable(p, c)}</details>
+  </div>`;
+}
+function catRow(it, c, extraMeta) {
+  const bits = [];
+  if (it.practical) bits.push(`<p>${esc(it.practical)}</p>`);
+  if (it.safety) bits.push(`<p class="safe"><b>Know before you go:</b> ${esc(it.safety)}</p>`);
+  if (dogOn()) bits.push(`<p class="annot">${it.dog === false ? "no dogs on this one" : esc(it.dogNote || "dogs welcome")}</p>`);
+  const m = c.month;
+  const closed = it.months && !it.months.includes(m);
+  const gate = closed ? gateLabel(it) : "";
+  const fav = it.kind === "hike" && HOUSE_TRAILS.has(it.name) ? `<span style="color:var(--coral)" title="house favorite"> ♥</span>` : "";
+  const dist = it.drive || extraMeta || "";
+  const rest = it.kind === "hike" ? [it.diff, it.length].filter(Boolean).join(" · ") : (it.cat || "");
+  return `<div class="row ${closed ? "off" : ""}" style="padding:12px 0">
+    <div class="rowtop"><h3>${esc(it.name)}${fav}</h3>${gate ? `<span class="st closed"><span class="dot"></span>${gate}</span>` : ""}</div>
+    <div class="meta">${dist ? `<b>${esc(dist)}</b>` : ""}${dist && rest ? " · " : ""}${esc(rest)}</div>
+    <p class="desc">${esc(it.blurb)}</p>
+    ${bits.join("")}
+    ${actsRow(it.name, { mapsQ: it.mapq || (it.kind === "hike" ? it.name + " trailhead" : it.name), tel: it.phone })}
+  </div>`;
+}
+function exploreEat(c) {
+  const withSt = DATA.eat.map(p => ({ p, st: statusFor(p, c) }));
+  const open = withSt.filter(x => x.st.order <= 1);
+  const later = withSt.filter(x => x.st.order === 2);
+  const closed = withSt.filter(x => x.st.order === 3);
+  open.sort((a, b) => a.st.order - b.st.order || fitScore(b.p.goodFor) - fitScore(a.p.goodFor));
+  return `
+    ${open.length ? `<span class="label">Open now</span>${open.slice(0, 3).map(x => eatRow(x.p, c)).join("")}` : `<p class="why">Kernville's tucked in for the night.</p>`}
+    ${open.length > 3 ? `<details class="grp"><summary>More open now <span class="chev">⌄</span></summary>${open.slice(3).map(x => eatRow(x.p, c)).join("")}</details>` : ""}
+    ${later.length ? `<details class="grp"><summary>Later today <span class="chev">⌄</span></summary>${later.map(x => eatRow(x.p, c)).join("")}</details>` : ""}
+    ${closed.length ? `<details class="grp"><summary>Closed today <span class="chev">⌄</span></summary>${closed.map(x => eatRow(x.p, c, true)).join("")}</details>` : ""}
+    <details class="grp"><summary>${inkMark("mug")} Breakfast spots <span class="chev">⌄</span></summary>${DATA.eat.filter(p => p.breakfast).map(p => eatRow(p, c)).join("")}</details>
+    <p class="logi" style="font-style:italic">Small-town hours wander with the seasons — when it really matters, call first.</p>`;
+}
+function exploreDo(c) {
+  const seasonNow = seasonOf(c.month);
+  const seasonOrder = ["spring", "summer", "fall", "winter"];
+  return `
+    <details class="grp" open><summary>${inkMark("boot")} Trails <span class="chev">⌄</span></summary>
+      ${DATA.hikes.map(h => catRow({ ...h, kind: "hike" }, c)).join("")}
+      <div class="mist" style="margin-top:12px">Down here, hike before 10 or after 5 in summer — or drive up a mountain; it's 20° cooler at Unal. Closed shoes; rattlers like the same warm mornings you do. Carry more water than feels reasonable.</div>
+    </details>
+    <details class="grp"><summary>River & rafting <span class="chev">⌄</span></summary>
+      ${DATA.rafting.map(r => `<details class="row"><summary><div class="rowtop"><h3>${esc(r.name)}</h3><span class="st"><span class="dot"></span>${esc(r.season.toLowerCase())}</span></div><p class="desc">${esc(r.detail)}</p></summary><div class="more">${actsRow(r.name, { tel: r.phone })}</div></details>`).join("")}
+      <div class="note"><span class="label">River respect</span>${esc(DATA.raftingNote)}</div>
+    </details>
+    <details class="grp"><summary>${inkMark("fish")} Fishing <span class="chev">⌄</span></summary>
+      ${DATA.fishing.map(f => `<div class="row" style="padding:12px 0"><h3>${esc(f.name)}</h3><p class="desc" style="font-style:normal">${esc(f.detail)}</p></div>`).join("")}
+      <details class="grp"><summary>Before you cast <span class="chev">⌄</span></summary>
+        <p style="font-size:14px">${esc(DATA.fishingNote)}</p>
+        <p class="desc" style="margin-top:8px">“No self-respecting angler divulges her favorite spots — but pointers about my home water? Those are free.”</p>
+        ${DATA.anglerNotes.map(n => `<div class="row" style="padding:9px 0"><h3 style="font-size:15px">${esc(n.t)}</h3><p style="font-size:13.5px;margin:2px 0 0">${esc(n.d)}</p></div>`).join("")}
+        <div class="acts"><a class="act" href="${LICENSE_LINKS[0]}" target="_blank" rel="noopener">Buy a license</a>
+        <a class="act" href="${LICENSE_LINKS[1]}" target="_blank" rel="noopener">This week's trout stocking</a></div>
+      </details>
+    </details>
+    <details class="grp"><summary>Day trips <span class="chev">⌄</span></summary>
+      ${DATA.dayTrips.map(d => catRow({ ...d, kind: "trip" }, c, d.drive)).join("")}
+      <div class="mist">High roads close with snow roughly Nov–May; fire seasons rearrange things. Ranger district: (760) 376-3781.</div>
+    </details>
+    <details class="grp"><summary>Shops <span class="chev">⌄</span></summary>
+      <p class="desc">${esc(DATA.shops.intro)}</p>
+      ${DATA.shops.groups.map(g => `<div class="row" style="padding:10px 0"><h3 style="font-size:15px">${esc(g.title)}</h3>
+        ${g.list.map(s => `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0"><span>${esc(s)}</span><a class="act" href="${mapsQ(s)}" target="_blank" rel="noopener">Directions</a></div>`).join("")}</div>`).join("")}
+    </details>
+    <details class="grp"><summary>Wildlife & seasons <span class="chev">⌄</span></summary>
+      <div class="note bearRow">${bearSvg}<div><p style="margin:0"><b>About the bears:</b> ${esc(DATA.bearLine)}</p>
+      <p style="margin:6px 0 0"><a href="${DATA.bearLink}" target="_blank" rel="noopener">${esc(DATA.bearLinkLabel)}</a></p>
+      <p class="logi" style="margin:6px 0 0">Bold bear on the property? Tell the front desk.</p></div></div>
+      ${DATA.wildlife.map(w => `<details class="row"><summary><h3>${esc(w.name)}</h3><p class="desc" style="font-style:normal">${esc(w.facts)}</p></summary><div class="more"><p class="safe">${esc(w.safety)}</p></div></details>`).join("")}
+      <details class="grp"><summary>The seasons here <span class="chev">⌄</span></summary>
+        <p style="font-size:14px;font-style:italic">${esc(DATA.snowAnswer)}</p>
+        ${seasonOrder.map(s => `<div class="seas"><b>${s}${s === seasonNow ? " · now" : ""}</b>${esc(DATA.seasons[s])}</div>`).join("")}
+      </details>
+    </details>`;
+}
+function exploreSecrets(c) {
+  const dayN = Math.floor(+c.mid / 864e5);
+  const eligible = DATA.deepCuts.filter(d => inSeason(d, c.month));
+  const feat = eligible[dayN % Math.max(eligible.length, 1)];
+  const rest = DATA.deepCuts.filter(d => !feat || d.name !== feat.name);
+  return `
+    ${feat ? `<span class="label">Today's house secret</span>
+    <div class="beat"><span class="slotlab">Psst</span>
+      <div class="pickname">${esc(feat.name)}</div>
+      <p class="why">${esc(feat.blurb)}</p>
+      <details class="alts"><summary>The details</summary>
+        <p class="logi">${esc(feat.practical || "")}</p>
+        ${feat.safety ? `<p class="safe"><b>Know before you go:</b> ${esc(feat.safety)}</p>` : ""}
+      </details>
+      ${actsRow(feat.name, { tel: feat.phone })}</div>
+    <p class="logi" style="font-style:italic;margin-top:-14px">There are more secrets than nights in your stay — a new one surfaces each morning.</p>` : ""}
+    ${rest.map(d => catRow({ ...d, kind: "secret" }, c)).join("")}
+    <div class="mist">Conditions shift with water and season — the desk knows this week's truth.</div>`;
+}
+function exploreEvents(c, sc) {
+  const here = sc.days.length && (sc.mode === "arrival" || sc.mode === "full" || sc.mode === "pre" || sc.mode === "checkout")
+    ? eventsDuringStay(c, sc) : [];
+  const rest = DATA.events.slice().filter(e => !e.adult || !picked.has("family"))
+    .sort((a, b) => eventDistance(a, c.month) - eventDistance(b, c.month));
+  const noneLine = sc.days.length ? "A quiet stretch — the town's your own." : "Set your dates on Now and this fills in.";
+  return `
+    <span class="label">${sc.days.length ? "While you're here" : "This month & beyond"}</span>
+    ${here.length ? here.map(x => `<div class="evt"><div class="when"><span class="mo">${MONTHS[x.d.getMonth()]}</span><span class="da">${x.d.getDate()}</span></div>
+      <div><h3>${esc(x.e.name)}</h3><p>${esc(x.e.blurb)}</p></div></div>`).join("") : `<p class="why">${noneLine}</p>`}
+    <details class="grp"><summary>The rest of the year <span class="chev">⌄</span></summary>
+      ${rest.map(e => { const w = eventNearestLabel(e, c.month); return `<div class="evt"><div class="when"><span class="mo">${esc(w.mo)}</span><span class="da">${esc(w.da)}</span></div>
+        <div><h3>${esc(e.name)}</h3><p>${esc(e.blurb)}</p></div></div>`; }).join("")}
+      <p class="logi" style="font-style:italic">Dates drift year to year — the desk keeps the current flyer.</p>
+    </details>`;
+}
+function askResults(c, sc) {
+  const q = askQuery.trim().toLowerCase();
+  if (!q) {
+    const topics = [...new Set(DATA.ask.map(x => x.topic))];
+    return `<details class="grp"><summary>Browse every question <span class="chev">⌄</span></summary>
+      ${topics.map(t => `<details class="grp" style="margin-left:8px"><summary style="font-size:14.5px">${esc(t)} <span class="chev">⌄</span></summary>
+        ${DATA.ask.filter(x => x.topic === t).map(x => `<div class="qa"><h3>${esc(x.q)}</h3><p>${esc(x.a)}</p></div>`).join("")}</details>`).join("")}
+    </details>`;
+  }
+  const words = q.split(/\s+/).filter(Boolean);
+  const skipEwings = sc.days.length && !sc.days.some(d => [4, 5, 6, 0].includes(d.getDay()));
+  const scored = DATA.ask.map(x => {
+    const hay = (x.q + " " + x.k + " " + x.a).toLowerCase();
+    let s = 0; words.forEach(w => { if (hay.includes(w)) s++; });
+    return { x, s };
+  }).filter(r => r.s > 0).sort((a, b) => b.s - a.s).slice(0, 6);
+  return scored.length
+    ? scored.map(r => {
+        let a = r.x.a;
+        if (r.x.dateNight && skipEwings) a = "Your nights miss the Ewings deck — make the 25-minute canyon drive to Johnny McNally's, the 1941 roadhouse where the valley celebrates.";
+        return `<div class="qa"><span class="topic">${r.x.topic}</span><h3>${esc(r.x.q)}</h3><p>${esc(a)}</p></div>`;
+      }).join("")
+    : `<div class="qa"><h3>Stumped us!</h3><p>That one deserves a real local — call the desk, (760) 376-3733.</p></div>`;
+}
+function milepost(z) {
+  return `<div class="zonehead" id="z${z}">
+    <svg width="24" height="40" viewBox="0 0 24 40" fill="none" aria-hidden="true">
+      <path d="M12 8 L12 38" stroke="#34322C" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M4 10 L20 6 L20 15 L4 19 Z" fill="#FBEFEA" stroke="#C44F41" stroke-width="1.5"/>
+      <text x="12" y="14.5" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#C44F41" font-family="Georgia,serif" transform="rotate(-4 12 12)">${z}</text>
+    </svg>
+    <div><span class="script" style="font-size:26px">${ZONES[z][0]}</span>
+    <div class="meta">${ZONES[z][1]}</div></div>
+  </div>`;
+}
+function waterRow(f) {
+  return `<div class="row" style="padding:11px 0">
+    <div class="rowtop"><h3 style="font-size:16px">${esc(f.name)}</h3>${f.season ? `<span class="st"><span class="dot"></span>${esc(f.season.toLowerCase())}</span>` : ""}</div>
+    <p class="desc" style="font-style:normal">${esc(f.detail)}</p>
+    ${f.phone ? actsRow(f.name, { tel: f.phone, maps: false }) : ""}
+  </div>`;
+}
+function practicalCard() {
+  const P = DATA.practical;
+  const lines = [
+    ["Emergencies", "911, always"],
+    P.er ? ["Nearest ER", P.er] : null,
+    ["Rangers", P.ranger],
+    ["Roads", P.roads],
+    P.lateFood ? ["Hungry late", P.lateFood] : null,
+    P.gas ? ["Gas & late supplies", P.gas] : null,
+    P.pharmacy ? ["Pharmacy", P.pharmacy] : null,
+    P.grocery ? ["Groceries", P.grocery] : null,
+  ].filter(Boolean);
+  return `<div class="tick alt2"><span class="label" style="color:var(--coral-deep)">Good to know out here</span>
+    ${lines.map(l => `<div style="font-size:13.5px;margin-top:4px"><b>${l[0]}:</b> ${esc(l[1])}</div>`).join("")}
+  </div>`;
+}
+function renderExplore() {
+  const c = clock(), sc = stayCtx(c);
+  /* the whole valley, hung on one question: how far from your door? */
+  const all = [
+    ...DATA.eat.map(it => ({ kind: "eat", it })),
+    ...DATA.hikes.map(it => ({ kind: "trail", it })),
+    ...DATA.deepCuts.map(it => ({ kind: "secret", it })),
+    ...DATA.dayTrips.map(it => ({ kind: "trip", it })),
+    ...DATA.fishing.map(it => ({ kind: "water", it })),
+    ...DATA.rafting.map(it => ({ kind: "water", it })),
+  ];
+  const passes = x => exFilter === "all" ? true
+    : exFilter === "eat" ? x.kind === "eat"
+    : exFilter === "trail" ? x.kind === "trail"
+    : exFilter === "water" ? (x.kind === "water" || x.it.water)
+    : exFilter === "secret" ? x.kind === "secret" : true;
+  const present = [];
+  const zonesHtml = [1, 2, 3, 4, 5, 6].map(z => {
+    let items = all.filter(x => (ZONE_OF[x.it.name] || 9) === z && passes(x));
+    if (!items.length) return "";
+    present.push(z);
+    items.sort((a, b) => ((b.it.star ? 1 : 0) - (a.it.star ? 1 : 0))
+      || ((!a.it.months || a.it.months.includes(c.month)) ? 0 : 1) - ((!b.it.months || b.it.months.includes(c.month)) ? 0 : 1)
+      || fitScore(b.it.goodFor || b.it.tags) - fitScore(a.it.goodFor || a.it.tags));
+    /* lead with the best three; the rest wait behind one tap so the page stays walkable */
+    const open = exOpen.has(z), CAP = 3, deep = items.length > CAP + 1;
+    const show = (deep && !open) ? items.slice(0, CAP) : items;
+    const rows = show.map(x =>
+      x.kind === "eat" ? eatRow(x.it, c)
+      : x.kind === "water" ? waterRow(x.it)
+      : catRow({ ...x.it, kind: x.kind === "trail" ? "hike" : x.kind }, c, x.kind === "trip" ? x.it.drive : null)
+    ).join("");
+    const more = !deep ? ""
+      : `<button class="morez" data-exz="${z}">${open ? "Show fewer" : "See all " + items.length + " ›"}</button>`;
+    return milepost(z) + rows + more;
+  }).join("");
+  /* today's house secret, up top */
+  const dayN = Math.floor(+c.mid / 864e5);
+  const eligible = DATA.deepCuts.filter(d => inSeason(d, c.month));
+  const feat = (exFilter === "all" || exFilter === "secret") && eligible.length ? eligible[dayN % eligible.length] : null;
+  return `
+    <div class="t-display">Explore</div>
+    <p class="logi">The valley, laid out by how far it is from your door.</p>
+    ${zoneMap}
+    <div class="contactrow" style="margin-top:8px">
+      <a class="cbtn" href="${DATA.lodge.mapUrl}" target="_blank" rel="noopener">Open us in your maps app</a>
+    </div>
+    <div class="chips" style="margin-top:12px">${[["all", "Everything"], ["eat", "Eat & drink"], ["trail", "Trails"], ["water", "On the water"], ["secret", "Local secrets"]].map(([k, l]) =>
+      `<button class="chip ${exFilter === k ? "on" : ""}" data-exf="${k}">${l}</button>`).join("")}</div>
+    ${present.length > 1 ? `<div class="zjump">${present.map(z =>
+      `<button data-jump="${z}">${ZONES[z][2]}</button>`).join("")}</div>` : ""}
+    ${feat ? `<span class="label" style="display:block;margin-top:16px">Today's house secret</span>
+      <div class="beat"><span class="slotlab">Psst</span>
+        <div class="pickname">${esc(feat.name)}</div>
+        <p class="why">${esc(feat.blurb)}</p>
+        <p class="logi">${esc(feat.practical || "")}</p>
+        ${feat.safety ? `<p class="safe"><b>Know before you go:</b> ${esc(feat.safety)}</p>` : ""}
+        ${actsRow(feat.name, { mapsQ: feat.mapq, tel: feat.phone })}</div>
+      <p class="logi" style="font-style:italic;margin-top:-14px">A new one surfaces each morning — more secrets than nights in your stay.</p>` : ""}
+    ${zonesHtml}
+    ${squiggle()}
+    <span class="label" style="display:block">The year in Kernville</span>
+    ${exploreEvents(c, sc)}
+    <details class="grp"><summary>Shops — downtown, walkable <span class="chev">⌄</span></summary>
+      <p class="desc">${esc(DATA.shops.intro)}</p>
+      ${DATA.shops.groups.map(g => `<div class="row" style="padding:10px 0"><h3 style="font-size:15px">${esc(g.title)}</h3>
+        ${g.list.map(s => `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0"><span>${esc(s)}</span><a class="act" href="${mapsQ(s)}" target="_blank" rel="noopener">Directions</a></div>`).join("")}</div>`).join("")}
+    </details>
+    <details class="grp"><summary>Wildlife & the seasons <span class="chev">⌄</span></summary>
+      <div class="note bearRow">${bearSvg}<div><p style="margin:0"><b>About the bears:</b> ${esc(DATA.bearLine)}</p>
+      <p style="margin:6px 0 0"><a href="${DATA.bearLink}" target="_blank" rel="noopener">${esc(DATA.bearLinkLabel)}</a></p>
+      <p class="logi" style="margin:6px 0 0">Bold bear on the property? Tell the front desk.</p></div></div>
+      ${DATA.wildlife.map(w => `<div class="row" style="padding:10px 0"><h3 style="font-size:15.5px">${esc(w.name)}</h3><p class="desc" style="font-style:normal">${esc(w.facts)}</p><p class="safe" style="font-size:13px">${esc(w.safety)}</p></div>`).join("")}
+      <p style="font-size:14px;font-style:italic;margin-top:10px">${esc(DATA.snowAnswer)}</p>
+      ${["spring", "summer", "fall", "winter"].map(s => `<div class="seas"><b>${s}${s === seasonOf(c.month) ? " · now" : ""}</b>${esc(DATA.seasons[s])}</div>`).join("")}
+    </details>
+    ${practicalCard()}
+    <input id="askSearch" class="askbox" placeholder="Ask us anything — bears, breakfast, hot springs…" aria-label="Ask anything" value="${esc(askQuery)}" autocomplete="off">
+    <div id="askResults">${askResults(c, sc)}</div>
+    <p class="logi" style="font-style:italic">The real experts are at the desk — (760) 376-3733 · Sun–Thu 11–5, Fri–Sat 10–6.</p>
+    ${trailScene}`;
+}
+
+/* ===================== THE LODGE ===================== */
+/* NOTE: wifi/pool codes and the FitHaus perk deliberately live ONLY on the Now
+   screen's essentials card — Ryan: "why are we doing these 2 things on 2 of the 3
+   pages at the top! stop that!" Now is the default tab, so it's the canonical home. */
+function renderLodge() {
+  const c = clock(), sc = stayCtx(c);
+  return `
+    <div class="t-display">The Lodge</div>
+    <p class="logi">Est. 1950s · eight acres on the Kern</p>
+    <div class="contactrow" style="margin-top:14px">
+      <a class="cbtn call" href="${telHref(DATA.lodge.phone)}">Call the desk · ${DATA.lodge.phone}</a>
+    </div>
+    <p class="logi">${esc(DATA.lodge.deskHours)}</p>
+    ${squiggle()}
+    <span class="label">In your room</span>
+    ${DATA.roomHelp.map(r => `<details class="row"><summary><h3 style="font-size:16px">${esc(r.q)}</h3></summary><div class="more"><p>${esc(r.a)}</p></div></details>`).join("")}
+    <div style="margin-top:26px"><span class="label">Good to know</span>
+      <ul style="margin:6px 0 0;padding-left:20px;font-size:14px">${DATA.policies.map(p => `<li style="margin:4px 0">${esc(p)}</li>`).join("")}</ul></div>
+    ${squiggle()}
+    <span class="label">Find your room</span>
+    ${lodgeMap()}
+    <p class="logi" style="font-style:italic;margin-top:0">Ice: the coral box on the map. Fourteen rooms, most with a balcony of their own — walk-in rate: ask the desk, or <a href="${SMS_DESK}">text us</a>.</p>
+    ${roomCard()}
+    <details class="row" style="margin-top:14px"><summary><h3 style="font-size:16px">Our story</h3></summary>
+      <div class="more"><p>${esc(DATA.story)}</p></div></details>
+    <div class="contactrow">
+      <a class="cbtn" href="${telHref(DATA.lodge.phone)}">Call</a>
+      <a class="cbtn" href="mailto:${DATA.lodge.email}">Email</a>
+      <a class="cbtn" href="${DATA.lodge.mapUrl}" target="_blank" rel="noopener">Directions</a>
+      <a class="cbtn" href="${DATA.lodge.site}" target="_blank" rel="noopener">${sc.mode === "past" ? "Book again" : "pineskernville.com"}</a>
+    </div>
+    <p class="logi">${esc(DATA.lodge.address)}</p>
+    ${cabinScene}`;
+}
+
+/* ===================== SHELL ===================== */
+const SCREENS = [
+  { id: "now", label: "Now", render: renderNow,
+    icon: `<svg width="21" height="21" viewBox="0 0 22 22"><circle cx="11" cy="11" r="4.2"/><path d="M11 2.5v2.2M11 17.3v2.2M2.5 11h2.2M17.3 11h2.2M5 5l1.5 1.5M15.5 15.5L17 17M17 5l-1.5 1.5M6.5 15.5L5 17"/></svg>` },
+  { id: "explore", label: "Explore", render: renderExplore,
+    icon: `<svg width="21" height="21" viewBox="0 0 22 22"><path d="M11 2.5L5 11h3.4L4 18h14l-4.4-7H17L11 2.5zM11 18v2"/></svg>` },
+  { id: "lodge", label: "The Lodge", render: renderLodge,
+    icon: `<svg width="21" height="21" viewBox="0 0 22 22"><path d="M3 11l8-7 8 7M5.5 9.2V19h11V9.2M9.5 19v-5h3v5"/></svg>` },
+];
+/* #v=explore / #v=lodge opens straight to that screen; anything else starts on Now */
+let cur = (() => {
+  try {
+    const v = (new URLSearchParams((location.hash || "").replace(/^#/, "")).get("v")
+      || new URLSearchParams(location.search || "").get("v") || "").trim().toLowerCase();
+    return SCREENS.some(s => s.id === v) ? v : "now";
+  } catch (e) { return "now"; }
+})();
+function paint(toTop) {
+  const y = window.scrollY;
+  const c = clock();
+  const sc = stayCtx(c);
+  document.getElementById("ctxchip").textContent =
+    (sc.mode === "arrival" || sc.mode === "full") ? "" : DAY_FULL[c.day] + ", " + MONTHS[c.n.getMonth()] + " " + c.n.getDate();
+  document.getElementById("main").innerHTML =
+    SCREENS.map(s => `<section class="screen ${s.id === cur ? "on" : ""}">${s.id === cur ? s.render() : ""}</section>`).join("") +
+    `<footer>Hours and rivers both change with the seasons —<br>when in doubt, holler at the front desk.</footer>`;
+  document.getElementById("nav").innerHTML = SCREENS.map(s =>
+    `<button class="${s.id === cur ? "on" : ""}" data-nav="${s.id}" aria-label="${s.label}">${s.icon}<span class="nlabel">${s.label}</span></button>`).join("");
+  const sh = document.getElementById("shelf");
+  if (sh) { const t = sh.querySelector(".dcard.today"); if (t) sh.scrollLeft = Math.max(0, t.offsetLeft - 12); }
+  window.scrollTo({ top: toTop ? 0 : y });
+}
+function toast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("show"), 1800);
+}
+function readWho() { /* pull the sheet's fields into state without repainting */
+  const ni = document.getElementById("guestNameInput");
+  if (ni) { guestName = cleanName(ni.value); saveName(); }
+  const rn = document.getElementById("roomNumInput");
+  if (rn) { roomNum = (rn.value || "").replace(/[^\d]/g, "").slice(0, 3); store("wpl-roomnum", roomNum || null); }
+  const a = (document.getElementById("stayA") || {}).value, d = (document.getElementById("stayD") || {}).value;
+  if (a && d) {
+    const da = new Date(a + "T12:00:00"), dd = new Date(d + "T12:00:00");
+    if (!isNaN(da) && !isNaN(dd) && dd >= da) { stay = { a, d }; fixSheet = false; saveStay(); }
+  } else if (!a && !d) { stay = null; saveStay(); }
+}
+document.addEventListener("click", (e) => {
+  const nav = e.target.closest("[data-nav]");
+  if (nav) { cur = nav.dataset.nav; paint(true); return; }
+  const go = e.target.closest("[data-goto]");
+  if (go) { e.preventDefault(); cur = "explore"; exFilter = { eat: "eat", do: "trail", secrets: "secret", events: "all" }[go.dataset.goto] || "all"; exOpen.clear(); paint(true); return; }
+  const p = e.target.closest("[data-p]");
+  if (p) {
+    const id = p.dataset.p;
+    picked.has(id) ? picked.delete(id) : picked.add(id);
+    savePicked();
+    p.classList.toggle("on"); /* patch in place — no mid-flow rebuild */
+    return;
+  }
+  const rm = e.target.closest("[data-room]");
+  if (rm) {
+    room = room === rm.dataset.room ? "" : rm.dataset.room;
+    store("wpl-room", room || null);
+    [...rm.parentElement.querySelectorAll(".chip")].forEach(ch => ch.classList.toggle("on", ch.dataset.room === room));
+    return;
+  }
+  const jp = e.target.closest("[data-jump]");
+  if (jp) { const el = document.getElementById("z" + jp.dataset.jump); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); return; }
+  const xz = e.target.closest("[data-exz]");
+  if (xz) { const z = +xz.dataset.exz; exOpen.has(z) ? exOpen.delete(z) : exOpen.add(z); paint(); return; }
+  const ex = e.target.closest("[data-exf]");
+  if (ex) { exFilter = ex.dataset.exf; exOpen.clear(); paint(); return; }
+  const ak = e.target.closest("[data-ask]");
+  if (ak) {
+    askQuery = ak.dataset.ask;
+    const inp = document.getElementById("askSearch");
+    if (inp) inp.value = askQuery;
+    const r = document.getElementById("askResults");
+    if (r) { const c = clock(); r.innerHTML = askResults(c, stayCtx(c)); }
+    return;
+  }
+  if (e.target.closest("[data-savewho]")) { readWho(); paint(true); toast(guestName ? "Pleasure to meet you, " + guestName.split(/\s+/)[0] + "." : "All set."); return; }
+  if (e.target.closest("[data-clearall]")) { purgeAll(); fixSheet = false; paint(true); toast("Fresh page."); return; }
+  const cp = e.target.closest("[data-copy]");
+  if (cp) {
+    const v = cp.dataset.copy;
+    (navigator.clipboard ? navigator.clipboard.writeText(v) : Promise.reject())
+      .then(() => toast("Copied — you're in."))
+      .catch(() => toast(v));
+  }
+});
+document.addEventListener("change", (e) => {
+  if (e.target.id === "stayA" || e.target.id === "stayD") {
+    /* defer full repaint until both dates set — iOS picker stays open */
+    const a = document.getElementById("stayA").value, d = document.getElementById("stayD").value;
+    if (a && d) { readWho(); paint(); }
+  }
+});
+document.addEventListener("input", (e) => {
+  if (e.target.id === "askSearch") {
+    askQuery = e.target.value;
+    const r = document.getElementById("askResults");
+    if (r) { const c = clock(); r.innerHTML = askResults(c, stayCtx(c)); }
+  }
+  if (e.target.id === "guestNameInput") { guestName = cleanName(e.target.value); saveName(); }
+});
+/* the jump strip marks whichever zone you're standing in as you scroll */
+let spyTick = 0;
+window.addEventListener("scroll", () => {
+  if (cur !== "explore" || spyTick) return;
+  spyTick = requestAnimationFrame(() => {
+    spyTick = 0;
+    const strip = document.querySelector(".zjump");
+    const btns = document.querySelectorAll(".zjump [data-jump]");
+    if (!btns.length) return;
+    /* Measure the pinned bar rather than hardcoding a cutoff. It was a fixed 84px,
+       sized for a one-row bar — once the bar wrapped to two rows (~103px) a heading
+       you jumped to landed at ~112px, never satisfied the test, and the chip ABOVE
+       stayed lit. That's the "click north, it highlights south" bug. */
+    const cut = (strip ? strip.getBoundingClientRect().bottom : 84) + 14;
+    let active = "";
+    btns.forEach(b => {
+      const el = document.getElementById("z" + b.dataset.jump);
+      if (el && el.getBoundingClientRect().top <= cut) active = b.dataset.jump;
+    });
+    btns.forEach(b => b.classList.toggle("on", b.dataset.jump === active));
+  });
+}, { passive: true });
+window.addEventListener("hashchange", () => { ingestParams(); paint(true); });
+function safePaint() { /* don't clobber typing, half-entered dates, or an open sheet */
+  if (document.hidden) return;
+  const ae = document.activeElement;
+  if (ae && /^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName)) return;
+  const fs = document.getElementById("fixsheet");
+  if (fs && fs.open) return;
+  const opened = document.querySelector("#main details[open]:not(.grp)");
+  if (opened) return;
+  paint();
+}
+document.addEventListener("visibilitychange", safePaint);
+setInterval(safePaint, 60000);
+paint();
+
+/* ===================== TEST-BUILD FEEDBACK LAYER =====================
+   Only in the test build — never shipped to guests. Lets a tester tap any part of
+   the guide and type a note about it. Everything is kept on their own phone
+   (localStorage); nothing is uploaded, no account, no backend, no per-note cost.
+   When they're done, one button copies the whole batch — or texts it to the desk. */
+(function () {
+  "use strict";
+  var KEY = "wpl-testnotes";
+  var notes = [];
+  try { notes = JSON.parse(localStorage.getItem(KEY) || "[]"); } catch (e) {}
+  var picking = false;
+
+  var css = document.createElement("style");
+  css.textContent = [
+    ".fbBtn{position:fixed;left:14px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:80;",
+      "background:var(--coral);color:#fff;border:0;border-radius:999px;padding:12px 17px;font-family:var(--serif);",
+      "font-size:14.5px;font-weight:700;box-shadow:0 2px 10px rgba(52,50,44,.25);cursor:pointer;min-height:46px}",
+    ".fbBtn.picking{background:var(--olive-deep)}",
+    ".fbCount{background:#fff;color:var(--coral-deep);border-radius:999px;padding:1px 7px;margin-left:7px;font-size:12.5px}",
+    ".fbWrap{position:fixed;inset:0;z-index:90;background:rgba(52,50,44,.45);display:flex;align-items:flex-end}",
+    ".fbCard{background:var(--paper);width:100%;max-width:480px;margin:0 auto;border-radius:18px 18px 0 0;padding:18px 18px calc(20px + env(safe-area-inset-bottom))}",
+    ".fbCard h3{font-size:18px;margin:0 0 4px}",
+    ".fbCtx{font-size:13px;color:var(--faded);font-style:italic;margin:0 0 10px;word-break:break-word}",
+    ".fbCard textarea{width:100%;min-height:110px;font-family:var(--serif);font-size:16px;padding:11px 12px;",
+      "border:1.3px solid var(--ink);border-radius:10px 3px 10px 3px;background:var(--paper);color:var(--ink)}",
+    ".fbRow{display:flex;gap:9px;margin-top:12px;flex-wrap:wrap}",
+    ".fbRow button,.fbRow a{flex:1 1 46%;text-align:center;font-family:var(--serif);font-size:15px;font-weight:700;",
+      "padding:13px 10px;border-radius:12px 4px 12px 4px;border:1.5px solid var(--coral);background:var(--coral);",
+      "color:#fff;cursor:pointer;text-decoration:none;min-height:46px}",
+    ".fbRow .ghost{background:none;color:var(--coral-deep)}",
+    ".fbList{margin-top:14px;max-height:38vh;overflow:auto;border-top:1px solid var(--line);padding-top:10px}",
+    ".fbItem{font-size:13.5px;padding:8px 0;border-bottom:1px solid var(--line)}",
+    ".fbItem b{color:var(--coral-deep);display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase}",
+    ".fbItem .x{float:right;color:var(--faded);cursor:pointer;padding:0 4px}",
+    ".fbHi{outline:2.5px solid var(--olive) !important;outline-offset:2px;border-radius:4px}"
+  ].join("");
+  document.head.appendChild(css);
+
+  var btn = document.createElement("button");
+  btn.className = "fbBtn";
+  document.body.appendChild(btn);
+
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(notes)); } catch (e) {} paintBtn(); }
+  function paintBtn() {
+    btn.innerHTML = picking
+      ? "Tap what you mean \u2192"
+      : "\uD83D\uDCAC Add a note" + (notes.length ? '<span class="fbCount">' + notes.length + "</span>" : "");
+    btn.classList.toggle("picking", picking);
+  }
+
+  function screenName() {
+    var on = document.querySelector("#nav button.on .nlabel");
+    return on ? on.textContent.trim() : "Guide";
+  }
+
+  function openSheet(ctx) {
+    var wrap = document.createElement("div");
+    wrap.className = "fbWrap";
+    wrap.innerHTML =
+      '<div class="fbCard">' +
+        "<h3>What's on your mind?</h3>" +
+        '<p class="fbCtx">' + (ctx ? "About: \u201c" + ctx + "\u201d" : "On the " + screenName() + " screen") + "</p>" +
+        '<textarea placeholder="Wrong hours? Confusing? Missing something? Just say it plainly."></textarea>' +
+        '<div class="fbRow">' +
+          '<button class="fbSave">Save this note</button>' +
+          '<button class="ghost fbClose">Cancel</button>' +
+        "</div>" +
+        (notes.length
+          ? '<div class="fbList"></div><div class="fbRow">' +
+              '<button class="fbCopy">Copy all ' + notes.length + " notes</button>" +
+              '<a class="ghost fbText" href="#">Text them in</a>' +
+            "</div>"
+          : "") +
+      "</div>";
+    document.body.appendChild(wrap);
+    var ta = wrap.querySelector("textarea");
+    ta.focus();
+
+    var list = wrap.querySelector(".fbList");
+    if (list) {
+      list.innerHTML = notes.map(function (n, i) {
+        return '<div class="fbItem"><span class="x" data-del="' + i + '">\u2715</span><b>' +
+               (n.ctx || n.screen) + "</b>" + n.text + "</div>";
+      }).join("");
+    }
+
+    function close() { wrap.remove(); paintBtn(); }
+    wrap.addEventListener("click", function (e) {
+      if (e.target === wrap || e.target.closest(".fbClose")) { close(); return; }
+      var del = e.target.closest("[data-del]");
+      if (del) { notes.splice(+del.dataset.del, 1); save(); close(); openSheet(ctx); return; }
+      if (e.target.closest(".fbSave")) {
+        var t = ta.value.trim();
+        if (t) { notes.push({ text: t, ctx: ctx || "", screen: screenName() }); save(); }
+        close(); return;
+      }
+      if (e.target.closest(".fbCopy")) {
+        navigator.clipboard.writeText(asText()).then(function () {
+          e.target.textContent = "Copied \u2713";
+        }, function () { e.target.textContent = "Select the notes above to copy"; });
+        return;
+      }
+      if (e.target.closest(".fbText")) {
+        e.target.setAttribute("href", "sms:+17603763733?&body=" + encodeURIComponent(asText()));
+      }
+    });
+  }
+
+  function asText() {
+    return "Whispering Pines guide \u2014 test notes\n\n" + notes.map(function (n, i) {
+      return (i + 1) + ". [" + (n.ctx ? n.ctx : n.screen) + "]\n   " + n.text;
+    }).join("\n\n");
+  }
+
+  btn.addEventListener("click", function (e) {
+    e.stopPropagation();
+    if (picking) { picking = false; paintBtn(); return; }
+    openSheet("");
+  });
+
+  /* long-press the button to enter "tap the thing you mean" mode */
+  var lp;
+  btn.addEventListener("pointerdown", function () {
+    lp = setTimeout(function () { picking = true; paintBtn(); }, 450);
+  });
+  ["pointerup", "pointerleave", "pointercancel"].forEach(function (ev) {
+    btn.addEventListener(ev, function () { clearTimeout(lp); });
+  });
+
+  document.addEventListener("click", function (e) {
+    if (!picking) return;
+    if (e.target.closest(".fbBtn") || e.target.closest(".fbWrap")) return;
+    e.preventDefault(); e.stopPropagation();
+    var el = e.target.closest("div,p,section,li,button,a,h1,h2,h3,summary,span") || e.target;
+    var label = (el.textContent || "").replace(/\s+/g, " ").trim().slice(0, 70);
+    el.classList.add("fbHi");
+    setTimeout(function () { el.classList.remove("fbHi"); }, 900);
+    picking = false; paintBtn();
+    openSheet(label);
+  }, true);
+
+  paintBtn();
+})();
+
+</script>
