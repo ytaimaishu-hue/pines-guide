@@ -2546,7 +2546,11 @@ paint();
     ".fbBtn.picking{background:var(--olive-deep)}",
     ".fbCount{background:#fff;color:var(--coral-deep);border-radius:999px;padding:1px 7px;margin-left:7px;font-size:12.5px}",
     ".fbWrap{position:fixed;inset:0;z-index:90;background:rgba(52,50,44,.45);display:flex;align-items:flex-end}",
-    ".fbCard{background:var(--paper);width:100%;max-width:480px;margin:0 auto;border-radius:18px 18px 0 0;padding:18px 18px calc(20px + env(safe-area-inset-bottom))}",
+    /* cap the sheet and let it scroll — Ryan saved a note and couldn't find it
+       again, because the saved list sits under the compose box and fell off the
+       bottom of the screen on a phone */
+    ".fbCard{background:var(--paper);width:100%;max-width:480px;margin:0 auto;border-radius:18px 18px 0 0;",
+      "padding:18px 18px calc(20px + env(safe-area-inset-bottom));max-height:86vh;overflow:auto}",
     ".fbCard h3{font-size:18px;margin:0 0 4px}",
     ".fbCtx{font-size:13px;color:var(--faded);font-style:italic;margin:0 0 10px;word-break:break-word}",
     ".fbCard textarea{width:100%;min-height:110px;font-family:var(--serif);font-size:16px;padding:11px 12px;",
@@ -2594,7 +2598,11 @@ paint();
           '<button class="ghost fbClose">Cancel</button>' +
         "</div>" +
         (notes.length
-          ? '<div class="fbList"></div><div class="fbRow">' +
+          ? '<span class="label" style="display:block;margin-top:18px">' +
+              "Saved on this phone · " + notes.length + "</span>" +
+            '<p class="fbCtx" style="margin:2px 0 0">These stay on your phone until you send them ' +
+              "— nobody sees them until you do.</p>" +
+            '<div class="fbList"></div><div class="fbRow">' +
               '<button class="fbCopy">Copy all ' + notes.length + " notes</button>" +
               '<a class="ghost fbText" href="#">Text them in</a>' +
             "</div>"
