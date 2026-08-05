@@ -184,7 +184,14 @@
   .stayrow>label{flex:1;min-width:0}
   .contactrow{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
   .cbtn{flex:1;min-width:100px;text-align:center;border:1.3px solid var(--ink);color:var(--ink);border-radius:999px;padding:11px 10px;font-size:13.5px;text-decoration:none;font-family:var(--serif);background:none;min-height:44px}
-  .cbtn.call{background:var(--coral);border-color:var(--coral);color:#fff;font-weight:700;font-size:15px}
+  .cbtn.call,.cbtn.nav{background:var(--coral);border-color:var(--coral);color:#fff;font-weight:700;font-size:15px}
+  /* "Open us in your maps app" was a thin outline and read as a caption, not a
+     control. Same filled treatment as the call button — this is the one action
+     on Explore that hands off to another app, so it should look like a button.
+     The arrow is the tilted maps cursor rather than the usual upward one: this
+     guide is full of pine triangles, and an upward arrowhead reads as another. */
+  .cbtn.nav{display:inline-flex;align-items:center;justify-content:center;gap:8px}
+  .navico{width:18px;height:18px;flex:none;fill:currentColor}
   .seas{border-left:2.5px solid var(--olive);padding:2px 0 2px 13px;font-size:14px;margin:8px 0}
   .seas b{display:block;font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--olive-deep)}
   .evt{display:flex;gap:13px;padding:10px 0;border-bottom:1px solid var(--line)}
@@ -2277,7 +2284,7 @@ function renderExplore() {
       `<button data-jump="${z}">${ZONES[z][2]}</button>`).join("")}</div>` : ""}
     ${zoneMap}
     <div class="contactrow" style="margin-top:8px">
-      <a class="cbtn" href="${DATA.lodge.mapUrl}" target="_blank" rel="noopener">Open us in your maps app</a>
+      <a class="cbtn nav" href="${DATA.lodge.mapUrl}" target="_blank" rel="noopener"><svg class="navico" viewBox="0 0 16 16" aria-hidden="true"><path d="M14.8 1.2L1.4 6.8L7 9L9.2 14.6Z"/></svg>Open us in your maps app</a>
     </div>
     ${feat ? `<span class="label" style="display:block;margin-top:16px">Today's house secret</span>
       <div class="beat"><span class="slotlab">Psst</span>
