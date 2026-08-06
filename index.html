@@ -279,7 +279,10 @@ const DESK_SHORT = "Sun & Tue–Sat, from 11";
 /* NEVER state that the desk or property is unattended — this page is public and
    Ryan doesn't want absence advertised. Say only where to reach us; Monday simply
    isn't listed in the grid, which reveals nothing. */
-const DESK_AFTER = "Call or text (760) 376-3733 any time — someone answers every day of the week, whatever the desk hours say. Late at night a text gets picked up first thing in the morning; if it truly can't wait, call.";
+/* Never gate the invitation ("only if it's urgent") — that makes a guest audition
+   their own problem. Ritz sets no conditions. The 2 AM restraint comes from making
+   the text the hero and framing the overnight wait as a courtesy, not a rule. */
+const DESK_AFTER = "Text or call (760) 376-3733 — any hour, any reason, every day of the week. Send a note overnight and there'll be an answer waiting when you wake.";
 const DATA = {
   lodge: {
     phone: "(760) 376-3733",
@@ -710,7 +713,7 @@ const DATA = {
     { topic: "Practical", q: "Gas? Groceries? An ATM?", k: "gas station groceries store market atm cash pharmacy",
       a: "Town covers the basics; Lake Isabella, 15 minutes south, has bigger stores. The desk knows the closest everything." },
     { topic: "Practical", q: "Where do we go if we have a problem?", k: "help emergency problem broken issue complaint maintenance",
-      a: `Straight to us — text (760) 376-3733. The desk is open ${DESK_SHORT}; any other time we're on the phone, and texts get picked up first thing. If it truly can't wait, call. Emergencies are always 911.` },
+      a: `Straight to us — text or call (760) 376-3733, any hour, any reason. The desk is open ${DESK_SHORT}; a note sent overnight has an answer waiting when you wake. Emergencies are always 911.` },
   ],
 };
 
