@@ -270,8 +270,13 @@
 "use strict";
 /* ===================== DATA ===================== */
 /* Desk hours live HERE and nowhere else — they were hardcoded in four places and
-   drifted out of date. Change this one line and every screen follows. */
-const DESK_HOURS = "Sun–Thu 11–5 · Fri–Sat 10–6";
+   drifted out of date. Change these and every screen follows.
+   No desk on Mondays. The after-hours line is deliberately balanced: it promises a
+   real person so nobody panics, but sets the bar at "genuinely can't wait" so we're
+   not inviting 2 AM calls about nothing. */
+const DESK_GRID = "Sun 11–7 · Tue 11–7 · Wed 11–6 · Thu 11–7:30 · Fri 11–7 · Sat 11–6";
+const DESK_SHORT = "Sun & Tue–Sat, from 11";
+const DESK_AFTER = "Mondays and after hours you get us directly — text (760) 376-3733 and it's Ryan or Cici. We pick it up first thing. If it genuinely can't wait, call.";
 const DATA = {
   lodge: {
     phone: "(760) 376-3733",
@@ -280,7 +285,8 @@ const DATA = {
     site: "https://www.pineskernville.com",
     mapUrl: "https://maps.google.com/?q=Whispering+Pines+Lodge,+13745+Sierra+Way,+Kernville,+CA+93238",
     reviewUrl: "https://maps.google.com/?q=Whispering+Pines+Lodge+Kernville+reviews",
-    deskHours: `Front desk: ${DESK_HOURS}`,
+    deskHours: `Front desk: ${DESK_GRID}`,
+    deskAfter: DESK_AFTER,
   },
   essentials: {
     wifiNet: "Whispering Pines", wifiPass: "Kernville",
@@ -607,7 +613,8 @@ const DATA = {
   story: "A lodge under these pines since the 1950s, in the same family's care since 2003. Eight quiet acres, our own stretch of the Kern, the only pool in Kernville with a river view. Old-timers say celebrities hid out here. Everybody deserves to.",
   policies: [
     "Check-in 3 PM · checkout 11 AM — keys in the box by the front office",
-    `Front desk: ${DESK_HOURS} — call anytime`,
+    `Front desk: ${DESK_GRID}`,
+    DESK_AFTER,
     "Dogs welcome in select rooms — $15/night, declare when booking",
     "No smoking anywhere on property",
     "Cancel 7+ days ahead to avoid charges",
@@ -700,7 +707,7 @@ const DATA = {
     { topic: "Practical", q: "Gas? Groceries? An ATM?", k: "gas station groceries store market atm cash pharmacy",
       a: "Town covers the basics; Lake Isabella, 15 minutes south, has bigger stores. The desk knows the closest everything." },
     { topic: "Practical", q: "Where do we go if we have a problem?", k: "help emergency problem broken issue complaint maintenance",
-      a: `Straight to us: (760) 376-3733, or the desk (${DESK_HOURS}). Emergencies are always 911.` },
+      a: `Straight to us — text (760) 376-3733. The desk is open ${DESK_SHORT}; outside that it's Ryan or Cici on the phone, and we pick it up first thing. If it genuinely can't wait, call. Emergencies are always 911.` },
   ],
 };
 
@@ -2355,7 +2362,7 @@ function renderExplore() {
     ${practicalCard()}
     <input id="askSearch" class="askbox" placeholder="Ask us anything — bears, breakfast, hot springs…" aria-label="Ask anything" value="${esc(askQuery)}" autocomplete="off">
     <div id="askResults">${askResults(c, sc)}</div>
-    <p class="logi" style="font-style:italic">The real experts are at the desk — (760) 376-3733 · ${DESK_HOURS}.</p>
+    <p class="logi" style="font-style:italic">The real experts are at the desk — (760) 376-3733 · ${DESK_SHORT}. Any other time, text and you'll get one of us.</p>
     ${trailScene}`;
 }
 
@@ -2372,6 +2379,7 @@ function renderLodge() {
       <a class="cbtn call" href="${telHref(DATA.lodge.phone)}">Call the desk · ${DATA.lodge.phone}</a>
     </div>
     <p class="logi">${esc(DATA.lodge.deskHours)}</p>
+    <p class="logi" style="margin-top:2px">${esc(DATA.lodge.deskAfter)}</p>
     <!-- map leads the page — Ryan: "map should be at the top on 'lodge' section man!!!" -->
     <span class="label" style="display:block;margin-top:20px">Find your room</span>
     ${lodgeMap()}
