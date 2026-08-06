@@ -269,6 +269,12 @@
 <script>
 "use strict";
 /* ===================== DATA ===================== */
+/* Desk hours live HERE and nowhere else. No desk Mondays; Monday is simply absent
+   from the grid and never mentioned — this page is public and we do not advertise
+   when the property is unattended. The invitation below is never gated on urgency. */
+const DESK_GRID = "Sun 11–7 · Tue 11–7 · Wed 11–6 · Thu 11–7:30 · Fri 11–7 · Sat 11–6";
+const DESK_SHORT = "Sun & Tue–Sat, from 11";
+const DESK_AFTER = "Text or call (760) 376-3733 — any hour, any reason, every day of the week. Send a note overnight and there'll be an answer waiting when you wake.";
 const DATA = {
   lodge: {
     phone: "(760) 376-3733",
@@ -277,7 +283,8 @@ const DATA = {
     site: "https://www.pineskernville.com",
     mapUrl: "https://maps.google.com/?q=Whispering+Pines+Lodge,+13745+Sierra+Way,+Kernville,+CA+93238",
     reviewUrl: "https://maps.google.com/?q=Whispering+Pines+Lodge+Kernville+reviews",
-    deskHours: "Front desk: Sun–Thu 11–5 · Fri–Sat 10–6",
+    deskHours: `Front desk: ${DESK_GRID}`,
+    deskAfter: DESK_AFTER,
   },
   essentials: {
     wifiNet: "Whispering Pines", wifiPass: "Kernville",
@@ -408,7 +415,7 @@ const DATA = {
       safety: "Clothing-optional is the long custom — families should know before they go. Never wade from the tubs when the river's high. (Miracle Hot Springs is closed — don't go looking.)" },
     { name: "The river the locals swim", cat: "Beaches, floats & jump rocks", tags: ["family", "couple"], dog: true, water: true, months: [7,8,9],
       closedReason: "water", mapq: "Riverside Park Kernville CA", star: true,
-      blurb: "Low water (late July–September) turns the river friendly: the bridge-to-park tube float, sandy flats at Chico Flat and Corral Creek, Goldledge's jump rock — and Alligator Rock at Limestone, genuine local shorthand, late summer only: a Class IV rapid waits just below the old gator.",
+      blurb: "Low water (late July–September) turns the river friendly: the bridge-to-park tube float, sandy flats at Chico Flat and Corral Creek, Goldledge's jump rock — and Alligator Rock at Limestone, late summer only: a Class IV rapid waits just below the old gator.",
       practical: "Float: tube and life jacket, Riverside Park, moderate summer flows only · Chico Flat 4–5 mi up Sierra Way, Corral Creek 7, Goldledge 10, Limestone/Alligator Rock ~19 · all free · weekday mornings quietest · free life-jacket loaner stations around the valley",
       safety: "Straight talk: the Kern has taken over 300 lives since 1968 — the sign at the canyon mouth keeps count. The flow, not the look, decides if it's safe. Life jackets on everyone, kids within arm's reach, never near rapids, never at Alligator Rock in spring water." },
     { name: "Kayak school & SUP", cat: "Learn to paddle", tags: ["adventure", "family", "couple"], dog: false, water: true, months: [3,4,5,6,7,8,9,10,11], closedReason: "season",
@@ -458,9 +465,10 @@ const DATA = {
       blurb: "A staffed 1955 fire lookout you can climb, chatting with the lookout over a thousand square miles — Whitney to the Domelands.",
       practical: "Off Sherman Pass Rd + 2 mi of dirt (fine for most cars, dry weather), ~1¼ hr · staffed Thu–Mon 9:30–6 in summer · free · four visitors at a time",
       safety: "High altitude, afternoon thunderstorms in monsoon season, no cell — confirm Sherman Pass is open first." },
-    { name: "Kern Slabs climbing", cat: "Granite · 10 min north", tags: ["adventure"], dog: true, exposed: true,
+    { name: "Kern Slabs climbing", cat: "Granite · 10 min up the river", tags: ["adventure"], dog: true, exposed: true,
+      mapq: "Thunderbird Campground, Sierra Way, Kernville, CA 93238",
       blurb: "A friendly granite dome off Sierra Way — slab classics like the Chouinard Special, 5.7–5.9, honest bouldering below.",
-      practical: "Pullout 4.7 mi north on Sierra Way · best fall–spring, or 7–10 AM summer · Sierra South guides if you want instruction",
+      practical: "Head up the river on Sierra Way and pull out directly across from Thunderbird Campground · best fall–spring, or 7–10 AM summer · Sierra South guides if you want instruction",
       safety: "Rattlesnake country at the base, especially spring. Bring and know your own gear." },
   ],
   dayTrips: [
@@ -603,7 +611,8 @@ const DATA = {
   story: "A lodge under these pines since the 1950s, in the same family's care since 2003. Eight quiet acres, our own stretch of the Kern, the only pool in Kernville with a river view. Old-timers say celebrities hid out here. Everybody deserves to.",
   policies: [
     "Check-in 3 PM · checkout 11 AM — keys in the box by the front office",
-    "Front desk: Sun–Thu 11–5, Fri–Sat 10–6 — call anytime",
+    `Front desk: ${DESK_GRID}`,
+    DESK_AFTER,
     "Dogs welcome in select rooms — $15/night, declare when booking",
     "No smoking anywhere on property",
     "Cancel 7+ days ahead to avoid charges",
@@ -696,7 +705,7 @@ const DATA = {
     { topic: "Practical", q: "Gas? Groceries? An ATM?", k: "gas station groceries store market atm cash pharmacy",
       a: "Town covers the basics; Lake Isabella, 15 minutes south, has bigger stores. The desk knows the closest everything." },
     { topic: "Practical", q: "Where do we go if we have a problem?", k: "help emergency problem broken issue complaint maintenance",
-      a: "Straight to us: (760) 376-3733, or the desk (Sun–Thu 11–5, Fri–Sat 10–6). Emergencies are always 911." },
+      a: `Straight to us — text or call (760) 376-3733, any hour, any reason. The desk is open ${DESK_SHORT}; a note sent overnight has an answer waiting when you wake. Emergencies are always 911.` },
   ],
 };
 
@@ -2351,7 +2360,7 @@ function renderExplore() {
     ${practicalCard()}
     <input id="askSearch" class="askbox" placeholder="Ask us anything — bears, breakfast, hot springs…" aria-label="Ask anything" value="${esc(askQuery)}" autocomplete="off">
     <div id="askResults">${askResults(c, sc)}</div>
-    <p class="logi" style="font-style:italic">The real experts are at the desk — (760) 376-3733 · Sun–Thu 11–5, Fri–Sat 10–6.</p>
+    <p class="logi" style="font-style:italic">The real experts are at the desk — (760) 376-3733 · ${DESK_SHORT}. Any other time, text and you'll get one of us.</p>
     ${trailScene}`;
 }
 
@@ -2368,6 +2377,7 @@ function renderLodge() {
       <a class="cbtn call" href="${telHref(DATA.lodge.phone)}">Call the desk · ${DATA.lodge.phone}</a>
     </div>
     <p class="logi">${esc(DATA.lodge.deskHours)}</p>
+    <p class="logi" style="margin-top:2px">${esc(DATA.lodge.deskAfter)}</p>
     <!-- map leads the page — Ryan: "map should be at the top on 'lodge' section man!!!" -->
     <span class="label" style="display:block;margin-top:20px">Find your room</span>
     ${lodgeMap()}
