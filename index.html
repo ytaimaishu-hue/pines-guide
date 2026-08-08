@@ -273,7 +273,7 @@
 /* Desk hours live HERE and nowhere else. No desk Mondays; Monday is simply absent
    from the grid and never mentioned — this page is public and we do not advertise
    when the property is unattended. The invitation below is never gated on urgency. */
-const DESK_GRID = "Sun 11–7 · Tue 11–7 · Wed 11–6 · Thu 11–7:30 · Fri 11–7 · Sat 11–6";
+const DESK_GRID = "Sun 11–7 · Mon by phone & text · Tue 11–7 · Wed 11–6 · Thu 11–7:30 · Fri 11–7 · Sat 11–6";
 const DESK_SHORT = "Sun & Tue–Sat, from 11";
 const DESK_AFTER = "Text or call (760) 376-3733 — any hour, any reason, every day of the week. Send a note overnight and there'll be an answer waiting when you wake.";
 const DATA = {
@@ -290,7 +290,7 @@ const DATA = {
   essentials: {
     wifiNet: "Whispering Pines", wifiPass: "Kernville",
     pool: "C1278", poolSub: "towels at the desk",
-    checkout: "11 AM", checkin: "3 PM", keys: "keys in the box",
+    checkout: "11 AM", checkin: "3 PM", keys: "keys in the box by the office door",
     coffee: "Coffee's in your room — no lodge breakfast; town does it better.",
     gym: {
       name: "FitHaus HealthClub",
@@ -1042,7 +1042,8 @@ function ingestParams() {
     if (gv("r") != null) {
       const rv = gv("r").trim();
       if (ROOM_KEYS[rv]) { room = rv; store("wpl-room", room); }
-      else if (/^\d{3}$/.test(rv)) {
+      else if (/^\d{3}$/.test(rv) && NUM_TO_ROOMKEY[Number(rv)]) {
+        /* only rooms that exist — a typo used to render "Your room 999" and light nothing */
         roomNum = rv; store("wpl-roomnum", roomNum);
         const rk = NUM_TO_ROOMKEY[Number(rv)];
         if (rk) { room = rk; store("wpl-room", room); }
@@ -2022,7 +2023,7 @@ function nowCheckout(c, sc) {
     ${fixSheetHtml(false)}`;
 }
 function nowPast(c) {
-  const nextSeason = { winter: "come back for spring's wildflowers and big water", spring: "come back for summer festivals and river days", summer: "come back for fall's golden cottonwoods", fall: "come back for the quiet winter secret" }[seasonOf(c.month)];
+  const nextSeason = { winter: "come back for spring's wildflowers and big water", spring: "come back for summer festivals and river days", summer: "Come back for fall's golden cottonwoods", fall: "come back for the quiet winter secret" }[seasonOf(c.month)];
   return sceneHero(c, {
       top: "Thanks for staying" + (guestName ? ", " + esc(guestName.split(/\s+/)[0]) : "") + ".",
       skyline: "The pines already miss you.",
@@ -2436,7 +2437,9 @@ function gateUnlocked() {
     const qp = new URLSearchParams(location.search || "");
     const hp = new URLSearchParams((location.hash || "").replace(/^#/, ""));
     const gv = k => hp.get(k) || qp.get(k);
-    if (gv("k") === GATE_KEY || gv("n") != null || gv("r") != null || gv("a") != null) {
+    /* Key, or a genuine desk link (name AND arrival together). A bare ?r= or ?n=
+       used to open the door on its own; that was a hole. */
+    if (gv("k") === GATE_KEY || (gv("n") != null && gv("a") != null)) {
       try { localStorage.setItem("wpl-door", "1"); } catch (e) {}
       return true;
     }
