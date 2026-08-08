@@ -1042,7 +1042,7 @@ function ingestParams() {
     if (gv("r") != null) {
       const rv = gv("r").trim();
       if (ROOM_KEYS[rv]) { room = rv; store("wpl-room", room); }
-      else if (/^\d{3}$/.test(rv)) {
+      else if (/^\d{3}$/.test(rv) && NUM_TO_ROOMKEY[Number(rv)]) {
         roomNum = rv; store("wpl-roomnum", roomNum);
         const rk = NUM_TO_ROOMKEY[Number(rv)];
         if (rk) { room = rk; store("wpl-room", room); }
