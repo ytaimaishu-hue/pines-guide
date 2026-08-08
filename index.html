@@ -1,6 +1,7 @@
 <meta charset="utf-8">
 <title>Whispering Pines Lodge — Guest Guide</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
 <style>
   :root {
     color-scheme: light;
@@ -2424,7 +2425,40 @@ const screenParam = () => {
   } catch (e) { return null; }
 };
 let cur = screenParam() || "now";
+/* ===================== THE DOOR ===================== */
+/* The guide comes with the room. The QR card and every desk-sent link carry the
+   key (or the guest params), and the first unlock is remembered on this phone.
+   Bare-address visitors get a warm landing pointed at the desk and the booking
+   site. On ANY error we fail open — never lock a real guest out. */
+const GATE_KEY = "pk7river";
+function gateUnlocked() {
+  try {
+    const qp = new URLSearchParams(location.search || "");
+    const hp = new URLSearchParams((location.hash || "").replace(/^#/, ""));
+    const gv = k => hp.get(k) || qp.get(k);
+    if (gv("k") === GATE_KEY || gv("n") != null || gv("r") != null || gv("a") != null) {
+      try { localStorage.setItem("wpl-door", "1"); } catch (e) {}
+      return true;
+    }
+    return localStorage.getItem("wpl-door") === "1";
+  } catch (e) { return true; }
+}
+function renderGate() {
+  const nav = document.getElementById("nav"); if (nav) nav.innerHTML = "";
+  const chip = document.getElementById("ctxchip"); if (chip) chip.textContent = "";
+  document.getElementById("main").innerHTML = `
+    <section class="screen on">
+      <div class="t-display" style="margin-top:34px">Come on in — almost</div>
+      <p style="font-size:16px;max-width:36ch;margin-top:6px">This little guide comes with a stay at Whispering Pines. Scan the card in your room and everything opens right up — or text the desk and we&rsquo;ll send your personal link.</p>
+      <div style="display:flex;flex-direction:column;gap:10px;max-width:340px;margin-top:20px">
+        <a class="bigbtn" href="${SMS_DESK}">Text the desk — (760) 376-3733</a>
+        <a class="bigbtn half" href="https://www.pineskernville.com" style="text-align:center;text-decoration:none">pineskernville.com</a>
+      </div>
+      <p class="logi" style="font-style:italic;margin-top:28px">Not staying with us yet? The river&rsquo;s worth the trip.</p>
+    </section>`;
+}
 function paint(toTop) {
+  if (!gateUnlocked()) { renderGate(); return; }
   const y = window.scrollY;
   const c = clock();
   const sc = stayCtx(c);
