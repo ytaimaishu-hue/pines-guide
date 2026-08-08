@@ -269,17 +269,11 @@
 <script>
 "use strict";
 /* ===================== DATA ===================== */
-/* Desk hours live HERE and nowhere else — they were hardcoded in four places and
-   drifted out of date. Change these and every screen follows. There is no desk on
-   Mondays; Monday is simply absent from the grid and never mentioned. */
+/* Desk hours live HERE and nowhere else. No desk Mondays; Monday is simply absent
+   from the grid and never mentioned — this page is public and we do not advertise
+   when the property is unattended. The invitation below is never gated on urgency. */
 const DESK_GRID = "Sun 11–7 · Tue 11–7 · Wed 11–6 · Thu 11–7:30 · Fri 11–7 · Sat 11–6";
 const DESK_SHORT = "Sun & Tue–Sat, from 11";
-/* NEVER state that the desk or property is unattended — this page is public and
-   Ryan doesn't want absence advertised. Say only where to reach us; Monday simply
-   isn't listed in the grid, which reveals nothing. */
-/* Never gate the invitation ("only if it's urgent") — that makes a guest audition
-   their own problem. Ritz sets no conditions. The 2 AM restraint comes from making
-   the text the hero and framing the overnight wait as a courtesy, not a rule. */
 const DESK_AFTER = "Text or call (760) 376-3733 — any hour, any reason, every day of the week. Send a note overnight and there'll be an answer waiting when you wake.";
 const DATA = {
   lodge: {
@@ -2612,4 +2606,125 @@ document.addEventListener("click", (e) => {
   document.body.appendChild(wrap);
 });
 paint();
+
+/* ===== TEST BUILD ONLY — one-time rescue of notes saved before feedback
+   moved to Slack. Installs nothing unless this phone already has notes. ===== */
+(function () {
+  "use strict";
+  var KEY = "wpl-testnotes";
+  var notes = [];
+  try { notes = JSON.parse(localStorage.getItem(KEY) || "[]"); } catch (e) {}
+  if (!Array.isArray(notes) || !notes.length) return;
+
+  var css = document.createElement("style");
+  css.textContent = [
+    ".nrBtn{position:fixed;left:14px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:80;",
+      "background:var(--coral);color:#fff;border:0;border-radius:999px;padding:12px 17px;font-family:var(--serif);",
+      "font-size:14.5px;font-weight:700;box-shadow:0 2px 10px rgba(52,50,44,.25);cursor:pointer;min-height:46px}",
+    ".nrWrap{position:fixed;inset:0;z-index:90;background:rgba(52,50,44,.45);display:flex;align-items:flex-end}",
+    ".nrCard{background:var(--paper);width:100%;max-width:480px;margin:0 auto;border-radius:18px 18px 0 0;",
+      "padding:18px 18px calc(20px + env(safe-area-inset-bottom));max-height:86vh;overflow:auto}",
+    ".nrCard h3{font-size:18px;margin:0 0 6px}",
+    ".nrCard p{font-size:13.5px;color:var(--faded);margin:0 0 12px;line-height:1.5}",
+    ".nrList{border-top:1px solid var(--line);padding-top:10px;margin-bottom:14px}",
+    ".nrItem{font-size:13.5px;padding:8px 0;border-bottom:1px solid var(--line)}",
+    ".nrItem b{color:var(--coral-deep);display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase}",
+    ".nrRow{display:flex;gap:9px;flex-wrap:wrap}",
+    ".nrRow button{flex:1 1 46%;text-align:center;font-family:var(--serif);font-size:15px;font-weight:700;",
+      "padding:13px 10px;border-radius:12px 4px 12px 4px;border:1.5px solid var(--coral);background:var(--coral);",
+      "color:#fff;cursor:pointer;min-height:46px}",
+    ".nrRow .ghost{background:none;color:var(--coral-deep)}"
+  ].join("");
+  document.head.appendChild(css);
+
+  function asText() {
+    return "Whispering Pines guide \u2014 test notes\n\n" + notes.map(function (n, i) {
+      return (i + 1) + ". [" + (n.ctx ? n.ctx : n.screen) + "]\n   " + n.text;
+    }).join("\n\n");
+  }
+
+  var btn = document.createElement("button");
+  btn.className = "nrBtn";
+  btn.textContent = "\uD83D\uDCAC Send your " + notes.length + " note" + (notes.length > 1 ? "s" : "");
+  document.body.appendChild(btn);
+
+  btn.addEventListener("click", function () {
+    var wrap = document.createElement("div");
+    wrap.className = "nrWrap";
+    wrap.innerHTML = '<div class="nrCard">' +
+      "<h3>Post these in Slack</h3>" +
+      "<p>Feedback moved to <b>#guest-app-build</b> \u2014 just say it in the channel from now on. " +
+      "Copy the notes you already saved and paste them there, then you can clear them.</p>" +
+      '<div class="nrList">' + notes.map(function (n) {
+        return '<div class="nrItem"><b>' + (n.ctx || n.screen) + "</b>" + n.text + "</div>";
+      }).join("") + "</div>" +
+      '<div class="nrRow"><button class="nrCopy">Copy all ' + notes.length + " notes</button>" +
+      '<button class="ghost nrDone">Clear them</button></div></div>';
+    document.body.appendChild(wrap);
+
+    wrap.addEventListener("click", function (e) {
+      if (e.target === wrap) { wrap.remove(); return; }
+      if (e.target.closest(".nrCopy")) {
+        navigator.clipboard.writeText(asText()).then(function () {
+          e.target.textContent = "Copied \u2713 now paste in Slack";
+        }, function () { e.target.textContent = "Select the notes above to copy"; });
+        return;
+      }
+      if (e.target.closest(".nrDone")) {
+        try { localStorage.removeItem(KEY); } catch (x) {}
+        wrap.remove(); btn.remove();
+      }
+    });
+  });
+})();
+
+
+/* TEST BUILD ONLY — desktop hand-off. Testers open the Slack link on a laptop, but
+   the guide is a phone product, so show a QR that puts it in their hand instead of
+   making them retype a URL. Phones never see this. Dismissible either way. */
+(function () {
+  try {
+    /* Show this on a computer, hide it on a phone. The old test was
+       "(max-width:700px) OR (ontouchstart AND width<900)" — and every Windows
+       touch laptop has ontouchstart, so a staff laptop with a normal browser
+       window was treated as a phone and never got the QR at all. That's the
+       one screen it exists for.
+       any-pointer:fine means "some pointing device on this machine is precise"
+       — true for a trackpad or mouse even on a touchscreen laptop, false on a
+       phone or tablet. Paired with a width floor, that's the real distinction. */
+    var onAComputer = window.matchMedia("(any-pointer: fine)").matches
+      && window.matchMedia("(min-width: 700px)").matches;
+    if (!onAComputer) return;
+    if (sessionStorage.getItem("wpl-qr-dismissed")) return;
+
+    var css = document.createElement("style");
+    css.textContent = ".qrWrap{position:fixed;inset:0;z-index:120;background:rgba(52,50,44,.55);display:flex;align-items:center;justify-content:center;padding:24px}"
+      + ".qrCard{background:#FFFDF8;max-width:420px;width:100%;border-radius:20px;padding:30px 30px 24px;text-align:center;font-family:Georgia,serif;color:#34322C}"
+      + ".qrCard h2{font-size:24px;margin:0 0 6px;font-weight:700}"
+      + ".qrCard p{font-size:15px;color:#6B675A;margin:0 0 18px;line-height:1.5}"
+      + ".qrCard img{width:210px;height:210px;display:block;margin:0 auto 16px;border:1px solid #E3E0D6;border-radius:10px}"
+      + ".qrCard .u{font-size:12.5px;color:#6B675A;word-break:break-all;margin-bottom:18px}"
+      + ".qrCard button{font-family:Georgia,serif;font-size:15px;padding:12px 18px;border-radius:12px 4px 12px 4px;"
+      + "border:1.4px solid #E0655A;background:none;color:#C44F41;cursor:pointer;min-height:46px;width:100%}";
+    document.head.appendChild(css);
+
+    var w = document.createElement("div");
+    w.className = "qrWrap";
+    w.innerHTML = '<div class="qrCard">'
+      + "<h2>Point your phone at this</h2>"
+      + "<p>This is a phone guide \u2014 it's what a guest sees standing in their room. Scan to open it on yours. "
+      + "Feedback goes in Slack, #guest-app-build.</p>"
+      + '<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAXIAAAFyCAIAAABnRsZeAAAHlklEQVR4nO3dS47jxhJA0W6jt+PRg/a/AMEjL0ievhHhBm86I6lz5qI+lC6ygEDUz8/n8wOg80d4LQBZAXpOK0BMVoCYrAAxWQFisgLEZAWIyQoQkxUgJitATFaAmKwAMVkBYrICxGQFiMkKEJMVICYrQOzXnQe//vfnj2d5//X3ovd758q7XtW1O6/5jufdhZnu3EGnFSAmK0BMVoCYrAAxWQFisgLEZAWIyQoQkxVg0pTttXVzlnfMnIac+Vld2zX7u+6zOvHKM38LTitATFaAmKwAMVkBYrICxGQFiMkKEJMVICYrwDlTtrsm/E6caHzentQ772jXdt5dXo/7LTitADFZAWKyAsRkBYjJChCTFSAmK0BMVoCYrABPmbI90a5Z2DuzkrvmWXdNFd95XipOK0BMVoCYrAAxWQFisgLEZAWIyQoQkxVAVoDZTNn+hm/bKbtrnnXdVPGdx5rQ/ff8EQTEZAWIyQoQkxUgJitATFaAmKwAMVkBYrICPGXK9sSZxV27bNdtnJ35aezakrvrO/k+8LdwzWkFiMkKEJMVICYrQExWgJisADFZAWKyAsRkBThnyvbEza/X1s133rFrJvWOmXO062ZwX4/7LVxzWgFisgLEZAWIyQoQkxUgJitATFaAmKwAMVkBYj8/n099TX7bzHnWdVd+3vZW/p/TChCTFSAmK0BMVoCYrAAxWQFisgLEZAWIyQowaZet3Z8TJkd37XY9cY521zTztRP3DV9zWgFisgLEZAWIyQoQkxUgJitATFaAmKwAMVkBJk3ZzpwsXPeqdlk3Z7nu/a7bkrvO8yaD35vekdMKEJMVICYrQExWgJisADFZAWKyAsgKMJvTCnDOLtt1Vz5xu+fMOcsTJzh3zVjPnMG9Y937dVoBYrICxGQFiMkKEJMVICYrQExWgJisADFZAWI/P5/Pw/bR3rFrl+23zcJe27WNeN1n9Tpw+7IpW2AQfwQBMVkBYrICxGQFiMkKEJMVICYrQExWgEm7bO/M4e3aOTpzKnHXO3renPTzJrCvzfycnVaAmKwAMVkBYrICxGQFiMkKEJMVICYrQExWgEm7bE/cC3vteZOjJ25RvfZtU9QnfmOdVoCYrAAxWQFisgLEZAWIyQoQkxUgJitATFaASbts71g3Wbhr+nPm1OmufbS79u9em7kV+MQ52mtOK0BMVoCYrAAxWQFisgLEZAWIyQoQkxUgJivAU3bZfttG0pmzoetmcGc+dp2ZW4Hfm2asnVaAmKwAMVkBYrICxGQFiMkKICvAbE4rQExWgElTtrsmGteZuRn02q551nVOnLLd5T3yG+u0AsRkBYjJChCTFSAmK0BMVoCYrAAxWQFisgLEft158IkbSW1grcy8v7tmUmfu7n3bZQs8gz+CgJisADFZAWKyAsRkBYjJChCTFSAmK8BTdtmum8L8tvnOayfudp05C7vreV8HfmOdVoCYrAAxWQFisgLEZAWIyQoQkxUgJitATFaASbts71g3R3vnsbumIXc9765dp9dO3O06c472vel5nVaAmKwAMVkBYrICxGQFiMkKEJMVICYrQExWgEm7bK/tmtE88VVde96067UTZ1Jn3oVdV3ZaAWKyAsRkBYjJChCTFSAmK0BMVoCYrAAxWQEm7bLd9b/sd+3BPdGdScp1O4O/zWvZL2XX/b3mtALEZAWIyQoQkxUgJiuArACzOa0AMVkBYrICTNplu27X6a7NoNdmbm89cZ515j7add6bNs7umkd3WgFisgLEZAWIyQoQkxUgJitATFaAmKwAMVkBnjJlu+vKd+yadzxx9nedmXd/nffI79U1pxUgJitATFaAmKwAMVkBYrICxGQFiMkKEJMV4Jwp211mbvdcxw7d/+az2uU98lt3zWkFiMkKEJMVICYrQExWgJisADFZAWKyAsRkBZg0Zfttdu2ynblT9o6Ze453bVB+jfxe3eG0AsRkBYjJChCTFSAmK0BMVoCYrAAxWQFisgLEft158InznbvmDp83KXtt5mzous9514TutV3P67QCxGQFiMkKEJMVICYrQExWgJisADFZAWKyAkzaZTtzsnDm3tBrMz+ra8+blL22a5ftOnbZAsfwRxAQkxUgJiuArACzOa0AMVkBYrICxGQFmLTL9o7nTayum9BdNxk8c+PsTCfOwr42vWanFSAmK0BMVoCYrAAxWQFisgLEZAWIyQoQkxXgKVO2TJijvWPmq7q2a6r4NXLWed09cloBYrICxGQFiMkKEJMVICYrQExWgJisADFZAWKmbH/DumnIXXZNf9553pkTune8Ns3RruO0AsRkBYjJChCTFSAmK0BMVoCYrAAxWQFisgI8Zcp216zkTLtmJe/chTuPvX5HJ27n3eU18lU5rQAxWQFisgLEZAWIyQoQkxUgJitATFaAmKwA50zZzpz/m/mO1s2V7roLu+Z3n3cX3gfOozutADFZAWKyAsRkBYjJChCTFSAmK0BMVoCYrACxn5/Pp74m8NWcVoCYrAAxWQFisgLEZAWIyQoQkxUgJitATFaAmKwAMVkBYrICxGQFiMkKEJMVICYrQExWgJisADFZAX60/gH9buY2IGVWJQAAAABJRU5ErkJggg==" alt="QR code to open the guide on your phone">'
+      + '<div class="u">Opens as if you scanned the card in Room 107</div>'
+      + "<button>Just look on this computer</button></div>";
+    w.addEventListener("click", function (e) {
+      if (e.target.tagName === "BUTTON" || e.target === w) {
+        try { sessionStorage.setItem("wpl-qr-dismissed", "1"); } catch (x) {}
+        w.remove();
+      }
+    });
+    document.body.appendChild(w);
+  } catch (e) {}
+})();
+
 </script>
